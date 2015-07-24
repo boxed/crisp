@@ -1,0 +1,8 @@
+; SpinStar.def : Declares the module parameters for the DLL.
+
+LIBRARY      "SpinStar"
+DESCRIPTION  'SpinStar Windows Dynamic Link Library'
+
+EXPORTS
+    ; Explicit exports can go here
+	Run_SpinStar @8
