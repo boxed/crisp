@@ -1,0 +1,1830 @@
+// Created by Microsoft (R) C/C++ Compiler Version 12.00.9782.0 (469bd409).
+//
+// EMMENU4.tlh
+//
+// C++ source equivalent of Win32 type library EMMENU4.tlb
+// compiler-generated file created 04/13/07 at 01:01:21 - DO NOT EDIT!
+
+#pragma once
+#pragma pack(push, 8)
+
+#include <comdef.h>
+
+//
+// Forward references and typedefs
+//
+
+struct __declspec(uuid("1f7b6d23-c20e-4820-97ba-0547d1926ec4"))
+/* dispinterface */ _IEMMENUEvents;
+struct /* coclass */ EMMenuApplication;
+struct __declspec(uuid("64384edb-980d-4266-be93-18d38a881f6f"))
+/* dual interface */ IEMMenuApplication;
+struct __declspec(uuid("e3c4bbd8-bfda-4f3b-875d-6dec2eaeacf6"))
+/* dual interface */ IViewports;
+struct __declspec(uuid("f1575596-91c8-486f-8839-9340e3fd7c1b"))
+/* dual interface */ IImageVP;
+struct __declspec(uuid("43b11f58-3eb9-4537-a21c-2a926acf48b8"))
+/* dual interface */ IEMImage;
+struct IMAGE_VECTOR;
+struct VPPosition;
+struct __declspec(uuid("ef1cfc5d-38f6-43b0-824b-d48f0f528dae"))
+/* dual interface */ ICameraConfigurations;
+struct __declspec(uuid("41a79e56-78fc-4fc4-b815-78374fd5ee15"))
+/* dual interface */ IConfiguration;
+struct __declspec(uuid("f84ff4c2-95a2-48e6-9182-a28767d90c68"))
+/* dual interface */ ITEMCamera;
+struct __declspec(uuid("fd74c720-78a7-4669-a96a-b0df5092f129"))
+/* dual interface */ ITEMCameras;
+struct __declspec(uuid("f062a086-527d-44c2-aad6-a2a434abf3cb"))
+/* dual interface */ IImgManager;
+struct __declspec(uuid("e74077e0-1ea2-4558-9c3c-a5ed9c7ef2e2"))
+/* dual interface */ IEMFile;
+struct __declspec(uuid("8ebf4ca8-7514-42ab-b6f5-d019251918ca"))
+/* dual interface */ IImgArithmetic;
+struct __declspec(uuid("fdbf92bd-cc83-44e9-97c7-cab306007c35"))
+/* dual interface */ IStatistic;
+struct __declspec(uuid("d5ed3919-a2d1-42bb-8ecb-13c258f592dd"))
+/* dual interface */ IImgProcessing;
+struct __declspec(uuid("4561c53a-3894-4fb9-a30f-6905b40e3b2d"))
+/* dual interface */ IV2;
+struct __declspec(uuid("9bcae69c-b3dc-4022-a254-033f8884baef"))
+/* dual interface */ IImgTransformation;
+struct __declspec(uuid("7ac04e64-e85f-4f7d-85c6-c4040f66990e"))
+/* dual interface */ IEMImages;
+struct __declspec(uuid("16ebb1b9-4f39-4e35-9b3a-c71b989c9e52"))
+/* dual interface */ IMCL;
+struct __declspec(uuid("70eee744-2cf1-4f80-97f8-5a762ee40961"))
+/* dual interface */ IGonioPos;
+struct __declspec(uuid("245f37ac-9c2e-44ba-bad8-a9dfb515501b"))
+/* dual interface */ IV4;
+struct __declspec(uuid("b1e2a5a3-cba2-4345-8b40-156511b3713c"))
+/* dual interface */ IEMShutterBox;
+struct __declspec(uuid("1cbccd46-9f04-4c81-8b12-d69e2913cecb"))
+/* dual interface */ IFEIClient;
+struct /* coclass */ Viewports;
+struct /* coclass */ ImageVP;
+struct /* coclass */ CameraConfigurations;
+struct /* coclass */ Configuration;
+struct /* coclass */ TEMCameras;
+struct /* coclass */ TEMCamera;
+struct /* coclass */ ImgManager;
+struct /* coclass */ EMFile;
+struct /* coclass */ ImgArithmetic;
+struct /* coclass */ ImgProcessing;
+struct /* coclass */ ImgTransformation;
+struct /* coclass */ MCL;
+struct /* coclass */ EMImages;
+struct /* coclass */ EMImage;
+struct /* coclass */ FEIClient;
+struct /* coclass */ V2;
+struct /* coclass */ V4;
+struct /* coclass */ GonioPos;
+struct /* coclass */ Statistic;
+struct /* coclass */ EMShutterBox;
+
+//
+// Smart pointer typedef declarations
+//
+
+_COM_SMARTPTR_TYPEDEF(_IEMMENUEvents, __uuidof(IDispatch));
+_COM_SMARTPTR_TYPEDEF(IEMMenuApplication, __uuidof(IEMMenuApplication));
+_COM_SMARTPTR_TYPEDEF(IViewports, __uuidof(IViewports));
+_COM_SMARTPTR_TYPEDEF(IImageVP, __uuidof(IImageVP));
+_COM_SMARTPTR_TYPEDEF(IEMImage, __uuidof(IEMImage));
+_COM_SMARTPTR_TYPEDEF(ICameraConfigurations, __uuidof(ICameraConfigurations));
+_COM_SMARTPTR_TYPEDEF(IConfiguration, __uuidof(IConfiguration));
+_COM_SMARTPTR_TYPEDEF(ITEMCamera, __uuidof(ITEMCamera));
+_COM_SMARTPTR_TYPEDEF(ITEMCameras, __uuidof(ITEMCameras));
+_COM_SMARTPTR_TYPEDEF(IImgManager, __uuidof(IImgManager));
+_COM_SMARTPTR_TYPEDEF(IEMFile, __uuidof(IEMFile));
+_COM_SMARTPTR_TYPEDEF(IImgArithmetic, __uuidof(IImgArithmetic));
+_COM_SMARTPTR_TYPEDEF(IStatistic, __uuidof(IStatistic));
+_COM_SMARTPTR_TYPEDEF(IImgProcessing, __uuidof(IImgProcessing));
+_COM_SMARTPTR_TYPEDEF(IV2, __uuidof(IV2));
+_COM_SMARTPTR_TYPEDEF(IImgTransformation, __uuidof(IImgTransformation));
+_COM_SMARTPTR_TYPEDEF(IEMImages, __uuidof(IEMImages));
+_COM_SMARTPTR_TYPEDEF(IMCL, __uuidof(IMCL));
+_COM_SMARTPTR_TYPEDEF(IGonioPos, __uuidof(IGonioPos));
+_COM_SMARTPTR_TYPEDEF(IV4, __uuidof(IV4));
+_COM_SMARTPTR_TYPEDEF(IEMShutterBox, __uuidof(IEMShutterBox));
+_COM_SMARTPTR_TYPEDEF(IFEIClient, __uuidof(IFEIClient));
+
+//
+// Type library items
+//
+
+struct __declspec(uuid("1f7b6d23-c20e-4820-97ba-0547d1926ec4"))
+_IEMMENUEvents : IDispatch
+{};
+
+struct __declspec(uuid("2c8891c7-907c-4642-83e5-99f604a9eb9c"))
+EMMenuApplication;
+    // [ default ] interface IEMMenuApplication
+    // [ default, source ] dispinterface _IEMMENUEvents
+
+struct __declspec(uuid("64384edb-980d-4266-be93-18d38a881f6f"))
+IEMMenuApplication : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_Viewports (
+        struct IViewports * * pVal ) = 0;
+    virtual HRESULT __stdcall get_CameraConfigurations (
+        struct ICameraConfigurations * * pVal ) = 0;
+    virtual HRESULT __stdcall get_TEMCameras (
+        struct ITEMCameras * * pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageManager (
+        struct IImgManager * * pVal ) = 0;
+    virtual HRESULT __stdcall get_EMFile (
+        struct IEMFile * * pVal ) = 0;
+    virtual HRESULT __stdcall get_ImgArithmetic (
+        struct IImgArithmetic * * pVal ) = 0;
+    virtual HRESULT __stdcall get_ImgProcessing (
+        struct IImgProcessing * * pVal ) = 0;
+    virtual HRESULT __stdcall get_ImgTransformation (
+        struct IImgTransformation * * pVal ) = 0;
+    virtual HRESULT __stdcall get_EMImages (
+        struct IEMImages * * pVal ) = 0;
+    virtual HRESULT __stdcall get_MCL (
+        struct IMCL * * pVal ) = 0;
+    virtual HRESULT __stdcall get_EMShutterBox (
+        struct IEMShutterBox * * pVal ) = 0;
+    virtual HRESULT __stdcall get_FEIClient (
+        struct IFEIClient * * pVal ) = 0;
+    virtual HRESULT __stdcall get_EMMENUVersion (
+        BSTR * pVal ) = 0;
+};
+
+struct __declspec(uuid("e3c4bbd8-bfda-4f3b-875d-6dec2eaeacf6"))
+IViewports : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_Item (
+        VARIANT Index,
+        struct IImageVP * * pVal ) = 0;
+    virtual HRESULT __stdcall get__NewEnum (
+        IUnknown * * ppUnk ) = 0;
+    virtual HRESULT __stdcall Add (
+        struct IImageVP * pView ) = 0;
+    virtual HRESULT __stdcall Remove (
+        VARIANT Index ) = 0;
+    virtual HRESULT __stdcall get_Count (
+        long * pVal ) = 0;
+};
+
+struct __declspec(uuid("f1575596-91c8-486f-8839-9340e3fd7c1b"))
+IImageVP : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_VPHandle (
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall OpenPowerVP ( ) = 0;
+    virtual HRESULT __stdcall ClosePowerVP ( ) = 0;
+    virtual HRESULT __stdcall get_SelectedCamera (
+        enum CameraSelection * pVal ) = 0;
+    virtual HRESULT __stdcall put_SelectedCamera (
+        enum CameraSelection pVal ) = 0;
+    virtual HRESULT __stdcall get_Configuration (
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall put_Configuration (
+        BSTR pVal ) = 0;
+    virtual HRESULT __stdcall get_ExposureTime (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_ExposureTime (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall AcquireImage ( ) = 0;
+    virtual HRESULT __stdcall get_DirectoryHandle (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_DirectoryHandle (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_IndexInDirectory (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_IndexInDirectory (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageHandle (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall DisplayImage ( ) = 0;
+    virtual HRESULT __stdcall get_EMVectorHandle (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall Move (
+        long Left,
+        long Top,
+        long Width,
+        long Height ) = 0;
+    virtual HRESULT __stdcall get_FlapState (
+        enum FlapMode * pVal ) = 0;
+    virtual HRESULT __stdcall put_FlapState (
+        enum FlapMode pVal ) = 0;
+    virtual HRESULT __stdcall get_AutoIncrement (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_AutoIncrement (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_ScaleBarVisible (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_ScaleBarVisible (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_AutoFit (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_AutoFit (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall AcquireFlat ( ) = 0;
+    virtual HRESULT __stdcall AcquireDark ( ) = 0;
+    virtual HRESULT __stdcall ShowDark ( ) = 0;
+    virtual HRESULT __stdcall ShowFlat ( ) = 0;
+    virtual HRESULT __stdcall get_Image (
+        struct IEMImage * * pVal ) = 0;
+    virtual HRESULT __stdcall put_Image (
+        struct IEMImage * pVal ) = 0;
+    virtual HRESULT __stdcall StartContinuous ( ) = 0;
+    virtual HRESULT __stdcall StopContinuous ( ) = 0;
+    virtual HRESULT __stdcall OpenLSVP ( ) = 0;
+    virtual HRESULT __stdcall CloseLSVP ( ) = 0;
+    virtual HRESULT __stdcall AcquireAndDisplayImage ( ) = 0;
+    virtual HRESULT __stdcall AcquireAndDisplayDark ( ) = 0;
+    virtual HRESULT __stdcall AcquireAndDisplayFlat ( ) = 0;
+    virtual HRESULT __stdcall get_Position (
+        struct VPPosition * pVal ) = 0;
+    virtual HRESULT __stdcall put_Position (
+        struct VPPosition * pVal ) = 0;
+    virtual HRESULT __stdcall GetLiveImage (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall SetActivateLiveBuffer (
+        long bVal ) = 0;
+};
+
+enum CameraSelection
+{
+    FirstCamera = 1,
+    SecondCamera = 2
+};
+
+enum FlapMode
+{
+    Mini = 0,
+    Normal = 1,
+    Extended = 2
+};
+
+struct __declspec(uuid("43b11f58-3eb9-4537-a21c-2a926acf48b8"))
+IEMImage : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_ImgHandle (
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall get_DimX (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_DimY (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_DimZ (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_DimA (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_DataType (
+        enum DataType * pVal ) = 0;
+    virtual HRESULT __stdcall get_Pixel (
+        long lX,
+        long lY,
+        long lZ,
+        long lA,
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_Pixel (
+        long lX,
+        long lY,
+        long lZ,
+        long lA,
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_IsValidDimension (
+        long lMinDim,
+        long lMaxDim,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_IsPowerOf2 (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_IsSquare (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_Dimensions (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall GetDataByte (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall GetDataUShort (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall GetDataShort (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall GetDataLong (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall GetDataFloat (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall GetDataDouble (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall GetDataComplex (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall GetDataBinary (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall GetDataRGB8 (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall GetDataRGB16 (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall GetDataConvertedAsLong (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall PutDataConvertedFromLong (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall PutDataByte (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall PutDataUShort (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall PutDataShort (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall PutDataLong (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall PutDataFloat (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall PutDataDouble (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall PutDataComplex (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall PutDataBinary (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall PutDataRGB8 (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall PutDataRGB16 (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall Clear ( ) = 0;
+    virtual HRESULT __stdcall get_EMVector (
+        struct IMAGE_VECTOR * pVal ) = 0;
+    virtual HRESULT __stdcall put_EMVector (
+        struct IMAGE_VECTOR * pVal ) = 0;
+    virtual HRESULT __stdcall GetScaledImage (
+        SAFEARRAY * * ppsaData ) = 0;
+    virtual HRESULT __stdcall BurnScalebar ( ) = 0;
+    virtual HRESULT __stdcall BurnOverlay ( ) = 0;
+    virtual HRESULT __stdcall TypeConversion (
+        enum DataType newVal ) = 0;
+};
+
+enum DataType
+{
+    IMG_UCHAR = 1,
+    IMG_USHORT = 2,
+    IMG_SHORT = 3,
+    IMG_LONG = 4,
+    IMG_FLOAT = 5,
+    IMG_DOUBLE = 6,
+    IMG_COMPLEX = 7,
+    IMG_STRING = 8,
+    IMG_BINARY = 9,
+    IMG_RGB8 = 10,
+    IMG_RGB16 = 11,
+    IMG_EMVector = 12
+};
+
+struct IMAGE_VECTOR
+{
+    BSTR bstrImgName;
+    BSTR bstrImgFolder;
+    long lImgSizeX;
+    long lImgSizeY;
+    long lImgSizeZ;
+    long lImgSizeE;
+    long lImgDataType;
+    long lImgCreationDate;
+    long lImgCreationTime;
+    BSTR bstrImgComment;
+    BSTR bstrImgHistory;
+    float fImgScaling[16];
+    double cmplxImgStat[32];
+    long lImgType;
+    long lImgDisplay;
+    float fImgDistX;
+    float fImgDistY;
+    float fImgDistZ;
+    float fImgDistE;
+    float fImgMisc[32];
+    BSTR bstrTemType;
+    float fTemHT;
+    float fTemAberr[32];
+    float fTemEnergy[32];
+    long lTemMode;
+    float fTemMagScr;
+    float fTemMagCor;
+    float fTemMagPst;
+    long lTemStgType;
+    float fTemStgPos[5];
+    float fTemImgShift[2];
+    float fTemBeamShift[2];
+    float fTemBeamTilt[2];
+    float fTemTiling[7];
+    float fTemIllum[3];
+    long lTemShutter;
+    float fTemMisc[32];
+    BSTR bstrCamType;
+    float fCamPixel[2];
+    long lCamOffX;
+    long lCamOffY;
+    long lCamBinX;
+    long lCamBinY;
+    float fCamExpTime;
+    float fCamGain;
+    float fCamSpeed;
+    BSTR bstrCamFlat;
+    float fCamSense;
+    float fCamDose;
+    float fCamMisc[32];
+    BSTR bstrAdaTietzMicInfo;
+    BSTR bstrAdaTietzSpecInfo;
+};
+
+struct VPPosition
+{
+    long Left;
+    long Top;
+    long Right;
+    long Bottom;
+};
+
+struct __declspec(uuid("ef1cfc5d-38f6-43b0-824b-d48f0f528dae"))
+ICameraConfigurations : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_Item (
+        VARIANT Index,
+        struct IConfiguration * * pVal ) = 0;
+    virtual HRESULT __stdcall get__NewEnum (
+        IUnknown * * ppUnk ) = 0;
+    virtual HRESULT __stdcall Add (
+        struct IConfiguration * pConfig ) = 0;
+    virtual HRESULT __stdcall Remove (
+        VARIANT Index ) = 0;
+    virtual HRESULT __stdcall get_Count (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall Update ( ) = 0;
+};
+
+struct __declspec(uuid("41a79e56-78fc-4fc4-b815-78374fd5ee15"))
+IConfiguration : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_Name (
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall put_Name (
+        BSTR pVal ) = 0;
+    virtual HRESULT __stdcall get_CCDOffsetX (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_CCDOffsetX (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_CCDOffsetY (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_CCDOffsetY (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_DimensionX (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_DimensionX (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_DimensionY (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_DimensionY (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_BinningX (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_BinningX (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_BinningY (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_BinningY (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_CameraType (
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall put_CameraType (
+        BSTR pVal ) = 0;
+    virtual HRESULT __stdcall get_TEMCamera (
+        struct ITEMCamera * * pVal ) = 0;
+    virtual HRESULT __stdcall get_GainValue (
+        float * pVal ) = 0;
+    virtual HRESULT __stdcall put_GainValue (
+        float pVal ) = 0;
+    virtual HRESULT __stdcall get_SpeedValue (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_SpeedValue (
+        long pVal ) = 0;
+};
+
+struct __declspec(uuid("f84ff4c2-95a2-48e6-9182-a28767d90c68"))
+ITEMCamera : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_Name (
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall get_RealSizeX (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_RealSizeY (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_MaximumSizeX (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_MaximumSizeY (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_NumberOfGains (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_GainValue (
+        int nPos,
+        float * pVal ) = 0;
+    virtual HRESULT __stdcall get_NumberOfSpeeds (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_SpeedValue (
+        int nPos,
+        long * pVal ) = 0;
+};
+
+struct __declspec(uuid("fd74c720-78a7-4669-a96a-b0df5092f129"))
+ITEMCameras : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_Item (
+        VARIANT Index,
+        struct ITEMCamera * * pVal ) = 0;
+    virtual HRESULT __stdcall get__NewEnum (
+        IUnknown * * ppUnk ) = 0;
+    virtual HRESULT __stdcall get_Count (
+        long * pVal ) = 0;
+};
+
+struct __declspec(uuid("f062a086-527d-44c2-aad6-a2a434abf3cb"))
+IImgManager : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_TopDirectory (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_NextDirectory (
+        long hDir,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_SubDirectory (
+        long hDir,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_DirectoryName (
+        long hDir,
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall put_DirectoryName (
+        long hDir,
+        BSTR pVal ) = 0;
+    virtual HRESULT __stdcall get_DirectoryHandleFromName (
+        BSTR bstrName,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall CreateNewSubDirectory (
+        long hDir,
+        BSTR bstrName,
+        enum SubDirFlags flags,
+        enum SubDirProperties DirProp ) = 0;
+    virtual HRESULT __stdcall AddNEmptyImagesToDirectory (
+        long hDir,
+        long nrImages ) = 0;
+    virtual HRESULT __stdcall DeleteDirectory (
+        long hDir ) = 0;
+    virtual HRESULT __stdcall SortDirectoryTree ( ) = 0;
+    virtual HRESULT __stdcall get_ImageName (
+        long hDir,
+        long lImageIndex,
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall put_ImageName (
+        long hDir,
+        long lImageIndex,
+        BSTR pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageHandle (
+        long hDir,
+        long lImageIndex,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageType (
+        long hDir,
+        long lIndex,
+        enum DataType * pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageXDim (
+        long hDir,
+        long lIndex,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageYDim (
+        long hDir,
+        long lIndex,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageZDim (
+        long hDir,
+        long lIndex,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageADim (
+        long hDir,
+        long lIndex,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_FullDirectoryName (
+        long hDir,
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall get_EMVectorHandle (
+        long hDir,
+        long lImageIndex,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageExist (
+        long hDir,
+        BSTR bstrImageName,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_DirectoryExist (
+        long hDir,
+        BSTR bstrNew,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_Image (
+        long hDir,
+        long lImageIndex,
+        struct IEMImage * * pVal ) = 0;
+    virtual HRESULT __stdcall put_Image (
+        long hDir,
+        long lImageIndex,
+        struct IEMImage * pVal ) = 0;
+    virtual HRESULT __stdcall DeleteImageBuffer (
+        long hDir,
+        long lImageIndex ) = 0;
+    virtual HRESULT __stdcall get_ImageEmpty (
+        long hDir,
+        long lImageIndex,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_ImageEmpty (
+        long hDir,
+        long lImageIndex,
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageProtected (
+        long hDir,
+        long lImageIndex,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_ImageProtected (
+        long hDir,
+        long lImageIndex,
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_NumberOfBuffers (
+        long hDir,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall GetSelectedImageBuffers (
+        VARIANT * pVariant ) = 0;
+    virtual HRESULT __stdcall GetNumberOfSelectedImageBuffers (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall GetSelectedDirectory (
+        long * pVal ) = 0;
+};
+
+enum SubDirFlags
+{
+    AddTop = 1,
+    AddBottom = 2
+};
+
+enum SubDirProperties
+{
+    CannotBeDeleted = 4,
+    CanBeDeleted = 5
+};
+
+struct __declspec(uuid("e74077e0-1ea2-4558-9c3c-a5ed9c7ef2e2"))
+IEMFile : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall ReadRaw (
+        BSTR bstrFilename,
+        long lOffset,
+        struct IEMImage * pEMImg ) = 0;
+    virtual HRESULT __stdcall WriteRaw (
+        struct IEMImage * pEMImg,
+        long lOffset,
+        BSTR bstrFilename ) = 0;
+    virtual HRESULT __stdcall ReadTiff (
+        BSTR bstrFilename,
+        struct IEMImage * pEMImg ) = 0;
+    virtual HRESULT __stdcall WriteTiff (
+        struct IEMImage * pEMImg,
+        BSTR bstrFilename ) = 0;
+};
+
+struct __declspec(uuid("8ebf4ca8-7514-42ab-b6f5-d019251918ca"))
+IImgArithmetic : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall TestPattern (
+        enum ImgPattern pattern,
+        long lParam,
+        struct IEMImage * pEMImgSrc ) = 0;
+    virtual HRESULT __stdcall Add (
+        struct IEMImage * pEMImgSrc1,
+        struct IEMImage * pEMImgSrc2,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Sub (
+        struct IEMImage * pEMImgSrc1,
+        struct IEMImage * pEMImgSrc2,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Mul (
+        struct IEMImage * pEMImgSrc1,
+        struct IEMImage * pEMImgSrc2,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Div (
+        struct IEMImage * pEMImgSrc1,
+        struct IEMImage * pEMImgSrc2,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall MulAddConst (
+        struct IEMImage * pEMImgSrc,
+        VARIANT vMulConst,
+        VARIANT vAddConst,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Min (
+        struct IEMImage * pEMImgSrc1,
+        struct IEMImage * pEMImgSrc2,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Max (
+        struct IEMImage * pEMImgSrc1,
+        struct IEMImage * pEMImgSrc2,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Abs (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Sin (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Cos (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Tan (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Sqrt (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall RealPart (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall ImaginaryPart (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall AmplPhase (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall RealImag (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall MergeComplex (
+        struct IEMImage * pEMImgSrc1,
+        struct IEMImage * pEMImgSrc2,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall FCalc (
+        struct IEMImage * pEMImgSrc,
+        BSTR bstrOperation ) = 0;
+    virtual HRESULT __stdcall MulConj (
+        struct IEMImage * pEMImgSrc1,
+        struct IEMImage * pEMImgSrc2,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall ConvertEndian (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Rescale (
+        struct IEMImage * pEMImgSrc,
+        double dMinSrc,
+        double dMaxSrc,
+        double dMinDst,
+        double dMaxDst,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Clip (
+        struct IEMImage * pEMImgSrc,
+        long lLow,
+        long lUp,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall MaxMin (
+        struct IEMImage * pEMImgSrc,
+        struct IStatistic * * pVal ) = 0;
+    virtual HRESULT __stdcall SubIfBigger (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst,
+        long lBiggerVal,
+        long lSubVal ) = 0;
+};
+
+enum ImgPattern
+{
+    LinearGradient = 1,
+    Chessboard = 2,
+    Circles = 3
+};
+
+struct __declspec(uuid("fdbf92bd-cc83-44e9-97c7-cab306007c35"))
+IStatistic : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_Minimum (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_Minimum (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_Maximum (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_Maximum (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_Mean (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_Mean (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_Deviation (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_Deviation (
+        double pVal ) = 0;
+};
+
+struct __declspec(uuid("d5ed3919-a2d1-42bb-8ecb-13c258f592dd"))
+IImgProcessing : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall Border (
+        long lBorderSize,
+        double dBorderValue,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Polar (
+        struct IEMImage * pEMImgSrc,
+        double dStartAngle,
+        double dEndAngle,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Rotate (
+        struct IEMImage * pEMImgSrc,
+        long lNumNinetyDegree,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall RotateFree (
+        struct IEMImage * pEMImgSrc,
+        double dDegree,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall MirrorHAxis (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall MirrorVAxis (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Blow (
+        struct IEMImage * pEMImgSrc,
+        long lFactorX,
+        long lFactorY,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Redu (
+        struct IEMImage * pEMImgSrc,
+        long lFactorX,
+        long lFactorY,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Wrap (
+        struct IEMImage * pEMImgSrc,
+        long ldx,
+        long ldy,
+        enum WrapMode Mode,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Find2DPeak (
+        struct IEMImage * pEMImgSrc,
+        struct IV2 * * pVal ) = 0;
+    virtual HRESULT __stdcall CopySubImage (
+        struct IEMImage * pEMImgSrc,
+        long lSrcOffsetX,
+        long lSrcOffsetY,
+        long lDstOffsetX,
+        long lDstOffsetY,
+        long lNumPixelX,
+        long lNumPixelY,
+        struct IEMImage * pEMImgDst ) = 0;
+};
+
+enum WrapMode
+{
+    WrapAround = 0,
+    ShiftAround = 1
+};
+
+struct __declspec(uuid("4561c53a-3894-4fb9-a30f-6905b40e3b2d"))
+IV2 : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_x (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_x (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_y (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_y (
+        double pVal ) = 0;
+};
+
+struct __declspec(uuid("9bcae69c-b3dc-4022-a254-033f8884baef"))
+IImgTransformation : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall FFT2D (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall FFTI2D (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall FFT2DFriedel (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst,
+        struct IEMImage * pEMImgNyquist ) = 0;
+    virtual HRESULT __stdcall FFTI2DFriedel (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst,
+        struct IEMImage * pEMImgNyquist ) = 0;
+    virtual HRESULT __stdcall Expand2D (
+        struct IEMImage * pEMImgSrc,
+        struct IEMImage * pEMImgDst,
+        struct IEMImage * pEMImgNy ) = 0;
+    virtual HRESULT __stdcall Swap2D (
+        struct IEMImage * pEMImgSrc ) = 0;
+    virtual HRESULT __stdcall Difr (
+        struct IEMImage * pEMImgSrc,
+        double dScale,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall Hough (
+        struct IEMImage * pEMImgSrc,
+        long lMode,
+        struct IEMImage * pEMImgDst ) = 0;
+    virtual HRESULT __stdcall XCF (
+        struct IEMImage * pImgSrc1,
+        struct IEMImage * pImgSrc2,
+        struct IEMImage * pMask1,
+        struct IEMImage * pMask2,
+        struct IEMImage * pImgDst,
+        long lflag,
+        struct IV2 * * pVal ) = 0;
+};
+
+struct __declspec(uuid("7ac04e64-e85f-4f7d-85c6-c4040f66990e"))
+IEMImages : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_Item (
+        VARIANT Index,
+        struct IEMImage * * pVal ) = 0;
+    virtual HRESULT __stdcall get__NewEnum (
+        IUnknown * * ppUnk ) = 0;
+    virtual HRESULT __stdcall Create (
+        enum DataType WhatType,
+        long lDimX,
+        long lDimY,
+        long lDimZ,
+        long lDimA,
+        struct IEMImage * * pVal ) = 0;
+    virtual HRESULT __stdcall Remove (
+        VARIANT Index ) = 0;
+    virtual HRESULT __stdcall get_Count (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall Copy (
+        struct IEMImage * pImgSrc,
+        struct IEMImage * pImgDst ) = 0;
+    virtual HRESULT __stdcall DeleteImage (
+        struct IEMImage * pEMImgSrc ) = 0;
+};
+
+struct __declspec(uuid("16ebb1b9-4f39-4e35-9b3a-c71b989c9e52"))
+IMCL : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall NormalizeLenses (
+        long lReserved ) = 0;
+    virtual HRESULT __stdcall ResetDefocus ( ) = 0;
+    virtual HRESULT __stdcall GetGonioXYZAB (
+        struct IGonioPos * * pVal ) = 0;
+    virtual HRESULT __stdcall SetGonioXYZAB (
+        double dX,
+        double dY,
+        double dZ,
+        double dA,
+        double dB,
+        int nStageAxes ) = 0;
+    virtual HRESULT __stdcall GetBeamShiftXY (
+        struct IV2 * * pVal ) = 0;
+    virtual HRESULT __stdcall SetBeamShiftXY (
+        double dX,
+        double dY ) = 0;
+    virtual HRESULT __stdcall GetImageShiftXY (
+        struct IV2 * * pVal ) = 0;
+    virtual HRESULT __stdcall SetImageShiftXY (
+        double dX,
+        double dY ) = 0;
+    virtual HRESULT __stdcall GetStigmatorXY (
+        enum Stigmator whatStigmator,
+        struct IV2 * * pVal ) = 0;
+    virtual HRESULT __stdcall SetStigmatorXY (
+        enum Stigmator whatStigmator,
+        double dX,
+        double dY ) = 0;
+    virtual HRESULT __stdcall GetRotationCenterXY (
+        struct IV2 * * pVal ) = 0;
+    virtual HRESULT __stdcall SetRotationCenterXY (
+        double dX,
+        double dY ) = 0;
+    virtual HRESULT __stdcall get_SoftwareVersion (
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall get_MainScreen (
+        enum SCREENPOS * pVal ) = 0;
+    virtual HRESULT __stdcall put_MainScreen (
+        enum SCREENPOS pVal ) = 0;
+    virtual HRESULT __stdcall get_HT (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_BeamTiltX (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_BeamTiltX (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_BeamTiltY (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_BeamTiltY (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_BeamShiftX (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_BeamShiftX (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_BeamShiftY (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_BeamShiftY (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageShiftX (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_ImageShiftX (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_ImageShiftY (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_ImageShiftY (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_MagIndex (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_MagIndex (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_Mag (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall get_MagRange (
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall get_Defocus (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_Defocus (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_StigmatorX (
+        enum Stigmator whatStigmator,
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_StigmatorX (
+        enum Stigmator whatStigmator,
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_StigmatorY (
+        enum Stigmator whatStigmator,
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_StigmatorY (
+        enum Stigmator whatStigmator,
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_SpotsizeIndex (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_SpotsizeIndex (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_Intensity (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_Intensity (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_GonioX (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_GonioX (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_GonioY (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_GonioY (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_GonioZ (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_GonioZ (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_GonioA (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_GonioA (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_GonioB (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_GonioB (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_GonioMode (
+        int * pVal ) = 0;
+    virtual HRESULT __stdcall put_GonioMode (
+        int pVal ) = 0;
+    virtual HRESULT __stdcall get_RotationCenterX (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_RotationCenterX (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_RotationCenterY (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_RotationCenterY (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_SoftwareBeamBlanker (
+        enum BBTYPE * pVal ) = 0;
+    virtual HRESULT __stdcall put_SoftwareBeamBlanker (
+        enum BBTYPE pVal ) = 0;
+    virtual HRESULT __stdcall get_DetectorPosition (
+        enum DETECTORPOSITIONS * pVal ) = 0;
+    virtual HRESULT __stdcall put_DetectorPosition (
+        enum DETECTORPOSITIONS pVal ) = 0;
+    virtual HRESULT __stdcall get_Mode (
+        enum TEMMODES * pVal ) = 0;
+    virtual HRESULT __stdcall put_Mode (
+        enum TEMMODES pVal ) = 0;
+    virtual HRESULT __stdcall ChangeDefocus (
+        double dDeltaFocus ) = 0;
+    virtual HRESULT __stdcall ChangeStigmatorXY (
+        enum Stigmator whatStigmator,
+        double dDeltaX,
+        double dDeltaY ) = 0;
+    virtual HRESULT __stdcall ChangeBeamTiltXY (
+        double dDeltaX,
+        double dDeltaY ) = 0;
+    virtual HRESULT __stdcall ChangeBeamShiftXY (
+        double dDeltaX,
+        double dDeltaY ) = 0;
+    virtual HRESULT __stdcall ChangeImageShiftXY (
+        double dDeltaX,
+        double dDeltaY ) = 0;
+    virtual HRESULT __stdcall ChangeIntensity (
+        double dDeltaIntensity ) = 0;
+    virtual HRESULT __stdcall ChangeSpotsizeIndex (
+        long lDeltaSpotsize ) = 0;
+    virtual HRESULT __stdcall ChangeGonioXYZAB (
+        double dDeltaX,
+        double dDeltaY,
+        double dDeltaZ,
+        double dDeltaA,
+        double dDeltaB,
+        int nStageAxes ) = 0;
+    virtual HRESULT __stdcall ChangeMagIndex (
+        long lDelta ) = 0;
+    virtual HRESULT __stdcall get_TEMProperty (
+        enum TEMPROPERTIES tpWhatProperty,
+        float * pVal ) = 0;
+    virtual HRESULT __stdcall EnableCache (
+        enum CacheModes enumMode,
+        long lExpiration,
+        long lReserved ) = 0;
+    virtual HRESULT __stdcall DisableCache ( ) = 0;
+    virtual HRESULT __stdcall InvalidateCache ( ) = 0;
+    virtual HRESULT __stdcall CacheDBGDump (
+        long lReserved1,
+        long lReserved2 ) = 0;
+    virtual HRESULT __stdcall get_IsCacheEnabled (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_CacheExpirationTime (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_CacheExpirationTime (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_CacheMode (
+        enum CacheModes * pVal ) = 0;
+    virtual HRESULT __stdcall put_CacheMode (
+        enum CacheModes pVal ) = 0;
+    virtual HRESULT __stdcall Ctrl (
+        long lID,
+        long lP1,
+        long lP2,
+        long * lpOut ) = 0;
+    virtual HRESULT __stdcall LowLevelCmd (
+        BSTR bstrTEM,
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall GetCalibrationValues (
+        enum CALIBRATION_ITEM enumWhatItem,
+        long lMagIndex,
+        long HT_in_Volt,
+        struct IV4 * * pVal ) = 0;
+    virtual HRESULT __stdcall get_MCL_TYPE (
+        long * pVal ) = 0;
+};
+
+struct __declspec(uuid("70eee744-2cf1-4f80-97f8-5a762ee40961"))
+IGonioPos : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_x (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_x (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_y (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_y (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_z (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_z (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_alpha (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_alpha (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_beta (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_beta (
+        double pVal ) = 0;
+};
+
+enum Stigmator
+{
+    CondenserStigmator = 0,
+    ObjectiveStigmator = 1,
+    DiffractionStigmator = 2
+};
+
+enum SCREENPOS
+{
+    SCREEN_DOWN = 0,
+    SCREEN_HALF = 1,
+    SCREEN_UP = 2,
+    SCREEN_UNDEFINED = 3,
+    SCREEN_NOT_AVAILABLE = 4
+};
+
+enum BBTYPE
+{
+    BEAMBLANKER_OFF = 0,
+    BEAMBLANKER_ON = 1,
+    BEAMBLANKER_UNDEFINED = 2,
+    BEAMBLANKER_NOT_AVAILABLE = 3
+};
+
+enum DETECTORPOSITIONS
+{
+    OnAxis = 0,
+    NearAxis = 1,
+    OffAxis = 2,
+    PosUnknown = 3
+};
+
+enum TEMMODES
+{
+    BrightField = 0,
+    DarkField = 1,
+    Diffraction = 2,
+    ModeUnknown = 3
+};
+
+enum TEMPROPERTIES
+{
+    GoniometerXYAvailable = 1,
+    GoniometerZAvailable = 2,
+    GoniometerAAvailable = 3,
+    GoniometerBAvailable = 4,
+    MainscreenAvailable = 5,
+    BBAvailable = 6,
+    NumberOfHT = 100,
+    NumberOfMagIndices = 101,
+    NumberOfSpotsizeIndices = 102,
+    NumberOfDiffrLenIndices = 103,
+    ImageShiftStepsize = 200,
+    BeamShiftStepsize = 201,
+    BeamTiltStepsize = 202,
+    StigmatorStepsize = 203,
+    FocusStepsize = 204,
+    RCMode = 300
+};
+
+enum CacheModes
+{
+    NO_USER = 1,
+    TIMED = 2,
+    ASYNCHRONOUS = 3
+};
+
+enum CALIBRATION_ITEM
+{
+    calibImageShift = 1,
+    calibBeamShift = 2,
+    calibBeamTilt = 3,
+    calibGonioShift = 4
+};
+
+struct __declspec(uuid("245f37ac-9c2e-44ba-bad8-a9dfb515501b"))
+IV4 : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall get_P1 (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_P1 (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_P2 (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_P2 (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_P3 (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_P3 (
+        double pVal ) = 0;
+    virtual HRESULT __stdcall get_P4 (
+        double * pVal ) = 0;
+    virtual HRESULT __stdcall put_P4 (
+        double pVal ) = 0;
+};
+
+struct __declspec(uuid("b1e2a5a3-cba2-4345-8b40-156511b3713c"))
+IEMShutterBox : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall ShutterOverride (
+        enum SH_TYPE type,
+        long bEnableOverride,
+        long bBeamCanPass ) = 0;
+    virtual HRESULT __stdcall ShutterMode (
+        enum SH_MODE newVal ) = 0;
+    virtual HRESULT __stdcall GetOverride (
+        unsigned char * pVal ) = 0;
+    virtual HRESULT __stdcall SetOverride (
+        unsigned char nVal ) = 0;
+    virtual HRESULT __stdcall SetDark ( ) = 0;
+    virtual HRESULT __stdcall get_PreExposure (
+        short * pVal ) = 0;
+    virtual HRESULT __stdcall put_PreExposure (
+        short pVal ) = 0;
+    virtual HRESULT __stdcall get_EnablePreExposure (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_EnablePreExposure (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall SendCommand (
+        enum SH_Commands cmd ) = 0;
+    virtual HRESULT __stdcall ReadData (
+        unsigned char * pVal ) = 0;
+    virtual HRESULT __stdcall SendData (
+        unsigned char data ) = 0;
+};
+
+enum SH_TYPE
+{
+    st_USB_SH = 0,
+    st_USB_BB = 1
+};
+
+enum SH_MODE
+{
+    sm_USB_SH = 2,
+    sm_USB_BB = 0,
+    sm_USB_SH_BB = 1,
+    sm_USB_SH_BB_Trigger = 3,
+    sm_USB_INACTIVE = 4
+};
+
+enum SH_Commands
+{
+    Reset_DoNotUse = 0,
+    Init = 1,
+    GetHardwareVersion = 2,
+    GetSoftwareVersion = 3,
+    GetLastErrorSH = 4,
+    ClearLastError = 5,
+    GetStatus = 6,
+    SendTable = 7,
+    GetInputLogic = 8,
+    SetInputLogic = 9,
+    GetCameraActive = 10,
+    SetCameraActive = 11,
+    GetCounterLow = 12,
+    GetCounterHigh = 13,
+    ResetCounter = 14,
+    EnableTriggerOverride = 15,
+    GetTriggerOverride = 16,
+    SetTriggerOverride = 17,
+    SetShutterMode = 18,
+    GetShutterMode = 19,
+    SetOutputLogic = 20,
+    GetOutputLogic = 21,
+    SetOveride = 22,
+    GetOveride = 23,
+    SetPreExposureLow = 24,
+    SetPreExposureHigh = 25,
+    GetPreExposureLow = 26,
+    GetPreExposureHigh = 27,
+    SetPreExposureEnable = 28,
+    GetPreExposureEnable = 29,
+    GetSHActiveLow = 30,
+    GetSHActiveHigh = 31,
+    BurnEEPROM = 32,
+    ReadEEPROM = 33,
+    SetPreDelayLow = 34,
+    SetPreDelayHigh = 35,
+    GetPreDelayLow = 36,
+    GetPreDelayHigh = 37,
+    SetPreDelayEnable = 38,
+    GetPreDelayEnable = 39,
+    GetShExpTimeActiveLow = 40,
+    GetShExpTimeActiveHigh = 41,
+    SetIndex = 44,
+    CopyEEPROM = 45,
+    WriteEEPROM = 46,
+    ReadEEPROMFomIndex = 47,
+    Reset = 48,
+    ClearDebugMode = 49,
+    SetDebugMode = 50,
+    ReadIndex = 51,
+    IncrementIndex = 52,
+    ResetIndex = 53,
+    GetDataValueAtIndex = 55
+};
+
+struct __declspec(uuid("1cbccd46-9f04-4c81-8b12-d69e2913cecb"))
+IFEIClient : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+    virtual HRESULT __stdcall Show (
+        long bShow ) = 0;
+    virtual HRESULT __stdcall get_HasCameraAccess (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall DisplayImage (
+        long hImage,
+        long hEMVector,
+        long hThumb,
+        long bContinuous,
+        long bNextImg ) = 0;
+    virtual HRESULT __stdcall StopGUIActions (
+        long bMsgBoxes ) = 0;
+    virtual HRESULT __stdcall get_Area (
+        enum tagGUI WhatGUI,
+        enum tagGUIPosition WhatPosition,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_Area (
+        enum tagGUI WhatGUI,
+        enum tagGUIPosition WhatPosition,
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_ActiveGUI (
+        enum tagGUI * pVal ) = 0;
+    virtual HRESULT __stdcall put_ActiveGUI (
+        enum tagGUI pVal ) = 0;
+    virtual HRESULT __stdcall GUIMove (
+        enum tagGUI WhatGUI ) = 0;
+    virtual HRESULT __stdcall TS_Ctrl (
+        long lP1,
+        long lP2,
+        long lP3,
+        long lP4 ) = 0;
+    virtual HRESULT __stdcall MinimizeActiveGUI (
+        long bMinimize ) = 0;
+    virtual HRESULT __stdcall get_GUIMode (
+        enum tagGUI WhatGUI,
+        enum tagGUIMode * pVal ) = 0;
+    virtual HRESULT __stdcall put_GUIMode (
+        enum tagGUI WhatGUI,
+        enum tagGUIMode pVal ) = 0;
+    virtual HRESULT __stdcall get_CAMLParam (
+        long lWhatCamera,
+        long lWhatParam,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_CAMLParam (
+        long lWhatCamera,
+        long lWhatParam,
+        long pVal ) = 0;
+    virtual HRESULT __stdcall get_CAMSParam (
+        long lWhatCamera,
+        long lWhatParam,
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall put_CAMSParam (
+        long lWhatCamera,
+        long lWhatParam,
+        BSTR pVal ) = 0;
+    virtual HRESULT __stdcall CAMIsCorrectionImageAvailable (
+        long lWhatCamera,
+        long lOffX,
+        long lOffY,
+        long lDimX,
+        long lDimY,
+        long lBinX,
+        long lBinY,
+        long lGainIndex,
+        long lSpeedIndex,
+        long lType,
+        long * lpAvail ) = 0;
+    virtual HRESULT __stdcall get_CAMCorrectionImageName (
+        long lWhatCamera,
+        long lOffX,
+        long lOffY,
+        long lDimX,
+        long lDimY,
+        long lBinX,
+        long lBinY,
+        long lGainIndex,
+        long lSpeedIndex,
+        long lType,
+        BSTR * pVal ) = 0;
+    virtual HRESULT __stdcall get_NotifyOnClose (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_NotifyOnClose (
+        long pVal ) = 0;
+    virtual HRESULT __stdcall AddVPHasActiveAcquisition (
+        long lGroupCamera ) = 0;
+    virtual HRESULT __stdcall RemoveVPHasActiveAcquisition ( ) = 0;
+    virtual HRESULT __stdcall CAMAcquire (
+        long lWhatCamera,
+        long lExpMode,
+        long lShutterMode,
+        long lTriggerMode,
+        long lFlatMode,
+        long lOffX,
+        long lOffY,
+        long lDimX,
+        long lDimY,
+        long lBinX,
+        long lBinY,
+        long lExpTime,
+        long lGainIndex,
+        long lSpeedIndex,
+        long bSynchronous,
+        long lSWBinning,
+        long hImage,
+        long hEMVector ) = 0;
+    virtual HRESULT __stdcall CAMAcquireFlat (
+        long lWhatCamera,
+        long lShutterMode,
+        long lTriggerMode,
+        long lOffX,
+        long lOffY,
+        long lDimX,
+        long lDimY,
+        long lBinX,
+        long lBinY,
+        long lExpTime,
+        long lGainIndex,
+        long lSpeedIndex,
+        long lNumberOfImages ) = 0;
+    virtual HRESULT __stdcall CAMAcquireDark (
+        long lWhatCamera,
+        long lTriggerMode,
+        long lOffX,
+        long lOffY,
+        long lDimX,
+        long lDimY,
+        long lBinX,
+        long lBinY,
+        long lExpTime,
+        long lGainIndex,
+        long lSpeedIndex,
+        long lNumberOfImages ) = 0;
+    virtual HRESULT __stdcall get_IsEmMenuStarted (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall get_LiveModeAvailable (
+        long lCamcGroup,
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall StartLiveMode (
+        long lWhatCamera,
+        long lFlatMode,
+        long lOffX,
+        long lOffY,
+        long lDimX,
+        long lDimY,
+        long lBinX,
+        long lBinY,
+        long lExpTime,
+        long lGainIndex,
+        long lSpeedIndex,
+        long lSWBinning,
+        long lReadoutMode ) = 0;
+    virtual HRESULT __stdcall get_LiveExposureTime (
+        long * pVal ) = 0;
+    virtual HRESULT __stdcall put_LiveExposureTime (
+        long pVal ) = 0;
+};
+
+enum tagGUI
+{
+    guiAcquisition = 0,
+    guiStandard = 1,
+    guiFree = 2,
+    guiNone = 999
+};
+
+enum tagGUIPosition
+{
+    gpLeft = 0,
+    gpTop = 1,
+    gpRight = 2,
+    gpBottom = 3
+};
+
+enum tagGUIMode
+{
+    gmHasCaption = 1,
+    gmIsMovable = 2,
+    gmHasWindowsInside = 4
+};
+
+struct __declspec(uuid("8859f7e9-62a3-4cf3-9967-7a5191b28edb"))
+Viewports;
+    // [ default ] interface IViewports
+
+struct __declspec(uuid("73d5b25c-9114-4f52-8be5-e185f0d54088"))
+ImageVP;
+    // [ default ] interface IImageVP
+
+struct __declspec(uuid("bc5b1e45-a578-436a-bbf1-8401114dd8c6"))
+CameraConfigurations;
+    // [ default ] interface ICameraConfigurations
+
+struct __declspec(uuid("0f4c6b39-e36f-4ce8-b4a5-ed9707f72d8c"))
+Configuration;
+    // [ default ] interface IConfiguration
+
+struct __declspec(uuid("610ab5ec-dc08-4c84-8746-94f6e9bd1419"))
+TEMCameras;
+    // [ default ] interface ITEMCameras
+
+struct __declspec(uuid("61cf2603-abd3-4af6-8a55-b1bea374bed0"))
+TEMCamera;
+    // [ default ] interface ITEMCamera
+
+struct __declspec(uuid("da835848-65e1-416f-8653-34e1ad8dd75e"))
+ImgManager;
+    // [ default ] interface IImgManager
+
+struct __declspec(uuid("3a636378-6960-40c5-85fd-26e39db45c7a"))
+EMFile;
+    // [ default ] interface IEMFile
+
+struct __declspec(uuid("fe60d7dd-3f06-4211-b436-fb6f396e5e4c"))
+ImgArithmetic;
+    // [ default ] interface IImgArithmetic
+
+struct __declspec(uuid("d1b59a65-09dd-4118-8edb-2ca189c6421d"))
+ImgProcessing;
+    // [ default ] interface IImgProcessing
+
+struct __declspec(uuid("2cb269f3-a0fe-4061-bd3a-851aa73968da"))
+ImgTransformation;
+    // [ default ] interface IImgTransformation
+
+struct __declspec(uuid("41433e5c-4382-45b2-a963-612465f70508"))
+MCL;
+    // [ default ] interface IMCL
+
+struct __declspec(uuid("3a105171-8f12-47f1-bc75-ba5a114ada88"))
+EMImages;
+    // [ default ] interface IEMImages
+
+struct __declspec(uuid("a2dc6d7d-1113-4ab6-adf8-954bb996ec77"))
+EMImage;
+    // [ default ] interface IEMImage
+
+struct __declspec(uuid("7c9530b2-97cd-4cf8-962f-b0f11647a5f5"))
+FEIClient;
+    // [ default ] interface IFEIClient
+
+struct __declspec(uuid("1ed382ba-3fca-4b72-8fdd-93ca542e7ffb"))
+V2;
+    // [ default ] interface IV2
+
+struct __declspec(uuid("8ca628ba-d607-4058-9833-18f2fa600993"))
+V4;
+    // [ default ] interface IV4
+
+struct __declspec(uuid("58844b58-6556-46dc-aa8b-6f291cab510c"))
+GonioPos;
+    // [ default ] interface IGonioPos
+
+struct __declspec(uuid("ff155733-2d3a-4400-b695-9fa9f2505219"))
+Statistic;
+    // [ default ] interface IStatistic
+
+struct __declspec(uuid("c2c9c251-352e-44ae-9404-ef2b62c99eff"))
+EMShutterBox;
+    // [ default ] interface IEMShutterBox
+
+//
+// Named GUID constants initializations
+//
+
+extern "C" const GUID __declspec(selectany) LIBID_EMMENU4Lib =
+    {0x3dc9cbf0,0xe47b,0x4ff6,{0x9c,0xee,0xc4,0xcc,0x36,0x99,0x40,0x3e}};
+extern "C" const GUID __declspec(selectany) DIID__IEMMENUEvents =
+    {0x1f7b6d23,0xc20e,0x4820,{0x97,0xba,0x05,0x47,0xd1,0x92,0x6e,0xc4}};
+extern "C" const GUID __declspec(selectany) CLSID_EMMenuApplication =
+    {0x2c8891c7,0x907c,0x4642,{0x83,0xe5,0x99,0xf6,0x04,0xa9,0xeb,0x9c}};
+extern "C" const GUID __declspec(selectany) IID_IEMMenuApplication =
+    {0x64384edb,0x980d,0x4266,{0xbe,0x93,0x18,0xd3,0x8a,0x88,0x1f,0x6f}};
+extern "C" const GUID __declspec(selectany) IID_IViewports =
+    {0xe3c4bbd8,0xbfda,0x4f3b,{0x87,0x5d,0x6d,0xec,0x2e,0xae,0xac,0xf6}};
+extern "C" const GUID __declspec(selectany) IID_IImageVP =
+    {0xf1575596,0x91c8,0x486f,{0x88,0x39,0x93,0x40,0xe3,0xfd,0x7c,0x1b}};
+extern "C" const GUID __declspec(selectany) IID_IEMImage =
+    {0x43b11f58,0x3eb9,0x4537,{0xa2,0x1c,0x2a,0x92,0x6a,0xcf,0x48,0xb8}};
+extern "C" const GUID __declspec(selectany) IID_ICameraConfigurations =
+    {0xef1cfc5d,0x38f6,0x43b0,{0x82,0x4b,0xd4,0x8f,0x0f,0x52,0x8d,0xae}};
+extern "C" const GUID __declspec(selectany) IID_IConfiguration =
+    {0x41a79e56,0x78fc,0x4fc4,{0xb8,0x15,0x78,0x37,0x4f,0xd5,0xee,0x15}};
+extern "C" const GUID __declspec(selectany) IID_ITEMCamera =
+    {0xf84ff4c2,0x95a2,0x48e6,{0x91,0x82,0xa2,0x87,0x67,0xd9,0x0c,0x68}};
+extern "C" const GUID __declspec(selectany) IID_ITEMCameras =
+    {0xfd74c720,0x78a7,0x4669,{0xa9,0x6a,0xb0,0xdf,0x50,0x92,0xf1,0x29}};
+extern "C" const GUID __declspec(selectany) IID_IImgManager =
+    {0xf062a086,0x527d,0x44c2,{0xaa,0xd6,0xa2,0xa4,0x34,0xab,0xf3,0xcb}};
+extern "C" const GUID __declspec(selectany) IID_IEMFile =
+    {0xe74077e0,0x1ea2,0x4558,{0x9c,0x3c,0xa5,0xed,0x9c,0x7e,0xf2,0xe2}};
+extern "C" const GUID __declspec(selectany) IID_IImgArithmetic =
+    {0x8ebf4ca8,0x7514,0x42ab,{0xb6,0xf5,0xd0,0x19,0x25,0x19,0x18,0xca}};
+extern "C" const GUID __declspec(selectany) IID_IStatistic =
+    {0xfdbf92bd,0xcc83,0x44e9,{0x97,0xc7,0xca,0xb3,0x06,0x00,0x7c,0x35}};
+extern "C" const GUID __declspec(selectany) IID_IImgProcessing =
+    {0xd5ed3919,0xa2d1,0x42bb,{0x8e,0xcb,0x13,0xc2,0x58,0xf5,0x92,0xdd}};
+extern "C" const GUID __declspec(selectany) IID_IV2 =
+    {0x4561c53a,0x3894,0x4fb9,{0xa3,0x0f,0x69,0x05,0xb4,0x0e,0x3b,0x2d}};
+extern "C" const GUID __declspec(selectany) IID_IImgTransformation =
+    {0x9bcae69c,0xb3dc,0x4022,{0xa2,0x54,0x03,0x3f,0x88,0x84,0xba,0xef}};
+extern "C" const GUID __declspec(selectany) IID_IEMImages =
+    {0x7ac04e64,0xe85f,0x4f7d,{0x85,0xc6,0xc4,0x04,0x0f,0x66,0x99,0x0e}};
+extern "C" const GUID __declspec(selectany) IID_IMCL =
+    {0x16ebb1b9,0x4f39,0x4e35,{0x9b,0x3a,0xc7,0x1b,0x98,0x9c,0x9e,0x52}};
+extern "C" const GUID __declspec(selectany) IID_IGonioPos =
+    {0x70eee744,0x2cf1,0x4f80,{0x97,0xf8,0x5a,0x76,0x2e,0xe4,0x09,0x61}};
+extern "C" const GUID __declspec(selectany) IID_IV4 =
+    {0x245f37ac,0x9c2e,0x44ba,{0xba,0xd8,0xa9,0xdf,0xb5,0x15,0x50,0x1b}};
+extern "C" const GUID __declspec(selectany) IID_IEMShutterBox =
+    {0xb1e2a5a3,0xcba2,0x4345,{0x8b,0x40,0x15,0x65,0x11,0xb3,0x71,0x3c}};
+extern "C" const GUID __declspec(selectany) IID_IFEIClient =
+    {0x1cbccd46,0x9f04,0x4c81,{0x8b,0x12,0xd6,0x9e,0x29,0x13,0xce,0xcb}};
+extern "C" const GUID __declspec(selectany) CLSID_Viewports =
+    {0x8859f7e9,0x62a3,0x4cf3,{0x99,0x67,0x7a,0x51,0x91,0xb2,0x8e,0xdb}};
+extern "C" const GUID __declspec(selectany) CLSID_ImageVP =
+    {0x73d5b25c,0x9114,0x4f52,{0x8b,0xe5,0xe1,0x85,0xf0,0xd5,0x40,0x88}};
+extern "C" const GUID __declspec(selectany) CLSID_CameraConfigurations =
+    {0xbc5b1e45,0xa578,0x436a,{0xbb,0xf1,0x84,0x01,0x11,0x4d,0xd8,0xc6}};
+extern "C" const GUID __declspec(selectany) CLSID_Configuration =
+    {0x0f4c6b39,0xe36f,0x4ce8,{0xb4,0xa5,0xed,0x97,0x07,0xf7,0x2d,0x8c}};
+extern "C" const GUID __declspec(selectany) CLSID_TEMCameras =
+    {0x610ab5ec,0xdc08,0x4c84,{0x87,0x46,0x94,0xf6,0xe9,0xbd,0x14,0x19}};
+extern "C" const GUID __declspec(selectany) CLSID_TEMCamera =
+    {0x61cf2603,0xabd3,0x4af6,{0x8a,0x55,0xb1,0xbe,0xa3,0x74,0xbe,0xd0}};
+extern "C" const GUID __declspec(selectany) CLSID_ImgManager =
+    {0xda835848,0x65e1,0x416f,{0x86,0x53,0x34,0xe1,0xad,0x8d,0xd7,0x5e}};
+extern "C" const GUID __declspec(selectany) CLSID_EMFile =
+    {0x3a636378,0x6960,0x40c5,{0x85,0xfd,0x26,0xe3,0x9d,0xb4,0x5c,0x7a}};
+extern "C" const GUID __declspec(selectany) CLSID_ImgArithmetic =
+    {0xfe60d7dd,0x3f06,0x4211,{0xb4,0x36,0xfb,0x6f,0x39,0x6e,0x5e,0x4c}};
+extern "C" const GUID __declspec(selectany) CLSID_ImgProcessing =
+    {0xd1b59a65,0x09dd,0x4118,{0x8e,0xdb,0x2c,0xa1,0x89,0xc6,0x42,0x1d}};
+extern "C" const GUID __declspec(selectany) CLSID_ImgTransformation =
+    {0x2cb269f3,0xa0fe,0x4061,{0xbd,0x3a,0x85,0x1a,0xa7,0x39,0x68,0xda}};
+extern "C" const GUID __declspec(selectany) CLSID_MCL =
+    {0x41433e5c,0x4382,0x45b2,{0xa9,0x63,0x61,0x24,0x65,0xf7,0x05,0x08}};
+extern "C" const GUID __declspec(selectany) CLSID_EMImages =
+    {0x3a105171,0x8f12,0x47f1,{0xbc,0x75,0xba,0x5a,0x11,0x4a,0xda,0x88}};
+extern "C" const GUID __declspec(selectany) CLSID_EMImage =
+    {0xa2dc6d7d,0x1113,0x4ab6,{0xad,0xf8,0x95,0x4b,0xb9,0x96,0xec,0x77}};
+extern "C" const GUID __declspec(selectany) CLSID_FEIClient =
+    {0x7c9530b2,0x97cd,0x4cf8,{0x96,0x2f,0xb0,0xf1,0x16,0x47,0xa5,0xf5}};
+extern "C" const GUID __declspec(selectany) CLSID_V2 =
+    {0x1ed382ba,0x3fca,0x4b72,{0x8f,0xdd,0x93,0xca,0x54,0x2e,0x7f,0xfb}};
+extern "C" const GUID __declspec(selectany) CLSID_V4 =
+    {0x8ca628ba,0xd607,0x4058,{0x98,0x33,0x18,0xf2,0xfa,0x60,0x09,0x93}};
+extern "C" const GUID __declspec(selectany) CLSID_GonioPos =
+    {0x58844b58,0x6556,0x46dc,{0xaa,0x8b,0x6f,0x29,0x1c,0xab,0x51,0x0c}};
+extern "C" const GUID __declspec(selectany) CLSID_Statistic =
+    {0xff155733,0x2d3a,0x4400,{0xb6,0x95,0x9f,0xa9,0xf2,0x50,0x52,0x19}};
+extern "C" const GUID __declspec(selectany) CLSID_EMShutterBox =
+    {0xc2c9c251,0x352e,0x44ae,{0x94,0x04,0xef,0x2b,0x62,0xc9,0x9e,0xff}};
+
+#pragma pack(pop)
