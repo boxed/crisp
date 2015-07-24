@@ -1,0 +1,135 @@
+.xlist
+DOS	= 0				;
+	.486
+	.MODEL	FLAT, C			;
+
+;====================================================================
+jmps	MACRO	lll			;
+	jmp	short	lll		;
+ENDM					;
+;----------------------------------------
+lloop	MACRO	lll			;
+	db	67h			;
+	loop	lll			;
+ENDM					;
+;----------------------------------------
+_push	MACRO	list			;
+	IRP	arg, <list>		;
+	push	arg			;
+	ENDM				;
+ENDM					;
+;----------------------------------------
+_pop	MACRO	list			;
+	IRP	arg, <list>		;
+	pop	arg			;
+	ENDM				;
+ENDM					;
+;----------------------------------------
+_proc	MACRO	name, version		;
+IFB <version>				;
+	public	name			;
+	name	proc			;
+ELSE					;
+	public	name&version		;
+	name&version	proc		;
+ENDIF					;
+ENDM					;
+;----------------------------------------
+_global	MACRO	name, siz, val		;
+	public	name			;
+IFB <val>				;
+	name	siz	0		;
+ELSE					;
+	name	siz	val		;
+ENDIF					;
+ENDM					;
+;====================================================================
+;====================================================================
+loff	macro	reg, v			;
+if DOS					;
+	mov	reg, [v]		;
+else					;
+	movzx	reg, word ptr [v]	;
+endif					;
+endm					;
+;----------------------------------------
+lseg	macro	reg, v			;
+if DOS					;
+	push	0			;
+	pop	reg			;
+else					;
+	mov	reg, word ptr [v+2]	;
+endif					;
+endm					;
+;----------------------------------------
+addoff	macro	reg, v			;
+if DOS					;
+	add	reg, [v]		;
+endif					;
+endm					;
+;----------------------------------------
+lsegoff	macro	sr, rg, src		;
+if DOS					;
+	push	0			;
+	pop	sr			;
+	mov	e&rg,	[src]		;
+else					;
+	xor	e&rg,	e&rg		;
+	l&sr	rg,	[src]		;
+endif					;
+endm					;
+;----------------------------------------
+;; Procedures entry and exit macros
+;------------------------------------------------
+;------------------------------------------------
+cProc	macro	n,a
+public	n
+n proc far
+irp x,<a>
+ifnb <x>
+arg <x>
+endif
+endm
+@@po=0
+endm
+;------------------------------------------------
+cPush macro a
+irp x,<a>
+ifnb <x>
+ push x
+endif
+endm
+purge @@o,x
+endm
+;------------------------------------------------
+cPop macro a
+irp x,<a>
+ifnb <x>
+ pop x
+endif
+endm
+purge @@o,x
+endm
+;------------------------------------------------
+cPopR	macro	a
+@@n catstr <>
+irp x,<a>
+@@o sizestr @@n
+ife @@o
+@@n catstr <x>
+else
+@@n catstr <x>,<,>,@@n
+endif
+endm
+cPop %@@n
+purge &@@o,&@@n
+endm
+;------------------------------------------------
+cEnd	macro	n
+purge &@@po
+n	endp
+endm
+;------------------------------------------------
+;====================================================================
+;====================================================================
+.list
