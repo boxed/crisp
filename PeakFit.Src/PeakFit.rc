@@ -1,0 +1,225 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\PeakFit.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Calidris"
+            VALUE "FileDescription", "PeakFit DLL"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "PeakFit"
+            VALUE "LegalCopyright", "Copyright (C) 2006"
+            VALUE "OriginalFilename", "PeakFit.DLL"
+            VALUE "ProductName", "PeakFit Dynamic Link Library"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_BKG_FITTING_DLG DIALOGEX 0, 0, 326, 300
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "RDF quantification"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Find peaks",IDC_FIND_PEAKS,7,7,50,14,BS_FLAT
+    PUSHBUTTON      "Fit...",IDC_TP_BKG_FIT_POINTS,7,127,50,14,BS_FLAT
+    PUSHBUTTON      "Auto fit...",IDC_AUTO_FIT_POINTS,60,127,50,14,BS_FLAT
+    PUSHBUTTON      "Reset params",IDC_RESET_PARAMS,7,144,50,14,BS_FLAT
+    PUSHBUTTON      "Abort fit",IDC_ABORT_FITTING,60,144,50,14,BS_FLAT
+    LTEXT           "Chi^2=XXXXXXXXXX",IDC_PEAK_FIT_CHI_SQ,7,25,96,10,0,WS_EX_STATICEDGE
+    CONTROL         "fit background with",IDC_PROF_FIT_BKG,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,7,39,76,10
+    CONTROL         "fit peak shape",IDC_PROF_FIT_PEAK_SHAPE,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,7,68,61,10
+    CONTROL         "fit peak positions",IDC_PROF_FIT_PEAK_POS,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,7,90,69,10
+    CONTROL         "fit peak amplitude",IDC_PROF_FIT_PEAK_AMPL,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,7,79,71,10
+    CONTROL         "fit FWHM dependance",IDC_PROF_FIT_FWHM_PARAMS,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,7,101,88,10
+    CONTROL         "fit peak asymmetry",IDC_PROF_FIT_PEAK_ASYMMETRY,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,7,112,74,10
+    LTEXT           "Mouse - select interval\r\nCTRL+mouse - deselect\r\nSHIFT+mouse - zoom in\r\nRight mouse - restore zoom\r\nDouble left-click - add/remove\r\n                            peaks",IDC_STATIC,7,161,99,50
+    CONTROL         "",IDC_TP_BKG_CHART,"Static",SS_BLACKRECT,112,7,207,286
+    COMBOBOX        IDC_FIT_BKG_POLY_N,14,52,29,163,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "orders polynomial",IDC_STATIC,47,54,61,8
+    LTEXT           "R = XXXXX, d = XXX.XXXÅ",IDC_RADIUS_D_VALUE,7,216,100,8
+    PUSHBUTTON      "OK",IDOK,28,228,50,14,BS_FLAT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_BKG_FITTING_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 319
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 293
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_BKG_FITTING_DLG DLGINIT
+BEGIN
+    IDC_FIT_BKG_POLY_N, 0x403, 7, 0
+0x6e28, 0x6e6f, 0x2965, "\000" 
+    IDC_FIT_BKG_POLY_N, 0x403, 2, 0
+0x0031, 
+    IDC_FIT_BKG_POLY_N, 0x403, 2, 0
+0x0032, 
+    IDC_FIT_BKG_POLY_N, 0x403, 2, 0
+0x0033, 
+    IDC_FIT_BKG_POLY_N, 0x403, 2, 0
+0x0034, 
+    IDC_FIT_BKG_POLY_N, 0x403, 2, 0
+0x0035, 
+    IDC_FIT_BKG_POLY_N, 0x403, 2, 0
+0x0036, 
+    IDC_FIT_BKG_POLY_N, 0x403, 2, 0
+0x0037, 
+    IDC_FIT_BKG_POLY_N, 0x403, 2, 0
+0x0038, 
+    IDC_FIT_BKG_POLY_N, 0x403, 2, 0
+0x0039, 
+    IDC_FIT_BKG_POLY_N, 0x403, 3, 0
+0x3031, "\000" 
+    IDC_FIT_BKG_POLY_N, 0x403, 3, 0
+0x3131, "\000" 
+    IDC_FIT_BKG_POLY_N, 0x403, 3, 0
+0x3231, "\000" 
+    0
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\PeakFit.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
