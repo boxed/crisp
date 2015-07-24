@@ -367,7 +367,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Calidris\CRISP2.Src\trace.cpp"
+				RelativePath="..\CRISP2.Src\trace.cpp"
 				>
 			</File>
 			<Filter

@@ -1,0 +1,213 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_NANOMEGAS           BITMAP                  "nanomegas.bmp"
+#endif    // Neutral resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "FileDescription", "SpinStar DLL"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "SpinStar"
+            VALUE "LegalCopyright", "Copyright (C) 2005"
+            VALUE "OriginalFilename", "SpinStar.DLL"
+            VALUE "ProductName", "SpinStar Dynamic Link Library"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Swedish resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_SVE)
+#ifdef _WIN32
+LANGUAGE LANG_SWEDISH, SUBLANG_DEFAULT
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\SpinStar.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SPIN_STAR_SYMMETRY_TEST_START DIALOGEX 0, 0, 477, 234
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Space Group Determinator"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    COMBOBOX        IDC_CRYSTAL_SYSTEM_CLASS_COMBO,69,80,75,161,CBS_DROPDOWNLIST | WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Browse...",IDC_BROWSE_ZOLZ,13,120,50,14,BS_FLAT
+    COMBOBOX        IDC_ZONE_AXIS_COMBO_1,121,121,75,161,CBS_DROPDOWNLIST | WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Browse...",IDC_BROWSE_FOLZ,13,170,50,14,BS_FLAT | WS_DISABLED
+    CONTROL         "Single pattern",IDC_SINGLE_PATT_RADIO,"Button",BS_AUTORADIOBUTTON | BS_FLAT | WS_DISABLED | WS_GROUP | WS_TABSTOP,15,43,85,10
+    CONTROL         "Two patterns",IDC_TWO_PATTS_RADIO,"Button",BS_AUTORADIOBUTTON | BS_FLAT | WS_DISABLED | WS_TABSTOP,114,43,84,10
+    COMBOBOX        IDC_ZONE_AXIS_COMBO_2,122,171,75,161,CBS_DROPDOWNLIST | WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Run tests",IDC_RUN_TESTS,45,213,50,14,BS_FLAT | WS_DISABLED
+    PUSHBUTTON      "Cancel",IDCANCEL,113,213,50,14,BS_FLAT
+    GROUPBOX        "Crystal system (symmetry)",IDC_STATIC,7,59,195,50,BS_CENTER | BS_FLAT
+    GROUPBOX        "ZOLZ (Zero Order Laue Zone)",IDC_STATIC_FIRST_FILE,7,104,195,54,BS_CENTER | BS_FLAT
+    GROUPBOX        "FOLZ (First Order Laue Zone)",IDC_STATIC_TEXT_SECOND_FILE,7,153,195,54,BS_CENTER | BS_FLAT | WS_DISABLED
+    CTEXT           "Static",IDC_ZOLZ_FILE,13,138,184,10,0,WS_EX_ACCEPTFILES | WS_EX_STATICEDGE
+    CTEXT           "Static",IDC_FOLZ_FILE,13,192,184,10,WS_DISABLED,WS_EX_ACCEPTFILES | WS_EX_STATICEDGE
+    GROUPBOX        "Symmetry",IDC_SYMMETRY_STATIC,207,8,263,219,BS_CENTER | BS_FLAT
+    LTEXT           "Zone Axis (1)",IDC_STATIC_ZA1_TEXT,67,123,50,8,WS_DISABLED
+    CONTROL         "List3",IDC_SYMM_LIST,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_OWNERDRAWFIXED | LVS_NOSORTHEADER | WS_TABSTOP,212,30,72,120,WS_EX_STATICEDGE
+    LTEXT           "Zone Axis (2)",IDC_STATIC_ZA2_TEXT,67,173,50,8,WS_DISABLED
+    CONTROL         "List3",IDC_SYMM_LIST2,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_OWNERDRAWFIXED | LVS_NOSORTHEADER | WS_TABSTOP,287,30,72,120,WS_EX_STATICEDGE
+    CTEXT           "Suggestions from intensities",IDC_STATIC,363,20,102,8
+    EDITTEXT        IDC_RESULT_TEXT,363,30,102,120,ES_MULTILINE | NOT WS_BORDER | WS_VSCROLL,WS_EX_STATICEDGE
+    EDITTEXT        IDC_PARTIAL_SYMBOLS_TEXT,212,165,252,58,ES_MULTILINE | ES_AUTOVSCROLL | NOT WS_BORDER | WS_VSCROLL,WS_EX_STATICEDGE
+    CTEXT           "Partial space group symbol from extinctions",IDC_STATIC,213,153,146,8
+    CTEXT           "ZOLZ",IDC_STATIC,214,20,72,8
+    CTEXT           "HOLZ",IDC_STATIC,287,20,72,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_SPIN_STAR_SYMMETRY_TEST_START, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 470
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 227
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Swedish resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\SpinStar.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

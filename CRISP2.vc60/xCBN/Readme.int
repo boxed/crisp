@@ -1,0 +1,110 @@
+                           Readme for NT BINDING
+                           ---------------------
+
+
+ The binding has been developed in 9 steps.
+ ------------------------------------------
+
+ 1. NT demo application
+ 2. NT simulation DLL
+ 3. Boxio converted to 'C'
+ 4. Boxio converted to 'C' 16 bit compatible, tested with MSC
+ 5. Boxio converted to 'C' 32 bit compatible, tested with MSC
+ 6. NT device driver created
+ 7. NT DLL with sytem calls for PORT I/O created
+ 8. Final cleanup, documentation.
+ 9. Logical->phisical port conversion
+
+The process is easily recreated. The following batch files will assist you
+in the re-creation:
+
+        MAKEDEMO BAT            to make the demo
+        SETENV   BAT            to make set environment
+        MAKEALL  BAT            to make the DLL, the DEMO app, test it
+        MAKEDLL  BAT            to make the DLL, copy it, test it
+        VCDEL    BAT            to clean the directory
+
+        The most important is MAKEALL.BAT
+        This will do the whole ddl/compile/copy/test cycle.
+        (delete the obj before the whole process takes place for a
+        workaround for NT linker bug).
+        This batch has to start from the NTDLL directory.
+
+Additional batches:
+-------------------
+
+        These are development helpers, no support is provided for them.
+
+        CLEAR   BAT     to get rid of the 8 Mbyte of garbage spewed by the compiler.
+        VCDEL   BAT     to compliment the odel, exedel etc ... batches.
+        COPYCBN BAT     to copy the result to the demo directory.
+
+
+Notes about the BOXIO:
+----------------------
+
+        I have requested, several times, theat the boxio is cleaned up.
+        I know it functions, but it is very difficult to work with it.
+
+        Here are some guidelines for the corrections needed:
+
+        a. 3000 lines of code is unmainainable.
+           Solution:    split into smaller modules.
+
+        b. The 'hacker' codes are difficult to encounter on development
+           and debugging.
+           Solution:    make it switchable with a #define
+
+        c. Same is true with the 'stupid' function.
+
+        d. Controllable 16 and 32 bit compilation
+           Solution:    please see the supplied cbn_asm.c
+
+        e. Documentation. A brief DOC how it works. Flowchart, timing and
+           communication description.
+
+        f. Redundant code. As reading the code, I find repeated sequences of
+           several parts.
+           Solution:    please understand the code better, and move common
+           tasks to procedures.
+           Example: the bios_test is repeated 3 times in the code. Make
+           it a procedure, and call it from other places. This is just an
+           example, the error occurs several times in the program.
+           Estimated size improvment 100% !!!!
+
+        g. Try to make a layered code. Example: level 1 checks arguments,
+           level 2 communicates bytes, level 3 handshakes lines etc...
+
+        h. Try to write PORTABLE code. Yes, even with assempler it is
+           possible.
+           Hints:       separate processor specific features.(cli)
+                        separate hardware specific features. (out)
+                        separate machine specific features. (bios access)
+                        separate langauge specific features. (small, large)
+           I know, most of it is done, but we need to do better.
+
+           The failure to finish NT fast, is attributed 80% to the difficult
+           nature of the BOXIO.
+
+        i. Document code, with a target in mind, that other people have
+           to base work upon the one you do.
+
+
+All these suggestions are made in an attempt to improve our product.
+
+To assure, that the responsible people read this document, I reqire that
+the following declaration is SIGNED, and faxed back to MARX International:
+
+--------------------------------------------------------------------------
+
+        I <name of responsible>
+
+        declare, that I have read the readme.* files, understood the
+        contents. I will take the desired actions to the best of my
+        knowledge and ability to confirm to the suggested improvements.
+
+
+                                                signature
+                                                   date
+
+--------------------------------------------------------------------------
