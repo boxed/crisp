@@ -1,0 +1,14 @@
+*.user
+*.pch
+*.obj
+.svn
+*.ncb
+*.opt
+*.plg
+*.idb
+*.pdb
+*.vcproj.*.user
+thumbs.db
+Visual Studio 2008
+Debug
+Release
