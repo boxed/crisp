@@ -1,0 +1,319 @@
+	.486
+	.MODEL	FLAT, C
+	.CODE
+;====================================================================
+;------	_proc	Conv5x5 ----------------;
+fff0	macro	a,	n		;
+IFNB	<a>				;
+  IFIDN	<a>,	<->			;
+	fsub	st(n),	st		;
+  ELSE					;
+	fadd	st(n),	st		;
+ENDIF					;
+ENDIF					;
+endm					;
+;----------------------------------------
+FFF	macro 	h, k, m, a, b, c, d, a1, b1, c1, d1
+	fld	qword ptr[esi+((h+2)*8)+((k+2)*8*5)];
+IFIDN	<m>,	<2>			;
+	fadd	st,	st		;
+ENDIF					;
+IFIDN	<m>,	<4>			;
+	fadd	st,	st		;
+	fadd	st,	st		;
+ENDIF					;
+	fff0	a,	1		;
+	fff0	b,	2		;
+	fff0	c,	3		;
+	fff0	d,	4		;
+	fff0	a1,	5		;
+	fff0	b1,	6		;
+	fff0	c1,	7		;
+
+IFNB	<d1>				;
+  IFIDN	<d1>,	<->			;
+	fsubr	qword ptr [edi]		;
+  ELSE					;
+	fadd	qword ptr [edi]		;
+  ENDIF					;
+	fstp	qword ptr [edi]		;
+ELSE					;
+	fstp	st			;
+ENDIF					;
+endm					;
+;----------------------------------------
+Conv5x5	PROC public uses esi edi ebx,	;
+	src:dword, dst:dword		;
+
+	mov	esi,	[src]		;
+	mov	edi,	[dst]		;
+	add	edi,	7*8		;
+rept	8				;
+	fldz				;
+endm					;
+	fstp	qword ptr [edi]		;
+;----------      h   k  m  A   B   C   D   A1  B1  C1  D1
+	FFF	-2, -2, 1, + , - , - , + , + , - , - , + ;
+	FFF	-1, -2, 2, + ,   , - ,   , + ,   , - ,   ;
+	FFF	 0, -2, 2,   , + ,   , - , + ,   , - ,   ;
+	FFF	 1, -2, 2, - ,   , + ,   , + ,   , - ,   ;
+	FFF	 2, -2, 1, - , - , + , + , + , + , - , - ;
+;----------      h   k  m  A   B   C   D   A1  B1  C1  D1
+	FFF	-2, -1, 2, + , - ,   ,   , + , - ,   ,   ;
+	FFF	-1, -1, 4, + ,   ,   ,   , + ,   ,   ,   ;
+	FFF	 0, -1, 4,   , + ,   ,   , + ,   ,   ,   ;
+	FFF	 1, -1, 4, - ,   ,   ,   , + ,   ,   ,   ;
+	FFF	 2, -1, 2, - , - ,   ,   , + , + ,   ,   ;
+;----------      h   k  m  A   B   C   D   A1  B1  C1  D1
+	FFF	-2,  0, 2, + , - ,   ,   ,   ,   , + , - ;
+	FFF	-1,  0, 4, _ ,   ,   ,   ,   ,   , + ,   ;
+	FFF	 0,  0, 4,   , + ,   ,   ,   ,   , + ,   ;
+	FFF	 1,  0, 4, - ,   ,   ,   ,   ,   , + ,   ;
+	FFF	 2,  0, 2, - , - ,   ,   ,   ,   , + , + ;
+;----------      h   k  m  A   B   C   D   A1  B1  C1  D1
+	FFF	-2,  1, 2, + , - ,   ,   , - , + ,   ,   ;
+	FFF	-1,  1, 4, + ,   ,   ,   , - ,   ,   ,   ;
+	FFF	 0,  1, 4,   , + ,   ,   , - ,   ,   ,   ;
+	FFF	 1,  1, 4, - ,   ,   ,   , - ,   ,   ,   ;
+	FFF	 2,  1, 2, - , - ,   ,   , - , - ,   ,   ;
+;----------      h   k  m  A   B   C   D   A1  B1  C1  D1
+	FFF	-2,  2, 1, + , - , + , - , - , + , - , + ;
+	FFF	-1,  2, 2, + ,   , + ,   , - ,   , - ,   ;
+	FFF	 0,  2, 2,   , + ,   , + , - ,   , - ,   ;
+	FFF	 1,  2, 2, - ,   , - ,   , - ,   , - ,   ;
+	FFF	 2,  2, 1, - , - , - , - , - , - , - , - ;
+;---------------------------------------------------------
+	fstp	qword ptr [edi-56]	; A
+	fstp	qword ptr [edi-48]	; B
+	fstp	qword ptr [edi-40]	; C
+	fstp	qword ptr [edi-32]	; D
+	fstp	qword ptr [edi-24]	; A1
+	fstp	qword ptr [edi-16]	; B1
+	fstp	qword ptr [edi- 8]	; C1
+
+	ret				;
+Conv5x5	endp				;
+;*********************************************************
+;*********************************************************
+;*********************************************************
+;*********************************************************
+Residual PROC public uses esi ebx,	;
+	data	: dword,		;
+	nnn	: dword,		;
+	res	: dword			;
+
+	cld				;
+	mov	esi,	[data]		; 0   4   8   12    20
+	add	esi,	4		; h,  k,  p,  w      h, ....
+	mov	ecx,	[nnn]		;
+	mov	edx,	4+4+8		;
+	fldz				;
+@@10:					;
+	lodsd				; k
+	fild	dword ptr[esi]		; p
+	fmul	qword ptr[esi+4]	; p*=w
+	add	[esi],	eax		; p+=k
+	fabs				;
+	add	esi,	edx		;
+	faddp	st(1),	st(0)		; r+=p*w
+	loop	@@10			;
+	mov	esi,	[res]		;
+	fstp	qword ptr[esi]		;
+	ret				;
+Residual endp				;
+;*********************************************************
+;*********************************************************
+;====================================================================
+X64_Copy PROC C PUBLIC uses esi edi ebx,;
+	src	: dword,		;
+	dst	: dword,		;
+	dstw	: dword,		;
+	dsth	: dword,		;
+	x_a	: dword,		;
+	y_a	: dword,		;
+	x_b	: dword,		;
+	y_b	: dword,		;
+	s_a0	: dword,		;
+	s_b0	: dword,		;
+	xneg	: dword			;
+;........................................
+local	xcnt	: dword,		;
+	ycnt	: dword,		;
+	s0	: dword,		;
+	s1	: dword			;
+;........................................
+	mov	esi,	[src]		;
+	mov	edi,  	[dst]		;
+	mov	edx,	[s_a0]		;
+	mov	ecx,	[s_b0]		;
+	mov	eax,	[dsth]		;
+	mov	[ycnt],	eax		;
+@@10:					;
+	push	edx			;
+	push	ecx			;
+	mov	eax,	[dstw]		;
+	mov	[xcnt],	eax		;
+;----------------------------------------
+@@20:					;
+	xor	ebx,	ebx		;
+	mov	bh,	ch		;
+	and     bh,	3Fh		;
+	mov	bl,	dh		;
+	shl	bl,	2		;
+	shr	bx,	2		;
+;....................................... al	ah	eal	eah
+	mov	al,	dl		;
+	not	al			;
+	mul	byte ptr[esi+ebx]	;	a*~dx
+;	rol	eax,	8		;		a*~dx
+	mov	[s0],	eax		;
+	mov	al,	dl		;
+	shl	bx,	2		;
+	add	bl,	4		;
+	shr	bx,	2		;
+	mul	byte ptr[esi+ebx]	;	b*dx	a*~dx
+	add	[s0],	eax		;
+;	ror	eax,	8		;b*dx	a*~dx
+;	add	al,	ah		;s
+;	not	cl			;
+;	mul	cl			;	s*~dy
+;	not	cl			;
+;	rol	eax,	8		;		s*~dy
+;.....................................................................
+	add	bx,	64		;
+	and	bh,	0Fh		;
+	mov	al,	dl		;
+	mul	byte ptr[esi+ebx]	;	d*dx	s*~dy
+;	rol	eax,	8		;		d*dx	s*~dy
+	mov	[s1],	eax		;
+	shl	bx,	2		;
+	sub	bl,	4		;
+	shr	bx,	2		;
+	mov	al,	dl		;
+	not	al			;
+	mul	byte ptr[esi+ebx]	;	c*~dx	d*dx	s*~dy
+	add	eax,	[s1]		;
+;	ror	eax,	8		;c*~dx	d*dx    s*~dy
+;	add	al,	ah		;t	d*dx    s*~dy
+;	mul	cl			;	t*dy    s*~dy
+;	ror	eax,	8		;t*dy   s*~dy
+;.....................................................................
+;	add	al,	ah		;p
+	movzx	ebx,	cl		;
+	imul	eax,	ebx		;
+	push	eax			;
+	mov	eax,	[s0]		;
+	not	bl			;
+	imul	eax,	ebx		;
+	pop	ebx			;
+	add	eax,	ebx		;
+	shr	eax,	16		;
+	adc	ax,	0		;
+	xor	eax,	[xneg]		;
+	stos	byte ptr[edi]		;
+	add	edx,	[x_a]		;
+	add	ecx,	[x_b]		;
+	dec	[xcnt]			;
+	jnz	short	@@20		;
+;----------------------------------------
+	pop	ecx			;
+	pop	edx			;
+	add	edx,	[y_a]		;
+	add	ecx,	[y_b]		;
+	dec	[ycnt]			;
+	jnz	@@10			;
+	ret				;
+X64_Copy endp				;
+;====================================================================
+X256_Copy PROC C PUBLIC uses esi edi ebx, ;
+	src	: dword,		;
+	dst	: dword,		;
+	dstw	: dword,		;
+	dsth	: dword,		;
+	x_a	: dword,		;
+	y_a	: dword,		;
+	x_b	: dword,		;
+	y_b	: dword,		;
+	s_a0	: dword,		;
+	s_b0	: dword,		;
+	xneg	: dword,		;
+;........................................
+local	xcnt	: dword,		;
+	ycnt	: dword,		;
+	s0	: dword,		;
+	s1	: dword			;
+;........................................
+	mov	esi,	[src]		;
+	mov	edi,	[dst]		;
+	mov	edx,	[s_a0]		;
+	mov	ecx,	[s_b0]		;
+	mov	eax,	[dsth]		;
+	mov	[ycnt],	eax		;
+@@10:					;
+	push	edx			;
+	push	ecx			;
+	mov	eax,	[dstw]		;
+	mov	[xcnt],	eax		;
+;----------------------------------------
+@@20:
+	xor	ebx,	ebx		;
+	mov	bh,	ch		;
+;	and     bh,	3Fh		;
+	mov	bl,	dh		;
+;	shl	bl,	2		;
+;	shr	bx,	2		;
+;....................................... al	ah	eal	eah
+	mov	al,	dl		;
+	not	al			;
+	mul	byte ptr[esi+ebx]	;	a*~dx
+	mov	[s0],	eax		;
+	mov	al,	dl		;
+;	shl	bx,	2		;
+;	add	bl,	4		;
+;	shr	bx,	2		;
+	inc	bl
+	mul	byte ptr[esi+ebx]	;	b*dx	a*~dx
+	add	[s0],	eax		;
+;.....................................................................
+;	add	bx,	64		;
+;	and	bh,	0Fh		;
+	inc	bh
+	mov	al,	dl		;
+	mul	byte ptr[esi+ebx]	;	d*dx	s*~dy
+	mov	[s1],	eax		;
+;	shl	bx,	2		;
+;	sub	bl,	4		;
+;	shr	bx,	2		;
+	dec	bl
+	mov	al,	dl		;
+	not	al			;
+	mul	byte ptr[esi+ebx]	;	c*~dx	d*dx	s*~dy
+	add	eax,	[s1]		;
+;.....................................................................
+	movzx	ebx,	cl		;
+	imul	eax,	ebx		;
+	push	eax			;
+	mov	eax,	[s0]		;
+	not	bl			;
+	imul	eax,	ebx		;
+	pop	ebx			;
+	add	eax,	ebx		;
+	shr	eax,	16		;
+	adc	ax,	0		;
+	xor	eax,	[xneg]		;
+	stos	byte ptr[edi]		;
+	add	edx,	[x_a]		;
+	add	ecx,	[x_b]		;
+	dec	[xcnt]			;
+	jnz	short	@@20		;
+;----------------------------------------
+	pop	ecx			;
+	pop	edx			;
+	add	edx,	[y_a]		;
+	add	ecx,	[y_b]		;
+	dec	[ycnt]			;
+	jnz	@@10			;
+	ret				;
+X256_Copy endp				;
+;========================================
+end

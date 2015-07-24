@@ -1,0 +1,269 @@
+	.486
+	.MODEL	FLAT,C
+	.CODE
+;----------------------------------------
+fcw	dw	137Fh			; round to nearest (1372h)
+fcwtr	dw	177Fh			; to infinity
+
+;-----------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
+im8Xlat	PROC public uses esi edi ebp ebx,
+	dst:dword, src:dword, soff:dword, ylat:dword, awidth:dword, height:dword
+	mov	edi,	[dst]		;
+	xor	ebx,	ebx		;
+	xor	eax,	eax		;
+	xor	esi,	esi		;
+	mov	esi,	[src]		;
+	add	esi,	[soff]		;
+	mov	ecx,	[awidth]	;
+	mov	edx,	[height]	;
+	imul	ecx,	edx		;
+	mov	ebp,	[ylat]		;
+;----------------------------------------
+@@10:
+	mov	al,	[esi+3]		; y3
+	mov	bl,	[esi+2]		; y2
+	mov	dh,	[eax+ebp]	;  p3
+	mov	dl,	[ebx+ebp]	;  p2
+	mov	al,	[esi+1]		; y1
+	shl	edx,	16		;
+	mov	bl,	[esi]		; y0
+	mov	dh,	[eax+ebp]	;  p1
+	mov	dl,	[ebx+ebp]	;  p0
+	add	esi,	4		;
+	mov	[edi],	edx		;
+	add	edi,	4		;
+	sub	ecx,	4		;
+	jg	short	@@10		;
+;........................................
+	ret				;
+im8Xlat endp				;
+;-----------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
+im16Xlat PROC public uses esi edi ebp ebx,
+	dst:dword, src:dword, soff:dword, ylat:dword, awidth:dword, height:dword
+	mov	edi,	[dst]		;
+	xor	ebx,	ebx		;
+	xor	eax,	eax		;
+	xor	esi,	esi		;
+	mov	esi,	[src]		;
+	add	esi,	[soff]		;
+	mov	ecx,	[awidth]	;
+	mov	edx,	[height]	;
+	imul	ecx,	edx		;
+	mov	ebp,	[ylat]		;
+;----------------------------------------
+@@10:
+	mov	ax,	[esi+2]		; y1
+	mov	bx,	[esi]		; y0
+	mov	dx,	word ptr [eax*2+ebp] ;  p1
+	add	esi,	4		;
+	shl	edx,	16		;
+	mov	dx,	word ptr [ebx*2+ebp] ;  p0
+	mov	[edi],	edx		;
+	add	edi,	4		;
+	sub	ecx,	2		;
+	jg	short	@@10		;
+;........................................
+	ret				;
+im16Xlat endp				;
+;-----------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
+im8Hi15 PROC public uses esi edi ebx,
+	dst:dword, src:dword, soff:dword, awidth:dword, height:dword
+	mov	edi,	[dst]		;
+	mov	esi,	[src]		;
+	add	esi,	[soff]		;
+	mov	ecx,	[awidth]		;
+	mov	edx,	[height]	;
+	imul	ecx,	edx		;
+;----------------------------------------
+@@10:
+	xor	bx,	bx		;
+	mov	ax,	[esi]		;
+	shld	bx,	ax,	5	;
+	shld	bx,	ax,	5	;
+	shld	bx,	ax,	5	;
+	mov	[edi+2],bx
+
+	xor	bx,	bx		;
+	mov	ah,	al		;
+	shld	bx,	ax,	5	;
+	shld	bx,	ax,	5	;
+	shld	bx,	ax,	5	;
+	mov	[edi],	bx
+
+	add	edi,	4		;
+	add	esi,	2		;
+	sub	ecx,	2		;
+	jg	short	@@10		;
+;........................................
+	ret				;
+im8Hi15 endp				;
+;-----------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
+im8Hi16 PROC public uses esi edi ebx,
+	dst:dword, src:dword, soff:dword, awidth:dword, height:dword
+	mov	edi,	[dst]		;
+	mov	esi,	[src]		;
+	add	esi,	[soff]		;
+	mov	ecx,	[awidth]	;
+	mov	edx,	[height]	;
+	imul	ecx,	edx		;
+;----------------------------------------
+@@10:
+	mov	ax,	[esi]		;
+	shld	bx,	ax,	5	;
+	shld	bx,	ax,	6	;
+	shld	bx,	ax,	5	;
+	bswap	eax			;
+	shld	ebx,	eax,	5	;
+	shld	ebx,	eax,	6	;
+	shld	ebx,	eax,	5	;
+
+	mov	[edi],	ebx		;
+	add	edi,	4		;
+	add	esi,	2		;
+	sub	ecx,	2		;
+	jg	short	@@10		;
+;........................................
+	ret				;
+im8Hi16 endp				;
+;-----------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
+im8Hi24 PROC public uses esi edi ebx,
+	dst:dword, src:dword, soff:dword, awidth:dword, height:dword
+	mov	edi,	[dst]		;
+	mov	esi,	[src]		;
+	add	esi,	[soff]		;
+	mov	ecx,	[awidth]	;
+	mov	edx,	[height]	;
+	imul	ecx,	edx		;
+;----------------------------------------
+@@10:
+	mov	ax,	[esi]		;
+	mov	bh,	ah		;
+	mov	bl,	ah		;
+	shl	ebx,	16		;
+	mov	bh,	ah		;
+	mov	bl,	al		;
+	mov	ah,	al		;
+	mov	[edi],	ax		;
+	mov	[edi+2], ebx		;
+	add	edi,	6		;
+	add	esi,	2		;
+	sub	ecx,	2		;
+	jg	short	@@10		;
+;........................................
+	ret				;
+im8Hi24 endp				;
+;-----------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
+im8Hi32 PROC public uses esi edi ebx,
+	dst:dword, src:dword, soff:dword, awidth:dword, height:dword
+	mov	edi,	[dst]		;
+	mov	esi,	[src]		;
+	add	esi,	[soff]		;
+	mov	ecx,	[awidth]	;
+	mov	edx,	[height]	;
+	imul	ecx,	edx		;
+;----------------------------------------
+@@10:
+	mov	ax,	[esi]		;
+	mov	bh,	ah		;
+	mov	bl,	ah		;
+	shl	ebx,	8		;
+	mov	bl,	ah		;
+	mov	ah,	al		;
+	shl	eax,	8		;
+	mov	al,	ah		;
+	mov	[edi+4], ebx		;
+	mov	[edi], eax		;
+	add	edi,	8		;
+	add	esi,	2		;
+	sub	ecx,	2		;
+	jg	short	@@10		;
+;........................................
+	ret				;
+im8Hi32 endp				;
+
+;====================================================================
+;====================================================================
+testpix	macro	adr, slbl
+local	a
+;	mov	al,	[esi]
+;	sub	al,	adr
+;	jnc	short	a
+;	neg	al
+;a:	cmp	al,	ah
+;	jnc	short	slbl
+	mov	al,	[esi]
+	xor	al,	adr
+	test	al,	ah
+	jnz	short	slbl
+endm
+;====================================================================
+im8CreateCtrMap PROC public uses esi edi ebx, ;
+	src:dword, dst:dword, xs:dword, ys:dword, stps:dword
+	cld				;
+;........................................
+	mov	esi, 	[src]		;
+	mov	edi,	[dst]		;
+	mov	ecx,	[xs]		;
+	mov	ebx,	ecx		;
+	mov	eax,	[ys]		;
+	dec	eax			;
+	imul	ecx,	eax		;
+	mov	ah,	byte ptr [stps]	;
+@@10:
+	testpix	[esi+1],   @@50		; left
+	testpix	[esi+ebx], @@50		; bottom
+	xor	al,	al		; fail
+	jmp	short	@@55		;
+@@50:
+	mov	al,	[esi]		;
+@@55:
+	mov	[edi],	al		; Store result (pixel code or 0)
+	inc	esi			;
+	inc	edi			;
+	dec	ecx			;
+	jnz	short	@@10		;
+@@99:					;
+	ret				;
+im8CreateCtrMap endp			;
+;====================================================================
+;====================================================================
+;====================================================================
+im8Descale PROC public USES esi edi ebx,;
+	dst	: dword,		;
+	src	: dword,		;
+	wgt	: dword,		;
+	cnt	: dword,		;
+
+local	tmpb	: dword			;
+
+;........................................
+	cld				;
+	mov	esi, [src]		;
+	mov	edi, [dst]		;
+	mov	ebx, [wgt]		;
+	mov	ecx, [cnt]		;
+@@10:	test	dword ptr [ebx], -1	;
+	jz	@@20			;
+	fld	qword ptr [esi]		;
+	fidiv	dword ptr [ebx]		;
+	fistp	dword ptr [tmpb]			;
+	mov	eax,	[tmpb]		;
+	jmp	@@22			;
+@@20:	mov	eax,	128		;
+@@22:	mov	[edi], al		;
+	add	esi,	8		;
+	add	ebx,	4		;
+	inc	edi			;
+	dec	ecx			;
+	jnz	@@10			;
+	ret				;
+im8Descale endp					;
+;====================================================================
+;*****************************************************************************
+end

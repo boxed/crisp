@@ -1,0 +1,207 @@
+include	DEFINE32.MAC
+
+	.data
+
+	.code
+;--------------------------------
+eadd1	macro   rg,	ea	; +E
+	add	rg,	ea	;
+endm				;
+;--------------------------------
+eadd3	macro   rg,	ea	; +3*E
+	mov	bx,	ea	;
+	add	rg,	bx	;
+	add	rg,	bx	;
+	add	rg,	bx	;
+endm				;
+;--------------------------------
+eadd5	macro   rg,	ea	; +5*E
+	mov	bx,	ea	;
+	add	rg,	bx	;
+	sal	bx,	2	;
+	add	rg,	bx	;
+endm				;
+;--------------------------------
+padd	macro   rg,	ea	; +16*P
+	movzx	bx,	byte ptr ea	;
+	sal	bx,	4	;
+	add	rg,	bx	;
+endm				;
+;--------------------------------
+vsub	macro   rg,	ea	; - V (*16)
+	sub	rg,	ea	;
+endm				;
+;--------------------------------
+esave	macro   rg,	ea	; save E
+	sar	rg,	4	;
+	mov	bx,	rg	;; pattern removing
+	sar	bx,	cl	;;
+	add	rg,	bx	;;
+	mov	ea,	rg	;
+	sal	rg,	3	;
+	sub	rg,	ea	;
+endm				;
+;--------------------------------
+round   macro	rg		;
+local	a			;
+	mov	bx,	rg	;
+	sar	bx,	4	;
+	adc	bx,	0	;
+	test	bh,	bh	;
+	jz	short	a	;
+	mov	bl,	bh	;
+	not	bl		;
+	xor	bh,	bh	;
+	sar	rg,	12	;
+	not	rg		;
+	shr	rg,	4	;
+a:				;
+endm				;
+;--------------------------------
+;********************************
+;--------------------------------
+;__________H_______L_______
+;    eax : G       R
+;    ebx : indx   tmp
+;    ecx : for sale
+;    edx : cnt     B
+; ds:esi :    err
+; es:edi :    dst
+; fs:ebp :    src
+; Err	{ER0, ER1}...
+	ER0	= 0	;
+	ER1	= 2	;
+	NEXT    = 4	;
+	PREV	=-4	;
+;------------------------------------------------------
+;------------------------------------------------------
+; void	prn_DitherR( LPBYTE dst, LPBYTE src, LPWORD err, int cnt, int prem);
+prn_DitherR	PROC USES EDI ESI EBX EBP,	;
+	dst	: dword,		; output 1bpp
+	src	: dword,		; input Grayscale image
+	err	: dword,		; ERR
+	cnt	: dword,		; pixel count
+	prem	: byte			; Pattern removing
+	mov	edx,	[cnt]		;
+	mov	cl,	[prem]		;
+	dec	edx			;
+	shl	edx,	16		;
+	xor	eax,	eax		;
+	mov	edi,	[dst]		;
+	mov	ebx,	[src]		;
+	mov	esi,	[err]		;
+	add	esi,	NEXT		;
+	mov	ebp,	ebx		;
+	mov	dh,	1		;
+@@10:
+;.........................................
+	padd	ax,	[ebp] 		; Y
+	eadd3	ax,	[esi+ER0+NEXT]	;
+	eadd5	ax,	[esi+ER0]	;
+	eadd1	ax,	[esi+ER0+PREV]	;
+	round	ax			;
+;.........................................
+	sar	bl,	8
+	rcl	dl,	1
+	rol	dh,	1
+	jnc	@@20
+	mov     [edi],	dl		;
+	inc	edi			; dst++
+@@20:					;
+	sal     bx,	4
+	sub	ax,	bx		;
+	esave	ax,	[esi+ER1]	;
+;.........................................
+	inc	ebp			; src++
+	add	esi,	NEXT		; err++
+	sub	edx,	10000h		; cnt
+	jge	@@10			;
+;.........................................
+	ret				;
+prn_DitherR	endp			;
+;------------------------------------------------------
+;------------------------------------------------------
+; void	prn_DitherL( LPBYTE dst, LPBYTE src, LPWORD err, int cnt, int prem);
+prn_DitherL	PROC USES EDI ESI EBX EBP, ;
+	dst	: dword,		; output 1bpp
+	src	: dword,		; input Grayscale image
+	err	: dword,		; ERR
+	cnt	: dword,		; pixel count
+	prem	: byte			; Pattern removing
+
+	mov	cl,	[prem]		;
+	mov	edx,	[cnt]		;
+	mov	edi,	[dst]		;
+	mov	ebx,	[src]		;
+	mov	esi,	[err]		;
+	mov	ebp,	ebx		;
+	mov	eax,	edx		;
+	shr	eax,	3		;
+	dec	eax			;
+	add     edi,	eax		; dst+=cnt/8-1;
+	dec	edx			;
+	add	ebp,	edx		; src+=cnt-1;
+	lea	esi,	[esi+edx*4+NEXT];
+	shl	edx,	16		;
+	mov	dh,	1		;
+	xor	eax,	eax		;
+@@10:
+;.........................................
+	padd	ax,	[ebp]		; Y
+	eadd3	ax,	[esi+ER1+PREV]	;
+	eadd5	ax,	[esi+ER1]	;
+	eadd1	ax,	[esi+ER1+NEXT]	;
+	round	ax			;
+;.........................................
+	sar	bl,	8
+	rcr	dl,	1
+	rol	dh,	1
+	jnc	@@20
+	mov     [edi], dl		;
+	dec	edi			; dst--
+@@20:					;
+	sal     bx,	4
+	sub	ax,	bx		;
+	esave	ax,	[esi+ER0]	;
+;.........................................
+	dec	ebp			; src--
+	add	esi,	PREV		; err--
+	sub	edx,	10000h		; cnt
+	jge	@@10			;
+;.........................................
+	ret				;
+prn_DitherL endp			;
+;===========================================================
+;===========================================================
+;===========================================================
+; void prn_RGB2Gray( LPBYTE dst, LPBYTE rgb, long cnt );
+prn_RGB2Gray	PROC USES ESI EDI EBX,	;
+	dst:dword,			;
+	src:dword,			;
+	cnt:dword			;
+
+	mov	edi,	[dst]		;
+	mov	esi,	[src]		;
+	mov	ecx,	[cnt]		;
+@@10:
+	movzx	dx, byte ptr [esi]	; R
+	inc	esi			;
+	lods	word ptr [esi]		; B.G
+	xor	bx,	bx		;
+	xchg	ah,	bl		; dx:R, ax:G, bx:B
+	add	bx,	ax		; bx:B+G
+	shl	ax,	1		;
+	add	ax,	dx		;
+	shl	ax,	1		;
+	add	ax,	bx		;
+	shr	ax,	3		;
+	adc	ax,	0		;
+	stos	byte ptr [edi]		;
+	dec	ecx			;
+	jnz	short	@@10		;
+	ret
+prn_RGB2Gray	endp
+;===========================================================
+;===========================================================
+
+end

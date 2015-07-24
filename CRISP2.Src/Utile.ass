@@ -1,0 +1,745 @@
+	.486
+	.MODEL	FLAT,C
+	.DATA
+
+float___ret dd	0			;
+
+	.CODE
+
+;====================================================================
+;====================================================================
+AGauss	PROC public,			;
+	s : dword,			;
+	x : dword			;
+	fld	[x]			;
+	fmul	[s]			;
+	fmul	st,	st		; s*s*x*x
+	fldl2e				;
+	fmulp	st(1),	st		; log2(e)*s*s*x*x
+	fchs				;-log2(e)*s*s*x*x
+	fld	st			;
+	frndint				;
+	fsub	st(1),	st		;
+	fxch	st(1)			;
+	f2xm1				;
+	fld1				;
+	faddp	st(1), st		;
+	fscale				;
+	fxch	st(1)
+	fstp st				;
+	ret				;
+AGauss	endp				;
+;====================================================================
+;====================================================================
+AddFPix8 PROC public uses esi ebx,	;
+	fmap	: dword,		;
+	imw	: dword,		;
+	imh	: dword,		;
+	x	: dword,		;
+	y	: dword,		;
+	pix	: dword			;
+	mov	esi,	[fmap]		;
+	mov	eax,	-1		;
+	mov	ebx,	[x]		;
+	mov	ecx,	[y]		;
+	mov	edx,	[imw]		;
+	cmp	ecx,	[imh]		;
+	jnc	short	@@99		;
+	cmp	ebx,	edx		;
+	jnc	short	@@99		;
+	imul	ecx,	edx		;
+	add	ebx,	ecx		;
+	fld	[pix]			;
+	fadd	dword ptr[esi+ebx*4]	;
+	fstp	dword ptr[esi+ebx*4]	;
+@@99:					;
+	ret				;
+AddFPix8 endp				;
+;====================================================================
+;====================================================================
+FMapToImg PROC public uses esi edi ebx,	;
+	fmap	: dword,		;
+	img	: dword,		;
+	imw	: dword,		;
+	imh	: dword,		;
+	aneg	: dword,		;
+	min	: dword,		;
+	max	: dword			;
+
+	mov	esi,	[fmap]		;
+	mov	edi,	[img]		;
+	mov	edx,	[imw]		;
+	mov	ecx,	[imh]		;
+	imul	ecx,	edx		;
+	mov	ebx,	[min]		;
+	sub	[max],	ebx		;
+	fild	[max]			;
+@@10:
+	fld	dword ptr[esi]		;
+	add	esi,	4		;
+	fmul	st,	st(1)		;
+	fistp	[min]			;
+	mov	eax,	[min]		;
+	add	eax,	ebx		;
+	neg	ah			;
+	sar	ah,	8		;
+	or	al,	ah		;
+	xor	eax,	[aneg]		;
+	stos	byte ptr [edi]		;
+	dec	ecx			;
+	jnz	short	@@10		;
+	fstp	st			;
+	ret				;
+FMapToImg endp				;
+;====================================================================
+;====================================================================
+FMapToImg16 PROC public uses esi edi ebx, ;
+	fmap	: dword,		;
+	img	: dword,		;
+	imw	: dword,		;
+	imh	: dword,		;
+	aneg	: dword,		;
+	min	: dword,		;
+	max	: dword			;
+
+	mov	esi,	[fmap]		;
+	mov	edi,	[img]		;
+	mov	edx,	[imw]		;
+	mov	ecx,	[imh]		;
+	imul	ecx,	edx		;
+	mov	ebx,	[min]		;
+	sub	[max],	ebx		;
+	fild	[max]			;
+@@10:
+	fld	dword ptr[esi]		;
+	add	esi,	4		;
+	fmul	st,	st(1)		;
+	fistp	[min]			;
+	mov	eax,	[min]		;
+	add	eax,	ebx		;
+	mov	edx,	eax		;
+	shr	edx,	16		;
+	neg	dx			;
+	sar	dx,	16		;
+	or	ax,	dx		;
+	xor	eax,	[aneg]		;
+	stos	word ptr [edi]		;
+	dec	ecx			;
+	jnz	short	@@10		;
+	fstp	st			;
+	ret				;
+FMapToImg16 endp			;
+;====================================================================
+fpCalcDistance PROC public uses esi edi ebx, ;
+	x0	: dword,			;
+	y0	: dword,			;
+	x1	: dword,			;	
+	y1	: dword			;
+	mov	eax,	[x0]		;
+	sub	[x1],	eax		;
+	mov	eax,	[y0]		;
+	sub	[y1],	eax		;
+	fild	[x1]			;
+	fmul	st,	st		;
+	fild	y1			;
+	fmul	st,	st		;
+	faddp	st(1),	st		;
+	fsqrt				;
+	ret				;
+fpCalcDistance endp					;
+;====================================================================
+;====================================================================
+;====================================================================
+GetRDF8 PROC public USES esi edi ebx,	;
+	img	: dword,		;
+	imw	: dword,		;
+	imh	: dword,		;
+	aneg	: dword,		;
+	x	: dword,		;
+	y	: dword,		;
+	r	: dword,		;
+	rdf	: dword,		; LPdouble
+	wgt	: dword			; LPLONG
+local	ycnt 	: dword,		;
+	xcnt 	: dword,		;
+	y0 	: dword,		;
+        xxx	: dword,		;
+	offs 	: dword			;
+
+	mov	esi, [img]		;
+	xor	ax,	ax		;
+	mov	edx,	[r]		;
+	mov	ebx,	[x]		;
+	sub	ebx,	edx		; x-r
+	js	@@99			; x-r <= 0
+	add	esi,	ebx		;
+	mov	edi,	[imw]		;
+	lea	ebx,	[ebx+2*edx+4]	; x+r+3
+	cmp	ebx,	edi		;
+	jnc	@@99			; x+r >= imgw
+	mov	ecx,	[y]		;
+	sub	ecx,	edx		; y-r
+	js	@@99			; y-r <= 0
+	mov	ebx,	edi		;
+	imul	edi,	ecx		;
+	add	esi,	edi		; img[y-r][x-r]
+	lea	edx,	[edx*2+1]	; 2*r+1
+	add	ecx,	edx		; y+r
+	cmp	ecx,	[imh]		;
+	jnc	short	@@99		;
+	sub	ebx,	edx		; imgw - 2*r -1
+	mov	[offs],	ebx		; offset
+	mov	[ycnt], edx		;
+	mov	[xcnt], edx		;
+	xor	eax,	eax		;
+;-----------------------------------------
+	fild	[r]			; st0 st1 st2 st3 st4 st5 st6 st7
+	fld1				; 1   R
+	fld	st(1)			; R   1   R
+	fchs				; y   1   R
+	mov	[r],	edx		; r=2*r+1
+	mov	edi,	[rdf]		;
+	mov	edx,	[wgt]		;
+@@10:					;
+	mov	ecx,	[r]		; st0 st1 st2 st3 st4 st5 st6 st7
+	fld	st(2)			; R   y   1   R
+	fchs				; x   y   1   R
+@@12:					;
+	fld	st			; x   x   y   1   R
+	fmul	st,	st(1)		; x2  x   y   1   R
+	fld	st(2)			; y   x2  x   y   1   R
+	fmul	st,	st(3)		; y2  x2  x   y   1   R
+	faddp	st(1),	st		; r2  x   y   1   R
+	fsqrt				; r   x   y   1   R
+	fcom	st(4)			; r   x   y   1   R
+	fstsw	ax			; r   x   y   1   R
+	fistp	[y0]			; x   y   1   R
+	sahf				;
+	jbe	short @@13		;
+	inc	esi			;
+	jmp	short @@14		;
+@@13:
+	movzx	eax,	byte ptr[esi]	;
+	xor	eax,	[aneg]		;
+	inc	esi			;
+        mov	[xxx],	eax		;
+	mov	ebx,	[y0]		; radius
+        fild	[xxx]			;
+        fadd	qword ptr [edi+ebx*8]	; add value
+	inc	dword ptr [edx+ebx*4]	; cnt++
+        fstp	qword ptr [edi+ebx*8]	;
+@@14:					; st0 st1 st2 st3 st4 st5 st6 st7
+					; x   y   1   R
+	fadd	st,	st(2)		; x++ y   1   R
+	loop	@@12			;
+	fstp	st			; y   1   R
+	fadd	st,	st(1)		; y++ 1   R
+	add	esi,	[offs]		;
+	dec	[ycnt]			;
+	jnz	short	@@10
+	fstp	st			;
+	fstp	st			;
+	fstp	st			;
+	mov	eax,	1		;
+@@99:					;
+	ret				;
+GetRDF8	endp				;
+;====================================================================
+;====================================================================
+GetRDF16 PROC public USES esi edi ebx,	;
+	img	: dword,		;
+	imw	: dword,		;
+	imh	: dword,		;
+	aneg	: dword,		;
+	x	: dword,		;
+	y	: dword,		;
+	r	: dword,		;
+	rdf	: dword,		; LPDOUBLE
+	wgt	: dword			; LPLONG
+local	ycnt 	: dword,		;
+	xcnt 	: dword,		;
+	y0 	: dword,		;
+        xxx	: dword,		;
+	offs 	: dword			;
+
+	mov	esi, [img]		;
+	mov	edx,	[r]		;
+	mov	ebx,	[x]		;
+	sub	ebx,	edx		; x-r
+	js	@@99			; x-r <= 0
+	lea	esi,	[esi+ebx*2]	;
+	mov	edi,	[imw]		;
+	lea	ebx,	[ebx+2*edx+4]	; x+r+3
+	cmp	ebx,	edi		;
+	jnc	@@99			; x+r >= imgw
+	mov	ecx,	[y]		;
+	sub	ecx,	edx		; y-r
+	js	@@99			; y-r <= 0
+	mov	ebx,	edi		;
+	imul	edi,	ecx		;
+	add	esi,	edi		; img[y-r][x-r]
+        add	esi,	edi
+	lea	edx,	[edx*2+1]	; 2*r+1
+	add	ecx,	edx		; y+r
+	cmp	ecx,	[imh]		;
+	jnc	short	@@99		;
+	sub	ebx,	edx		; imgw - 2*r -1
+        add	ebx,	ebx
+	mov	[offs],	ebx		; offset
+	mov	[ycnt], edx		;
+	mov	[xcnt], edx		;
+	xor	eax,	eax		;
+;-----------------------------------------
+	fild	[r]			; st0 st1 st2 st3 st4 st5 st6 st7
+	fld1				; 1   R
+	fld	st(1)			; R   1   R
+	fchs				; y   1   R
+	mov	[r],	edx		; r=2*r+1
+	mov	edi,	[rdf]		;
+	mov	edx,	[wgt]		;
+@@10:					;
+	mov	ecx,	[r]		; st0 st1 st2 st3 st4 st5 st6 st7
+	fld	st(2)			; R   y   1   R
+	fchs				; x   y   1   R
+@@12:					;
+	fld	st			; x   x   y   1   R
+	fmul	st,	st(1)		; x2  x   y   1   R
+	fld	st(2)			; y   x2  x   y   1   R
+	fmul	st,	st(3)		; y2  x2  x   y   1   R
+	faddp	st(1),	st		; r2  x   y   1   R
+	fsqrt				; r   x   y   1   R
+	fcom	st(4)			; r   x   y   1   R
+	fstsw	ax			; r   x   y   1   R
+	fistp	[y0]			; x   y   1   R
+	sahf				;
+	jbe	short @@13		;
+	add	esi,	2		;
+	jmp	short @@14		;
+@@13:
+	movzx	eax,	word ptr[esi]	;
+; mov word ptr [esi], 0
+	xor	eax,	[aneg]		;
+	add	esi,	2		;
+        mov	[xxx],	eax		;
+	mov	ebx,	[y0]		; radius
+        fild	[xxx]			;
+	fadd	qword ptr [edi+ebx*8]	; add value
+	inc	dword ptr [edx+ebx*4]	; cnt++
+        fstp	qword ptr [edi+ebx*8]	;
+@@14:					; st0 st1 st2 st3 st4 st5 st6 st7
+					; x   y   1   R
+	fadd	st,	st(2)		; x++ y   1   R
+	loop	@@12			;
+	fstp	st			; y   1   R
+	fadd	st,	st(1)		; y++ 1   R
+	add	esi,	[offs]		;
+	dec	[ycnt]			;
+	jnz	short	@@10
+	fstp	st			;
+	fstp	st			;
+	fstp	st			;
+	mov	eax,	1		;
+@@99:					;
+	ret				;
+GetRDF16 endp				;
+;====================================================================
+GetRDFangl8 PROC public USES esi edi ebx,;
+	img	: dword,		;
+	imw	: dword,		;
+	imh	: dword,		;
+	aneg	: dword,		;
+	x	: dword,		;
+	y	: dword,		;
+	r	: dword,		;
+	rdf	: dword,		;
+	wgt	: dword,		;
+	as	: dword,		;
+	am	: dword			;
+
+local	ycnt	: dword,		;
+	xcnt	: dword,		;
+	offs	: dword,		;
+	y0	: dword,		;
+        xxx	: dword,		;
+	onepi   : qword			;
+
+	mov	esi,	[img]		;
+	xor	eax,	eax		;
+	mov	edx,	[r]		;
+	mov	ebx,	[x]		;
+	sub	ebx,	edx		; x-r
+	js	@@99			; x-r <= 0
+	add	esi,	ebx		;
+	mov	edi,	[imw]		;
+	lea	ebx,	[ebx+2*edx+4]	; x+r+3
+	cmp	ebx,	edi		;
+	jnc		@@99		; x+r >= imgw
+	mov	ecx,	[y]		;
+	sub	ecx,	edx		; y-r
+	js	@@99			; y-r <= 0
+	mov	ebx,	edi		;
+	imul	edi,	ecx		;
+	add	esi,	edi		; img[y-r][x-r]
+	lea	edx,	[edx*2+1]	; 2*r+1
+	add	ecx,	edx		; y+r
+	cmp	ecx,	[imh]		;
+	jnc	@@99			;
+	sub	ebx,	edx		; imgw - 2*r -1
+	mov	[offs],	ebx		; offset
+	mov	[ycnt], edx		;
+	mov	[xcnt], edx		;
+;-----------------------------------------
+	fldpi				;
+	fstp	[onepi]			; pi
+;........................................
+	fld	[am]			;
+	fld	[as]			;
+	fild	[r]			; st0 st1 st2 st3 st4 st5 st6 st7
+	fld1				; 1   R   as  am
+	fld	st(1)			; R   1   R   as  am
+	fchs				; y   1   R   as  am
+	mov	[r],	edx		; r=2*r+1
+	mov	edi,	[rdf]		;
+	mov	edx,	[wgt]		;
+@@10:					;
+	mov	ecx,	[r]		; st0 st1 st2 st3 st4 st5 st6 st7
+	fld	st(2)			; R   y   1   R   as  am
+	fchs				; x   y   1   R   as  am
+@@12:					;
+	fld	st			; x   x   y   1   R   as  am
+	fmul	st,	st(1)		; x2  x   y   1   R   as  am
+	fld	st(2)			; y   x2  x   y   1   R   as  am
+	fmul	st,	st(3)		; y2  x2  x   y   1   R   as  am
+	faddp	st(1),	st		; r2  x   y   1   R   as  am
+	fsqrt				; r   x   y   1   R   as  am
+	fcom	st(4)			; r   x   y   1   R   as  am
+	fstsw	ax			; r   x   y   1   R   as  am
+	fistp	[y0]			; x   y   1   R   as  am
+	sahf				;
+	ja	short @@14		; if r>R
+@@13:
+	cmp	[y0],	2		;
+	jc	short	@@139		; if r<2 accept this point
+	fld	st(1)			; y   x   y   1   R   as  am
+	fld	st(1)			; x   y   x   y   1   R   as  am
+	fpatan				; a   x   y   1   R   as  am
+	fadd	st, st(5)		; a   x   y   1   R   as  am
+	fabs				; a   x   y   1   R   as  am
+	fcom	[onepi]			;
+	fstsw	ax			;
+	sahf				;
+	jbe	@@131			; if a<=pi
+	fsubr	[onepi]			; a=pi-a0
+	fadd	[onepi]			; a=2pi-a0
+@@131:					;
+	fcomp	st(6)			;
+	fstsw	ax			;
+	sahf				;
+	ja	short @@14		; a>am
+;----------------------------------------
+@@139:					;
+	movzx	eax,	byte ptr[esi]	;
+	xor	eax,	[aneg]		;
+;  mov	byte ptr[esi], 0	;
+	mov	ebx,	[y0]		; radius
+        mov	[xxx],	eax		;
+        fild	[xxx]			;
+	fadd	qword ptr [edi+ebx*8]	; add value
+	inc	dword ptr [edx+ebx*4]	; cnt++
+        fstp	qword ptr [edi+ebx*8]	;
+@@14:					; st0 st1 st2 st3 st4 st5 st6 st7
+	inc	esi			;
+					; x   y   1   R   a1  a0
+	fadd	st,	st(2)		; x++ y   1   R   a1  a0
+	loop	@@12			;
+	fstp	st			; y   1   R   a1  a0
+	fadd	st,	st(1)		; y++ 1   R   a1  a0
+	add	esi,	[offs]		;
+	dec	[ycnt]			;
+	jnz	short	@@10
+	fstp	st			;
+	fstp	st			;
+	fstp	st			;
+	fstp	st			;
+	fstp	st			;
+	mov	eax,	1		;
+@@99:					;
+	fnclex
+	fninit
+	ret				;
+GetRDFangl8 endp			;
+
+;====================================================================
+GetRDFangl16 PROC public USES esi edi ebx,;
+	img	: dword,		;
+	imw	: dword,		;
+	imh	: dword,		;
+	aneg	: dword,		;
+	x	: dword,		;
+	y	: dword,		;
+	r	: dword,		;
+	rdf	: dword,		;
+	wgt	: dword,		;
+	as	: dword,		;
+	am	: dword			;
+
+local	ycnt	: dword,		;
+	xcnt	: dword,		;
+	offs	: dword,		;
+	y0	: dword,		;
+        xxx	: dword,		;
+	onepi   : qword			;
+
+	mov	esi,	[img]		;
+	xor	eax,	eax		;
+	mov	edx,	[r]		;
+	mov	ebx,	[x]		;
+	sub	ebx,	edx		; x-r
+	js	@@99			; x-r <= 0
+	lea	esi,	[esi+ebx*2]	;
+	mov	edi,	[imw]		;
+	lea	ebx,	[ebx+2*edx+4]	; x+r+3
+	cmp	ebx,	edi		;
+	jnc	@@99			; x+r >= imgw
+	mov	ecx,	[y]		;
+	sub	ecx,	edx		; y-r
+	js	@@99			; y-r <= 0
+	mov	ebx,	edi		;
+	imul	edi,	ecx		;
+	add	esi,	edi		; img[y-r][x-r]
+        add	esi,	edi		;
+	lea	edx,	[edx*2+1]	; 2*r+1
+	add	ecx,	edx		; y+r
+	cmp	ecx,	[imh]		;
+	jnc	@@99			;
+	sub	ebx,	edx		; imgw - 2*r -1
+        add	ebx,	ebx		;
+	mov	[offs],	ebx		; offset
+	mov	[ycnt], edx		;
+	mov	[xcnt], edx		;
+;-----------------------------------------
+	fldpi				;
+	fstp	[onepi]			; pi
+;........................................
+	fld	[am]			;
+	fld	[as]			;
+	fild	[r]			; st0 st1 st2 st3 st4 st5 st6 st7
+	fld1				; 1   R   as  am
+	fld	st(1)			; R   1   R   as  am
+	fchs				; y   1   R   as  am
+	mov	[r],	edx		; r=2*r+1
+	mov	edi,	[rdf]		;
+	mov	edx,	[wgt]		;
+@@10:					;
+	mov	ecx,	[r]		; st0 st1 st2 st3 st4 st5 st6 st7
+	fld	st(2)			; R   y   1   R   as  am
+	fchs				; x   y   1   R   as  am
+@@12:					;
+	fld	st			; x   x   y   1   R   as  am
+	fmul	st,	st(1)		; x2  x   y   1   R   as  am
+	fld	st(2)			; y   x2  x   y   1   R   as  am
+	fmul	st,	st(3)		; y2  x2  x   y   1   R   as  am
+	faddp	st(1),	st		; r2  x   y   1   R   as  am
+	fsqrt				; r   x   y   1   R   as  am
+	fcom	st(4)			; r   x   y   1   R   as  am
+	fstsw	ax			; r   x   y   1   R   as  am
+	fistp	[y0]			; x   y   1   R   as  am
+	sahf				;
+	ja	short @@14		; if r>R
+@@13:
+	cmp	[y0],	2		;
+	jc	short	@@139		; if r<2 accept this point
+	fld	st(1)			; y   x   y   1   R   as  am
+	fld	st(1)			; x   y   x   y   1   R   as  am
+	fpatan				; a   x   y   1   R   as  am
+	fadd	st, st(5)		; a   x   y   1   R   as  am
+	fabs				; a   x   y   1   R   as  am
+	fcom	[onepi]			;
+	fstsw	ax			;
+	sahf				;
+	jbe	@@131			; if a<=pi
+	fsubr	[onepi]			; a=pi-a0
+	fadd	[onepi]			; a=2pi-a0
+@@131:					;
+	fcomp	st(6)			;
+	fstsw	ax			;
+	sahf				;
+	ja	short @@14		; a>am
+;----------------------------------------
+@@139:					;
+	movzx	eax,	word ptr[esi]	;
+	xor	eax,	[aneg]		;
+;  mov	word ptr[esi], 0	;
+	mov	ebx,	[y0]		; radius
+        mov	[xxx],	eax		;
+        fild	[xxx]			;
+	fadd	qword ptr [edi+ebx*8]	; add value
+	inc	dword ptr [edx+ebx*4]	; cnt++
+        fstp	qword ptr [edi+ebx*8]	;
+@@14:					; st0 st1 st2 st3 st4 st5 st6 st7
+	add	esi,	2		;
+					; x   y   1   R   a1  a0
+	fadd	st,	st(2)		; x++ y   1   R   a1  a0
+	loop	@@12			;
+	fstp	st			; y   1   R   a1  a0
+	fadd	st,	st(1)		; y++ 1   R   a1  a0
+	add	esi,	[offs]		;
+	dec	[ycnt]			;
+	jnz	short	@@10
+	fstp	st			;
+	fstp	st			;
+	fstp	st			;
+	fstp	st			;
+	fstp	st			;
+	mov	eax,	1		;
+@@99:					;
+	fnclex				;
+	fninit				;
+	ret				;
+GetRDFangl16 endp			;
+;========================================
+;===============================================================
+EstTP_BG PROC public USES esi,;
+	fft : dword,		;
+	xs  : dword,		;
+	rad : dword,		;
+	tp  : dword,		;
+
+	mov		esi, [fft]	;
+;	movzx	ebx, [xs]	;
+	mov		ebx, [xs]	;
+	sal		ebx,	2	;
+;----------------------------------------
+	push	esi			;
+	mov		ecx, [rad]	; st0 st1 st2 st3 st4 st5 st6 st7
+	fldz				; sy
+	fldz				; sy  sx
+	fldz				; k=0 sy  sx
+@@10:					;
+	push	esi			;
+	fild	[rad]		; r   k   sy  sx
+	fmul	st,	st		; r2  k   sy  sx
+	fld		st(1)		; k   r2  k   sy  sx
+	fmul	st,	st		; k2  r2  k   sy  sx
+	fsub	st(1), st	; k2 h2mx k   sy  sx
+	fldz				; h=0 k2 h2mx k   sy  sx
+	mov		edx, [rad]	; st0 st1 st2 st3 st4 st5 st6 st7
+@@12:					;
+;	fild	dword ptr[esi]		; re  h   k2 h2mx k   sy  sx
+	fld		dword ptr[esi]		; re  h   k2 h2mx k   sy  sx
+	fmul	st,	st		; re2 h   k2 h2mx k   sy  sx
+;	fild	dword ptr[esi+4]	; im  re2 h   k2 h2mx k   sy  sx
+	fld		dword ptr[esi+4]	; im  re2 h   k2 h2mx k   sy  sx
+	fmul	st,	st		; im2 re2 h   k2 h2mx k   sy  sx
+	faddp	st(1), st	; a2  h   k2 h2mx k   sy  sx
+	fld		st(1)		; h   a2  h   k2 h2mx k   sy  sx
+	fmul	st,	st		; h2  a2  h   k2 h2mx k   sy  sx
+	fcom	st(4)		; h > hmax
+	fstsw	ax			;
+	sahf				; st0   st1 st2 st3 st4 st5 st6 st7
+	ja		short @@14	; h2    a2  h   k2 h2mx k   sy  sx
+	fsub	st,	st(3)	; xr    a2  h   k2 h2mx k   sy  sx
+	fmul	st,	st(1)	; a2*xr a2  h   k2 h2mx i   sy  sx
+	faddp	st(7),	st	; a2    h   k2 h2mx k   sy  sx
+	fmul	st,	st(1)	; a2*h  h   k2 h2mx k   sy  sx
+	fmul	st,	st(4)	; a2*hk h   k2 h2mx k   sy  sx
+	fadd	st,	st		; a2*yr h   k2 h2mx k   sy  sx
+	faddp	st(5), st	; h     k2 h2mx k   sy  sx
+	fld1				;
+	faddp	st(1),	st	; h++   k2 h2mx k   sy  sx
+	add		esi, 8		;
+	dec		edx			;
+	jnz	short @@12		;
+;	jmps	@@15		;
+	jz		@@15		;
+;........................................
+@@14:					;
+	fstp	st			;
+	fstp	st			;
+@@15:					;
+	fstp	st			;
+	fstp	st			;
+	fstp	st			; k    sy  sx
+	fld1				;
+	faddp	st(1), st	; k++  sy  sx
+	pop		esi			;
+	add		esi, ebx	;
+	loop	@@10		;
+	fstp	st			; sy  sx
+	pop		esi			;
+;----------------------------------------
+	mov		ecx, [rad]	; st0 st1 st2 st3 st4 st5 st6 st7
+;	sub		ecx, 2		; added by Peter
+;	movzx	eax, [xs]	;
+	mov		eax, [xs]	;
+	dec		eax			; xs-1
+	imul	eax, ebx	;
+	lea		esi, [esi+eax-8]	; esi -> fft[-1][1]
+;	lea		esi, [esi+eax+8]	; esi -> fft[1][-1]
+	fld1				;
+	fchs				; k=-1 sy  sx
+@@20:					; st0 st1 st2 st3 st4 st5 st6 st7
+	push	esi			;
+	fild	[rad]		; r   k   sy  sx
+	fmul	st,	st		; r2  k   sy  sx
+	fld		st(1)		; k   r2  k   sy  sx
+	fmul	st,	st		; k2  r2  k   sy  sx
+	fsub	st(1), st	; k2 h2mx k   sy  sx
+	fld1				; h=1 k2 h2mx k   sy  sx
+	mov		edx, [rad]	;
+	dec		edx			;
+@@22:					; st0 st1 st2 st3 st4 st5 st6 st7
+;	fild	dword ptr[esi]		; re  h   k2 h2mx k   sy  sx
+	fld		dword ptr[esi]		; re  h   k2 h2mx k   sy  sx
+	fmul	st,	st		; re2 h   k2 h2mx k   sy  sx
+;	fild	dword ptr[esi+4]	; im  re2 h   k2 h2mx k   sy  sx
+	fld		dword ptr[esi+4]	; im  re2 h   k2 h2mx k   sy  sx
+	fmul	st,	st		; im2 re2 h   k2 h2mx k   sy  sx
+	faddp	st(1), st	; a2  h   k2 h2mx k   sy  sx
+	fld		st(1)		; h   a2  h   k2 h2mx k   sy  sx
+	fmul	st,	st		; h2  a2  h   k2 h2mx k   sy  sx
+	fcom	st(4)		; h > hmax
+	fstsw	ax			;
+	sahf				; st0   st1 st2 st3 st4 st5 st6 st7
+	ja	short @@24		; h2    a2  h   k2 h2mx k   sy  sx
+	fsub	st,	st(3)	; xr    a2  h   k2 h2mx k   sy  sx
+	fmul	st,	st(1)	; a2*xr a2  h   k2 h2mx k   sy  sx
+	faddp	st(7),	st	; a2    h   k2 h2mx k   sy  sx
+	fmul	st,	st(1)	; a2*h  h   k2 h2mx k   sy  sx
+	fmul	st,	st(4)	; a2*hk h   k2 h2mx k   sy  sx
+	fadd	st,	st		; a2*yr h   k2 h2mx k   sy  sx
+	faddp	st(5),	st	; h     k2 h2mx k   sy  sx
+	fld1				;
+	faddp	st(1),	st	; h++   k2 h2mx k   sy  sx
+	add		esi, 8		;
+;	sub		esi, 8		;
+	dec		edx			;
+	jnz	short @@22		;
+;	jmps	@@25		;
+	jz		@@25		;
+;........................................
+@@24:					;
+	fstp	st			;
+	fstp	st			;
+@@25:					;
+	fstp	st			;
+	fstp	st			;
+	fstp	st			; k    sy  sx
+	fld1				;
+	fsubp	st(1), st	; k--  sy  sx
+	pop		esi			;
+	sub		esi, ebx	;
+	loop	@@20		;
+;----------------------------------------
+	fstp	st			; sy  sx
+	fxch	st(1)		;
+	fpatan				; 2.*tp
+	fld1				;
+	fadd	st,	st		; 2
+	fdivp	st(1), st	; tp
+	mov		esi,	[tp];
+	fstp	dword ptr [esi]		;
+	ret					;
+EstTP_BG endp			;
+;===============================================================
+end

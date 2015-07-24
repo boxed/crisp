@@ -1,0 +1,665 @@
+include	DEFINE32.MAC			;
+	.486
+;--------------------------------------------------------------------
+	.data
+;--------------------------------------------------------------------
+	.code
+fcw	dw	137Fh			; rounding to nearest
+fcwtr	dw	177Fh			; to -infinity
+;====================================================================
+im8PreUp PROC public USES esi edi ebx,	;
+	dst	: dword,				;
+	src	: dword,				;
+	ofs	: dword,				;
+	cnt	: dword,				;
+	shft	: dword,			;
+	sbtr	: dword				;
+local	tmp	: dword				;
+;........................................
+								; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw					;
+	mov	esi,	[src]			;
+	add	esi,	[ofs]			;
+	mov	edi,	[dst]			;
+	mov	edx,	[cnt]			;
+	or	edx,	edx				;
+	jz	@@99					;
+	mov	ecx,	[shft]			;
+@@10:
+	xor	eax,	eax				;
+	lods	byte ptr [esi]		;
+	sub	eax,	[sbtr]			;
+	jns	@@11					;
+	xor	eax,	eax				;
+@@11:
+	shl	eax,	cl				;
+	mov	[tmp],	eax				;
+	fild	[tmp]				;
+	fstp	qword ptr [edi]		;
+	add edi, 8					;
+	dec	edx						;
+	jnz	@@10					;
+@@99:							;
+	ret							;
+im8PreUp endp					;
+;====================================================================
+im8PreDown PROC public USES esi edi ebx, ;
+	dst	: dword,			;
+	src	: dword,			;
+	ofs	: dword,			;
+	cnt	: dword,			;
+	shft	: dword,		;
+	sbtr	: dword			;
+local	tmp	: dword			;
+;........................................
+							; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw				;
+	mov	esi,	[src]		;
+	add	esi,	[ofs]		;
+	mov	edi,	[dst]		;
+	mov	edx,	[cnt]		;
+	or	edx,	edx			;
+	jz	@@99				;
+	mov	ecx,	[shft]		;
+@@10:
+	xor	eax,	eax			;
+	lods	byte ptr [esi]	;
+	sub	eax,	[sbtr]		;
+	jns	@@11				;
+	xor	eax,	eax			;
+@@11:
+	shr	eax,	cl			;
+	mov	[tmp], eax			;
+	fild	[tmp]			;
+	fstp	qword ptr [edi]	;
+	add	edi,	8			;
+	dec	edx					;
+	jnz	@@10				;
+@@99:						;
+	ret						;
+im8PreDown endp				;
+;====================================================================
+;====================================================================
+;====================================================================
+im8sPreUp PROC public USES esi edi ebx,	;
+	dst	: dword,				;
+	src	: dword,				;
+	ofs	: dword,				;
+	cnt	: dword,				;
+	shft	: dword,			;
+	sbtr	: dword				;
+local	tmp	: dword				;
+;........................................
+								; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw					;
+	mov	esi,	[src]			;
+	add	esi,	[ofs]			;
+	mov	edi,	[dst]			;
+	mov	edx,	[cnt]			;
+	or	edx,	edx				;
+	jz	@@99					;
+	mov	ecx,	[shft]			;
+@@10:
+	movsx	eax, byte ptr [esi]	;
+	inc esi						;
+	sub	eax,	[sbtr]			;
+	shl	eax,	cl				;
+	mov	tmp,	eax				;
+	fild	[tmp]				;
+	fstp	qword ptr [edi]		;
+	add	edi,	8				;
+	dec	edx						;
+	jnz	@@10					;
+@@99:							;
+	ret							;
+im8sPreUp endp					;
+;====================================================================
+im8sPreDown PROC public USES esi edi ebx, ;
+	dst	: dword,				;
+	src	: dword,				;
+	ofs	: dword,				;
+	cnt	: dword,				;
+	shft	: dword,			;
+	sbtr	: dword				;
+local	tmp	: dword				;
+;........................................
+								; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw					;
+	mov	esi,	[src]			;
+	add	esi,	[ofs]			;
+	mov	edi,	[dst]			;
+	mov	edx,	[cnt]			;
+	or	edx,	edx				;
+	jz	@@99					;
+	mov	ecx,	[shft]			;
+@@10:
+	movsx	eax, byte ptr [esi]	;
+	inc esi						;
+	sub	eax,	[sbtr]			;
+	shr	eax,	cl				;
+	mov	[tmp], eax				;
+	fild	[tmp]				;
+	fstp	qword ptr [edi]		;
+	add	edi,	8				;
+	dec	edx						;
+	jnz	@@10					;
+@@99:							;
+	ret							;
+im8sPreDown endp				;
+;====================================================================
+;====================================================================
+;====================================================================
+im16PreUp PROC public USES esi edi ebx, ;
+	dst	: dword,				;
+	src	: dword,				;
+	ofs	: dword,				;
+	cnt	: dword,				;
+	shft	: dword,			;
+	sbtr	: dword				;
+local	tmp	: dword				;
+;........................................
+								; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw					;
+	mov	esi,	[src]			;
+	add	esi,	[ofs]			;
+	mov	edi,	[dst]			;
+	mov	edx,	[cnt]			;
+	or	edx,	edx				;
+	jz	@@99					;
+	mov	ecx,	[shft]			;
+@@10:
+	movzx eax, word ptr [esi]	;
+	inc	esi						;
+	inc	esi						;
+	sub	eax,	[sbtr]			;
+	jns	@@11					;
+	xor	eax,	eax				;
+@@11:
+	shl	eax,	cl				;
+	mov	[tmp], eax				;
+	fild	[tmp]				;
+	fstp	qword ptr [edi]		;
+	add	edi,	8				;
+	dec	edx						;
+	jnz	@@10					;
+@@99:							;
+	ret							;
+im16PreUp endp					;
+;====================================================================
+im16PreDown PROC public USES esi edi ebx, ;
+	dst	: dword,				;
+	src	: dword,				;
+	ofs	: dword,				;
+	cnt	: dword,				;
+	shft	: dword,			;
+	sbtr	: dword				;
+local	tmp	: dword				;
+;........................................
+								; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw					;
+	mov	esi,	[src]			;
+	add	esi,	[ofs]			;
+	mov	edi,	[dst]			;
+	mov	edx,	[cnt]			;
+	or	edx,	edx				;
+	jz	@@99					;
+	mov	ecx,	[shft]			;
+@@10:
+	movzx	eax, word ptr [esi]	;
+	inc	esi						;
+	inc	esi						;
+	sub	eax,	[sbtr]			;
+	jns	@@11					;
+	xor	eax,	eax				;
+@@11:
+	shr	eax,	cl				;
+	mov	[tmp], eax				;
+	fild	[tmp]				;
+	fstp	qword ptr [edi]		;
+	add	edi,	8				;
+	dec	edx						;
+	jnz	@@10					;
+@@99:							;
+	ret							;
+im16PreDown endp				;
+;====================================================================
+;====================================================================
+;====================================================================
+im16sPreUp PROC public USES esi edi ebx, ;
+	dst	: dword,				;
+	src	: dword,				;
+	ofs	: dword,				;
+	cnt	: dword,				;
+	shft	: dword,			;
+	sbtr	: dword				;
+local	tmp	: dword				;
+;........................................
+								; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw					;
+	mov	esi,	[src]			;
+	add	esi,	[ofs]			;
+	mov	edi,	[dst]			;
+	mov	edx,	[cnt]			;
+	or	edx,	edx				;
+	jz	@@99					;
+	mov	ecx,	[shft]			;
+@@10:
+	movsx eax, word ptr [esi]	;
+	inc	esi						;
+	inc	esi						;
+	sub	eax,	[sbtr]			;
+	jns	@@11					;
+	xor	eax,	eax				;
+@@11:
+	shl	eax,	cl				;
+	mov	[tmp], eax				;
+	fild	[tmp]				;
+	fstp	qword ptr [edi]		;
+	add	edi,	8				;
+	dec	edx						;
+	jnz	@@10					;
+@@99:							;
+	ret							;
+im16sPreUp endp					;
+;====================================================================
+im16sPreDown PROC public USES esi edi ebx, ;
+	dst	: dword,				;
+	src	: dword,				;
+	ofs	: dword,				;
+	cnt	: dword,				;
+	shft	: dword,			;
+	sbtr	: dword				;
+local	tmp	: dword				;
+;........................................
+								; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw					;
+	mov	esi,	[src]			;
+	add	esi,	[ofs]			;
+	mov	edi,	[dst]			;
+	mov	edx,	[cnt]			;
+	or	edx,	edx				;
+	jz	@@99					;
+	mov	ecx,	[shft]			;
+@@10:
+	movsx	eax, word ptr [esi]	;
+	inc	esi						;
+	inc	esi						;
+	sub	eax,	[sbtr]			;
+	jns	@@11					;
+	xor	eax,	eax				;
+@@11:
+	shr	eax,	cl				;
+	mov	[tmp], eax				;
+	fild	[tmp]				;
+	fstp	qword ptr [edi]		;
+	add	edi,	8				;
+	dec	edx						;
+	jnz	@@10					;
+@@99:							;
+	ret							;
+im16sPreDown endp				;
+;====================================================================
+;====================================================================
+;====================================================================
+icAdd	PROC public USES esi edi ebx,	;
+	dst		: dword,		;
+	src1	: dword,		;
+	src2	: dword,		;
+	cnt		: dword			;
+;........................................
+							; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw				;
+	mov	esi,	[src1]		;
+	mov	ebx,	[src2]		;
+	mov	edi,	[dst]		;
+	mov	ecx,	[cnt]		;
+@@10:
+	fld	qword ptr [esi]		;
+	add	esi,	8			;
+	fadd	qword ptr [ebx]	;
+	add	ebx,	8			;
+	fstp	qword ptr [edi]	;
+	add	edi,	8			;
+	dec	ecx					;
+	jnz	@@10				;
+	ret						;
+icAdd endp					;
+;====================================================================
+icSub	PROC public USES esi edi ebx,	;
+	dst		: dword,		;
+	src1	: dword,		;
+	src2	: dword,		;
+	cnt		: dword			;
+;........................................
+							; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw				;
+	mov	esi,	[src1]		;
+	mov	ebx,	[src2]		;
+	mov	edi,	[dst]		;
+	mov	ecx,	[cnt]		;
+@@10:
+	fld	qword ptr [esi]		;
+	add	esi,	8			;
+	fsub	qword ptr [ebx]	;
+	add	ebx,	8			;
+	fstp	qword ptr [edi]	;
+	add	edi,	8			;
+	dec	ecx					;
+	jnz	@@10				;
+	ret						;
+icSub endp					;
+;====================================================================
+icMul	PROC public USES esi edi ebx,	;
+	dst		: dword,		;
+	src1	: dword,		;
+	src2	: dword,		;
+	cnt		: dword			;
+;........................................
+							; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw				;
+	mov	esi,	[src1]		;
+	mov	ebx,	[src2]		;
+	mov	edi,	[dst]		;
+	mov	ecx,	[cnt]		;
+@@10:
+	fld	qword ptr [esi]		;
+	add	esi,	8			;
+	fmul	qword ptr [ebx]	;
+	add	ebx,	8			;
+	fstp	qword ptr [edi]	;
+	add	edi,	8			;
+	dec	ecx					;
+	jnz	@@10				;
+	ret						;
+icMul endp					;
+;====================================================================
+icDiv	PROC public USES esi edi ebx,	;
+	dst		: dword,		;
+	src1	: dword,		;
+	src2	: dword,		;
+	cnt		: dword			;
+;........................................
+							; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw				;
+	mov	esi,	[src1]		;
+	mov	ebx,	[src2]		;
+	mov	edi,	[dst]		;
+	mov	ecx,	[cnt]		;
+@@10:
+	fld	qword ptr [esi]		;
+	add	esi,	8			;
+	fdiv	qword ptr [ebx]	;
+	add	ebx,	8			;
+	fstp	qword ptr [edi]	;
+	add	edi,	8			;
+	dec	ecx					;
+	jnz	@@10				;
+	fnclex					;
+	fninit					;
+	ret						;
+icDiv endp					;
+;====================================================================
+;====================================================================
+icPost8	PROC public USES esi edi ebx,	;
+	dst	: dword,			;
+	ofst	: dword,		;
+	src	: dword,			;
+	cnt	: dword,			;
+	dadd	: qword,		;
+	xmul	: qword			;
+local	tmp	: dword			;
+;........................................
+							; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw				;
+	mov	esi,	[src]		;
+	mov	edi,	[dst]		;
+	add	edi,	[ofst]		;
+	mov	ecx,	[cnt]		;
+	fld	[dadd]				;
+	fld	[xmul]				;
+@@10:
+	fld	qword ptr [esi]		;  dd mul add
+	add	esi,	8			;
+	fadd	st,	st(2)		;
+	fmul	st,	st(1)		;
+	fistp	[tmp]			;
+	mov	eax, dword ptr [tmp];
+	stos	byte ptr [edi]	;
+	dec	ecx					;
+	jnz	@@10				;
+	fstp	st				;
+	fstp	st				;
+	ret						;
+icPost8 endp				;
+;====================================================================
+icPost8c PROC public USES esi edi ebx,	;
+	dst	: dword,			;
+	ofst	: dword,		;
+	src	: dword,			;
+	cnt	: dword,			;
+	dadd	: qword,		;
+	xmul	: qword			;
+local	tmp	: dword			;
+;........................................
+							; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw				;
+	mov	esi,	[src]		;
+	mov	edi,	[dst]		;
+	add	edi,	[ofst]		;
+	mov	ecx,	[cnt]		;
+	fld	[dadd]				;
+	fld	[xmul]				;
+	mov	ebx,	0FFFFFF00h	;
+@@10:
+	fld	qword ptr [esi]		;  dd mul add
+	add	esi,	8			;
+	fadd	st,	st(2)		;
+	fmul	st,	st(1)		;
+	fistp	[tmp]			;
+	mov	eax, dword ptr [tmp];
+	test	eax,	ebx		;
+	jz	@@20				;
+	sar	eax,	31			;
+	not	eax					;
+@@20:
+	stos	byte ptr [edi]	;
+	dec	ecx					;
+	jnz	@@10				;
+	fstp	st				;
+	fstp	st				;
+	ret						;
+icPost8c endp				;
+;====================================================================
+icPost16 PROC public USES esi edi ebx,	;
+	dst	: dword,			;
+	ofst	: dword,		;
+	src	: dword,			;
+	cnt	: dword,			;
+	dadd	: qword,		;
+	xmul	: qword			;
+local	tmp	: dword			;
+;........................................
+							; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw				;
+	mov	esi,	[src]		;
+	mov	edi,	[dst]		;
+	add	edi,	[ofst]		;
+	mov	ecx,	[cnt]		;
+	fld	[dadd]				;
+	fld	[xmul]				;
+@@10:
+	fld	qword ptr [esi]		;  dd mul add
+	add	esi,	8			;
+	fadd	st,	st(2)		;
+	fmul	st,	st(1)		;
+	fistp	[tmp]			;
+	mov	eax, dword ptr [tmp];
+	stos	word ptr [edi]	;
+	dec	ecx					;
+	jnz	@@10				;
+	fstp	st				;
+	fstp	st				;
+	ret						;
+icPost16 endp				;
+;====================================================================
+icPost16c PROC public USES esi edi ebx,	;
+	dst	: dword,			;
+	ofst	: dword,		;
+	src	: dword,			;
+	cnt	: dword,			;
+	dadd	: qword,		;
+	xmul	: qword			;
+local	tmp	: dword			;
+;........................................
+							; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw				;
+	mov	esi,	[src]		;
+	mov	edi,	[dst]		;
+	add	edi,	[ofst]		;
+	mov	ecx,	[cnt]		;
+	fld	[dadd]				;
+	fld	[xmul]				;
+	mov	ebx,	0FFFF0000h	;
+@@10:
+	fld	qword ptr [esi]		;  dd mul add
+	add	esi,	8			;
+	fadd	st,	st(2)		;
+	fmul	st,	st(1)		;
+	fistp	[tmp]			;
+	mov	eax, dword ptr [tmp];
+	test	eax,	ebx		;
+	jz	@@20				;
+	sar	eax,	31			;
+	not	eax					;
+@@20:
+	stos	word ptr [edi]	;
+	dec	ecx					;
+	jnz	@@10				;
+	fstp	st				;
+	fstp	st				;
+	ret						;
+icPost16c endp				;
+;====================================================================
+;====================================================================
+icPost32 PROC public USES esi edi ebx,	;
+	dst	: dword,			;
+	ofst	: dword,		;
+	src	: dword,			;
+	cnt	: dword,			;
+	dadd	: qword,		;
+	xmul	: qword			;
+local	tmp	: dword			;
+;........................................
+							; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw				;
+	mov	esi,	[src]		;
+	mov	edi,	[dst]		;
+	add	edi,	[ofst]		;
+	mov	ecx,	[cnt]		;
+	fld	[dadd]				;
+	fld	[xmul]				;
+@@10:
+	fld	qword ptr [esi]		;  dd mul add
+	add	esi,	8			;
+	fadd	st,	st(2)		;
+	fmul	st,	st(1)		;
+	fistp	[tmp]			;
+	mov	eax, dword ptr [tmp];
+	mov	dword ptr [edi], eax;
+	add edi, 4				;
+	dec	ecx					;
+	jnz	@@10				;
+	fstp	st				;
+	fstp	st				;
+	ret						;
+icPost32 endp				;
+;====================================================================
+icPost32c PROC public USES esi edi ebx,	;
+	dst	: dword,			;
+	ofst	: dword,		;
+	src	: dword,			;
+	cnt	: dword,			;
+	dadd	: qword,		;
+	xmul	: qword			;
+local	tmp	: dword			;
+;........................................
+							; st0 st1 st2 st3 st4 st5 st6 st7
+	fldcw	fcw				;
+	mov	esi,	[src]		;
+	mov	edi,	[dst]		;
+	add	edi,	[ofst]		;
+	mov	ecx,	[cnt]		;
+	fld	[dadd]				;
+	fld	[xmul]				;
+@@10:
+	fld	qword ptr [esi]		;  dd mul add
+	add	esi,	8			;
+	fadd	st,	st(2)		;
+	fmul	st,	st(1)		;
+	fistp	[tmp]			;
+	mov	eax, dword ptr [tmp];
+	mov	dword ptr [edi], eax;
+	add edi, 4				;
+	dec	ecx					;
+	jnz	@@10				;
+	fstp	st				;
+	fstp	st				;
+	ret						;
+icPost32c endp				;
+;====================================================================
+;====================================================================
+ffcvt	MACRO
+	cdq
+	shr	edx,	1
+	xor	eax,	edx
+endm
+;----------------------------------------
+GetFloatMinMax PROC public USES esi edi ebx, ;
+	src	: dword,		;
+	cnt	: dword,		;
+	min	: dword,		;
+	max	: dword			;
+;........................................
+	cld				;
+	mov	esi,	[max]		;
+	mov	eax,	[esi]		;
+	ffcvt				;
+	mov	ebx,	eax		;
+;........................................
+	mov	esi,	[min]		;
+	mov	eax,	[esi]		; edi=min, ebx=max
+	ffcvt				;
+	mov	edi,	eax		;
+;........................................
+	mov	esi,	[src]		;
+	mov	ecx,	[cnt]		;
+	jmp	@@10			;
+@@8:					;
+	mov	edi,	eax		;
+@@9:					;
+	dec	ecx			;
+	jz	short	@@19		;
+@@10:					;
+	mov	eax,	[esi]		;
+	ffcvt				;
+	add	esi,	4		;
+	cmp	edi,	eax		;
+	jg	@@8			;
+	cmp	ebx,	eax		;
+	jge	@@9			;
+	mov	ebx,	eax		;
+	jmp	@@9			;
+@@19:					;
+	mov	eax,	edi		;
+	ffcvt				;
+	mov	esi,	[min]		;
+	mov	[esi],	eax		;
+
+	mov	eax,	ebx		;
+	ffcvt				;
+	mov	esi,	[max]		;
+	mov	[esi],	eax		;
+	ret				;
+GetFloatMinMax endp			;
+;===========================================================
+end

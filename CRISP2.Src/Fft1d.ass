@@ -1,0 +1,1002 @@
+	.486
+	.MODEL	FLAT,C
+	.DATA
+
+fpusav	dw	?		;
+
+	.CODE
+
+__start = $
+flt05	dq	0.5
+flt05m	dq     -0.5
+flt4	dq	4.0
+flt075	dq	0.75
+flt255	dq	255.
+flt64k	dq	65535.
+s67:
+c22	dq	0.923879532511287
+c22m	dq     -0.923879532511287
+c45	dq	0.707106781186548
+c45m	dq     -0.707106781186548
+s22:
+c67	dq	0.382683432365090
+s22m	dq     -0.382683432365090
+fpucw	dw	137Fh
+
+;--------------------------------------------------------------------
+alignx macro nn
+local 	aaa
+	jmp short aaa
+	align	nn
+aaa:
+endm
+;----------------------------------------------------------------------------
+RESTOREFPU macro			;
+	fnclex				;
+	or	[fpusav], 2		; Mask out FPU denormal exceptions
+	fldcw	[fpusav]		;
+	pop	ebx			;
+endm					;
+;----------------------------------------------------------------------------
+INITFPU	macro				;
+	fnstcw	[fpusav]		;
+	fninit				;
+	fldcw	word ptr cs:[fpucw]	;
+	push	ebx			;
+endm					;
+;----------------------------------------------------------------------------
+FFT_ENTRY macro	realft			;
+	INITFPU				;
+	mov	edx,	[dim]		;
+ifnb <realft>				;
+	sar	edx,	1		;
+endif					;
+	cmp	edx,	16		;
+	js	@@999			;
+;	_push	<esi,edi,ebp>		;
+	cld				;
+	mov	edi, 	[data]		;
+	mov	eax,	[ofs]		;
+	sal	eax,	4		;
+	add	edi,	eax		;
+	mov	ebx,	[stp]		; ebx = stp
+	add	ebp,	3		;
+	and	bp,	-4		;
+	mov	[dim],	edx		;
+	mov	[fftstart], edi		;
+	sal	ebx,	4		; ebx = stp * 8
+	imul	edx,	ebx		; edx = stp*dim*8
+	mov	[fftsiz],edx		;
+	lea	eax,	[edi+edx]	;
+	mov	[fftend], eax		;
+endm					;
+;----------------------------------------------------------------------------
+FFT_EXIT macro				;
+;	_pop	<ebp,edi,esi>		;
+@@999:					;
+	RESTOREFPU			;
+	ret				;
+endm					;
+;----------------------------------------------------------------------------
+REORD	macro				;
+local	a				;
+	mov	esi,	[fftstart]	;
+	lea	esi,	[esi+ebx+6]	;
+	lea	ecx,	[ebx*2]		;
+	mov	ax,	8000h		; flt sign
+	mov	edi,	[fftend]	;
+;	alignx	16			; PETER CHANGED THIS
+a:					;
+	xor	[esi],	ax		;
+	xor	[esi+8],ax		;
+	add	esi,	ecx		;
+	xor	[esi],	ax		;
+	xor	[esi+8],ax		;
+	add	esi,	ecx		;
+	cmp	esi,	edi		;
+	jl	short	a		;
+endm					;
+;----------------------------------------------------------------------------
+REVERS	macro				; The bit reversal section
+local a10, a13, a14, a20		;
+	push	ebp			; edi = start, edx = size, ebx = stp
+	mov	edi,	[fftstart]	;
+	mov	ebp,	edi		;
+	mov	esi,	edi		;
+	sar	edx,	1		;
+	jmp short a13			;
+;	alignx	16			; PETER CHANGED THIS
+a10:					;
+	lea	edi,	[edi+ecx*2]	; k += 2*i;
+	add	esi,	ebx		; j += stp;
+	cmp	esi,	edi		;
+	jge	short	a13		; if (j>=k)	goto @@00;
+	mov	eax,	[esi]		;
+	xchg	eax,	[edi]		;
+	mov	[esi],	eax		; xchg	fr[j], fr[k]
+	mov	eax,	[esi+4]		;
+	xchg	eax,	[edi+4]		;
+	mov	[esi+4],eax		; xchg	fi[j], fi[k]
+	mov	eax,	[esi+8]		;
+	xchg	eax,	[edi+8]		;
+	mov	[esi+8],eax		; xchg	fi[j], fi[k]
+	mov	eax,	[esi+12]		;
+	xchg	eax,	[edi+12]		;
+	mov	[esi+12],eax		; xchg	fi[j], fi[k]
+a13:					;
+	mov	ecx,	edx		; ecx = i = stp*dim
+a14:					;
+	sub	edi,	ecx		; k -= i;
+	cmp	edi,	ebp		;
+	jl	short	a10		; if (k >= xx)	goto @@10;
+	 sar	ecx,	1		; i /= 2;
+	 sub	edi,	ecx		; k -= i;
+	 cmp	edi,	ebp		;
+	 jl	short	a10		; if (k >= xx)	goto @@10;
+	sar	ecx,	1		; i /= 2;
+	cmp	ecx,	ebx		;
+	jge	short	a14		; if (i<stp)	goto @@20;
+a20:					;
+	sal edx, 1
+	mov	edi,	ebp		;
+	pop	ebp			;
+endm					;
+;----------------------------------------------------------------------------
+INIT_WSINCOS	macro			;
+	fldz
+	fstp	[wsin]
+	fld1
+	fchs
+	fstp	[wcos]
+endm					;
+;----------------------------------------------------------------------------
+INIT_SINCOS	macro			;
+	fldz
+	fstp	[sin]
+	fld1
+	fstp	[cos]
+endm					;
+;----------------------------------------------------------------------------
+INIT_SINCOS3	macro			;
+	fldz
+	fst	[sin]
+	fst	[sin2]
+	fstp	[sin3]
+	fld1
+	fst	[cos]
+	fst	[cos2]
+	fstp	[cos3]
+endm					;
+;----------------------------------------------------------------------------
+SINCOS	macro				;
+	fld	[wcos]			; wc
+	fld	[cos]			; c    wc
+	fst	st(2)			; c    wc   c
+	fmul	st,	st(1)		; c*wc wc   c
+	fld	[sin]			; s    c*wc wc   c
+	fmul	st(2),	st		; s    c*wc s*wc c
+	fld	[wsin]			; ws   s    c*wc s*wc c
+	fmul	st(4),	st		; ws   s    c*wc s*wc c*ws
+	fmulp	st(1),	st		; s*ws c*wc s*wc c*ws
+	fsubp	st(1),	st		; cos" s*wc c*ws
+	fstp	[cos]			; s*wc c*ws
+	faddp	st(1),	st		; sin"
+	fstp	[sin]			;
+endm					;
+;----------------------------------------------------------------------------
+SINCOS3	macro				;
+	fld	[wcos]			; wc
+	fld	[cos]			; c    wc
+	fst	st(2)			; c    wc   c
+	fmul	st,	st(1)		; c*wc wc   c
+	fld	[sin]			; s    c*wc wc   c
+	fmul	st(2),	st		; s    c*wc s*wc c
+	fld	[wsin]			; ws   s    c*wc s*wc c
+	fmul	st(4),	st		; ws   s    c*wc s*wc c*ws
+	fmulp	st(1),	st		; s*ws c*wc s*wc c*ws
+	fsubp	st(1),	st		; C    s*wc c*ws
+	fst	st(3)			; C    s*wc c*ws C
+	fstp	[cos]			; s*wc c*ws C
+	faddp	st(1),	st		; S    C
+	fst	[sin]			; S    C
+;................... sin(2a) = 2*sin*cos   cos(2a) = cos^2 - sin^2
+	fld	st(1)			; C    S    C
+	fmul	st,	st(1)		; CS   S    C
+	fadd	st,	st		; S2   S    C
+	fstp	[sin2]			; S    C
+	fst	st(2)			; S    C    S
+	fmul	st(2),	st		; S    C    SS
+	fld	st(1)			; C    S    C    SS
+	fmul	st,	st		; CC   S    C    SS
+	fst	st(4)			; CC   S    C    SS   CC
+	fsub	st,	st(3)		; C2   S    C    SS   CC
+	fstp	[cos2]			; S    C    SS   CC
+;.................. cos(3a) = 4*cos^3 - 3*cos  sin(3a) = 3*sin - 4*sin^3
+	fmul	qword ptr cs:[flt4]	; 4S   C    SS   CC
+	fmul	st(2),	st		; 4S   C    4SSS CC
+	fmul	qword ptr cs:[flt075]	; 3S   C    4SSS CC
+	fsubrp	st(2),	st		;  C   S3   CC
+	fmul	qword ptr cs:[flt4]	; 4C   S3   CC
+	fmul	st(2),	st		; 4C   S3   4CCC
+	fmul	qword ptr cs:[flt075]	; 3C   S3   4CCC
+	fsubp	st(2),	st		; S3   C3
+	fstp	[sin3]			;
+	fstp	[cos3]			;
+endm					;
+;----------------------------------------------------------------------------
+HSINCOS macro   rev
+	fld	[wsin]			; st0  st1  st2  st3  st4  st5  st6
+	fld	[wcos]			; wc   ws
+	fld1				; 1    wc   ws
+	fsub	st,	st(1)		; 1-wc
+	fmul	qword ptr cs:[flt05]	; (1-wc)/2
+	fsqrt				; w_sin" = sqrt((1-w_cos)/2)
+ifnb	<rev>
+	fchs
+endif
+	fstp	st(2)			; wc   ws"
+	fld1				; 1    wc   ws"
+	faddp	st(1),	st		; wc+1 ws"
+	fmul	qword ptr cs:[flt05]	;
+	fsqrt				; wc"  ws" ; w_cos" = sqrt((1+w_cos)/2)
+	fstp	[wcos]			;
+	fstp	[wsin]			;
+endm
+;----------------------------------------------------------------------------
+;----------------------------------------------------------------------------
+FFTPASS_0_0	macro	adr		;
+local a					;
+ifnb	<adr>				;
+	mov	edi,	adr		;
+else					;
+	mov	edi,	[fftstart]	;
+endif					;
+;	alignx	16			; PETER CHANGED THIS
+a:					; st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[edi]		; A
+	fsub	qword ptr[edi+ebx]	; A-B
+	lea	esi,	[edi+2*ebx]	;
+	fld	qword ptr[edi+8]	; a   A-B
+	fsub	qword ptr[edi+ebx+8]	; a-b A-B
+	fld	qword ptr[esi]		; C   a-b A-B
+	fsub	qword ptr[esi+ebx]	; C-D a-b A-B
+	fld	qword ptr[esi+8]	; c   C-D a-b A-B
+	fsub	qword ptr[esi+ebx+8]	; c-d C-D a-b A-B
+
+	fld	qword ptr[edi]		; A   c-d C-D a-b A-B
+	fadd	qword ptr[edi+ebx]	; A+B c-d C-D a-b A-B
+	fld	qword ptr[esi]		; C   A+B c-d C-D a-b A-B
+	fadd	qword ptr[esi+ebx]	; C+D A+B c-d C-D a-b A-B
+	fld	st			; C+D C+D A+B c-d C-D a-b A-B
+	fadd	st,	st(2)		; A"  C+D A+B c-d C-D a-b A-B
+	fstp	qword ptr[edi]		; C+D A+B c-d C-D a-b A-B
+	fsubp	st(1),	st		; C"  c-d C-D a-b A-B
+	fstp	qword ptr[esi]		; c-d C-D a-b A-B
+
+	fld	qword ptr[edi+8]	; a   c-d C-D a-b A-B
+	fadd	qword ptr[edi+ebx+8]	; a+b c-d C-D a-b A-B
+	fld	qword ptr[esi+8]	; c   a+b c-d C-D a-b A-B
+	fadd	qword ptr[esi+ebx+8]	; c+d a+b c-d C-D a-b A-B
+	fld	st			; c+d c+d a+b c-d C-D a-b A-B
+	fadd	st,	st(2)		; a"  c+d a+b c-d C-D a-b A-B
+	fstp	qword ptr[edi+8]	; c+d a+b c-d C-D a-b A-B
+	fsubp	st(1),	st		; c"  c-d C-D a-b A-B
+	fstp	qword ptr[esi+8]	; c-d C-D a-b A-B
+					; st0 st1 st2 st3 st4 st5 st6 st7
+	fld	st			; c-d c-d C-D a-b A-B
+	fadd	st,	st(4)		; D"  c-d C-D a-b A-B
+	fstp	qword ptr[esi+ebx]	; c-d C-D a-b A-B
+	fsubr	st,	st(3)		; B"  C-D a-b A-B
+	fstp	qword ptr[edi+ebx]	; C-D a-b A-B
+	fst	st(2)			; C-D a-b C_D
+	fadd	st,	st(1)		; b"  a-b C_D
+	fstp	qword ptr[edi+ebx+8]	; a-b C_D
+	fsubrp	st(1),	st		; d"
+	lea	edi,	[edi+4*ebx]	;
+	cmp	edi,	[fftend]	;
+	fstp	qword ptr[esi+ebx+8]	;
+	jl		a		;
+endm
+;----------------------------------------------------------------------------
+FFTPASS_45_90	macro	adr		;
+local a
+	mov	edi,	adr		;
+;	alignx	16			; PETER CHANGED THIS
+a:					; st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[edi]		; A
+	fadd	qword ptr[edi+ebx+8]	; A+b
+	fld	qword ptr[edi+8]	; a   A+b
+	fsub	qword ptr[edi+ebx]	; a-B A+b
+	lea	esi,	[edi+2*ebx]	;
+	fld	qword ptr[esi]		; C   a-B A+b
+	fsub	qword ptr[esi+8]	; C-c a-B A+b
+	fmul	qword ptr cs:[c45]	; C'  a-B A+b
+	fst	st(3)			; C'  a-B A+b C'
+	fld	qword ptr[esi+8]	; c   C'  a-B A+b C'
+	fadd	qword ptr[esi]		; c+C C'  a-B A+b C'
+	fmul	qword ptr cs:[c45]	; c'  C'  a-B A+b C'
+	fst	st(5)			; c'  C'  a-B A+b C'  c'
+	fld	qword ptr[esi+ebx]	; D   c'  C'  a-B A+b C'  c'
+	fsub	qword ptr[esi+ebx+8]	; D-d c'  C'  a-B A+b C'  c'
+	fmul	qword ptr cs:[c45]	; D'  c'  C'  a-B A+b C'  c'
+	fld	qword ptr[esi+ebx+8]	; d   D'  c'  C'  a-B A+b C'  c'
+	fadd	qword ptr[esi+ebx]	; d+D D'  c'  C'  a-B A+b C'  c'
+	fmul	qword ptr cs:[c45]	; d'  D'  c'  C'  a-B A+b C'  c'
+	fsub	st(6),	st		; d'  D'  c'  C'  a-B A+b F   c'
+	faddp	st(3),	st		; D'  c'  g   a-B A+b F   c'
+	fsubr	st(6),	st		; D'  c'  g   a-B A+b F   G
+	faddp	st(1),	st		; f   g   a-B A+b F   G
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[edi]		; A   f   g   a-B A+b F   G
+	fsub	qword ptr[edi+ebx+8]	; A-b f   g   a-B A+b F   G
+	fld	st			; A-b A-b f   g   a-B A+b F   G
+	fadd	st,	st(6)		; A"  A-b f   g   a-B A+b F   G
+	fstp	qword ptr[edi]		; A-b f   g   a-B A+b F   G
+	fsubrp	st(5),	st		; f   g   a-B A+b C"  G
+	fld	qword ptr[edi+8]	; a   f   g   a-B A+b C"  G
+	fadd	qword ptr[edi+ebx]	; a+B f   g   a-B A+b C"  G
+	fst	st(7)			; a+B f   g   a-B A+b C"  G   a+B
+	fadd	st,	st(1)		; a"  f   g   a-B A+b C"  G   a+B
+	fstp	qword ptr[edi+8]	; f   g   a-B A+b C"  G   a+B
+	fsubp	st(6),	st		; g   a-B A+b C"  G   c"
+	fld	st			; g   g   a-B A+b C"  G   c"
+	fadd	st,	st(2)		; b"  g   a-B A+b C"  G   c"
+	fstp	qword ptr[edi+ebx+8]	; g   a-B A+b C"  G   c"
+	fsubp	st(1),	st		; d"  A+b C"  G   c"
+	fstp	qword ptr[esi+ebx+8]	; A+b C"  G   c"
+	fst	st(4)			; A+b C"  G   c"  A+b
+	fadd	st,	st(2)		; B"  C"  G   c"  A+b
+	fstp	qword ptr[edi+ebx]	; C"  G   c"  A+b
+	fstp	qword ptr[esi]		; G   c"  A+b
+	fsubp	st(2),	st		; c"  D"
+	lea	edi,	[edi+4*ebx]	;
+	cmp	edi,	[fftend]	;
+	fstp	qword ptr[esi+8]	; D"
+	fstp	qword ptr[esi+ebx]	;
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	jl		a		;
+endm
+;----------------------------------------------------------------------------
+FFTPASS_22_45	macro	adr		;
+local a
+	mov	edi,	adr		;
+;	alignx	16			; PETER CHANGED THIS
+a:					; st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[edi+ebx]	; B
+	fadd	qword ptr[edi+ebx+8]	; B+b
+	lea	esi,	[edi+2*ebx]	;
+	fmul	qword ptr cs:[c45]	; b'
+	fld	qword ptr[edi+ebx]	; B   b'
+	fsub	qword ptr[edi+ebx+8]	; B-b b'
+	fmul	qword ptr cs:[c45]	; B'  b'
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[esi]		; C   B'  b'
+	fmul	qword ptr cs:[c22]	; C.  B'  b'
+	fld	qword ptr[esi+8]	; c   C.  B'  b'
+	fmul	qword ptr cs:[s22]	; c.  C.  B'  b'
+	fsubp	st(1),	st		; C'  B'  b'
+	fst	st(3)			; C'  B'  b'  C'
+	fld	qword ptr[esi]		; C   C'  B'  b'  C'
+	fmul	qword ptr cs:[s22]	; C_  C'  B'  b'  C'
+	fld	qword ptr[esi+8]	; c   C_  C'  B'  b'  C'
+	fmul	qword ptr cs:[c22]	; c_  C_  C'  B'  b'  C'
+	faddp	st(1),	st		; c'  C'  B'  b'  C'
+	fst	st(5)			; c'  C'  B'  b'  C'  c'
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[esi+ebx]	; D   c'  C'  B'  b'  C'  c'
+	fmul	qword ptr cs:[c67]	; D.  c'  C'  B'  b'  C'  c'
+	fld	qword ptr[esi+ebx+8]	; d   D.  c'  C'  B'  b'  C'  c'
+	fmul	qword ptr cs:[s67]	; d.  D.  c'  C'  B'  b'  C'  c'
+	fsubp	st(1),	st		; D'  c'  C'  B'  b'  C'  c'
+	fadd	st(5),	st		; D'  c'  C'  B'  b'  F   c'
+	fsubp	st(2),	st		; c'  G   B'  b'  F   c'
+	fld	qword ptr[esi+ebx]	; D   c'  G   B'  b'  F   c'
+	fmul	qword ptr cs:[s67]	; D_  c'  G   B'  b'  F   c'
+	fld	qword ptr[esi+ebx+8]	; d   D_  c'  G   B'  b'  F   c'
+	fmul	qword ptr cs:[c67]	; d_  D_  c'  G   B'  b'  F   c'
+	faddp	st(1),	st		; d'  c'  G   B'  b'  F   c'
+	fadd	st(6),	st		; d'  c'  G   B'  b'  F   f
+	fsubp	st(1),	st		; g   G   B'  b'  F   f
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[edi]		; A   g   G   B'  b'  F   f
+	fsub	st,	st(3)		; K   g   G   B'  b'  F   f
+	fst	st(7)			; K   g   G   B'  b'  F   f   K
+	fsub	st,	st(1)		; B"  g   G   B'  b'  F   f   K
+	fstp	qword ptr[edi+ebx]	; g   G   B'  b'  F   f   K
+	faddp	st(6),	st		; G   B'  b'  F   f   D"
+	fld	qword ptr[edi+8]	; a   G   B'  b'  F   f   D"
+	fsub	st,	st(3)		; k   G   B'  b'  F   f   D"
+	fst	st(7)			; k   G   B'  b'  F   f   D"  k
+	fadd	st,	st(1)		; b"  G   B'  b'  F   f   D"  k
+	fstp	qword ptr[edi+ebx+8]	; G   B'  b'  F   f   D"  k
+	fsubp	st(6),	st		; B'  b'  F   f   D"  d"
+	fadd	qword ptr[edi]		; H   b'  F   f   D"  d"
+	fld	st			; H   H   b'  F   f   D"  d"
+	fadd	st,	st(3)		; A"  H   b'  F   f   D"  d"
+	fstp	qword ptr[edi]		; H   b'  F   f   D"  d"
+	fsubrp	st(2),	st		; b'  C"  f   D"  d"
+	fadd	qword ptr[edi+8]	; h'  C"  f   D"  d"
+	fst	st(5)			; h'  C"  f   D"  d"  h'
+	fadd	st,	st(2)		; a"  C"  f   D"  d"  h'
+	fstp	qword ptr[edi+8]	; C"  f   D"  d"  h'
+	fstp	qword ptr[esi]		; f   D"  d"  h'
+	fsubp	st(3),	st		; D"  d"  c"
+	lea	edi,	[edi+4*ebx]	;
+	cmp	edi,	[fftend]	;
+	fstp	qword ptr[esi+ebx]	; d"  c"
+	fstp	qword ptr[esi+ebx+8]	; c"
+	fstp	qword ptr[esi+8]	;
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	jl		a		;
+endm
+;----------------------------------------------------------------------------
+FFTPASS_67_135	macro	adr		;
+local a
+	mov	edi,	adr		;
+;	alignx	16			; PETER CHANGED THIS
+a:					; st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[edi+ebx]	; B
+	fsub	qword ptr[edi+ebx+8]	; B+b
+	lea	esi,	[edi+2*ebx]	;
+	fmul	qword ptr cs:[c45]	; b'
+	fld	qword ptr[edi+ebx]	; B   b'
+	fadd	qword ptr[edi+ebx+8]	; B-b b'
+	fmul	qword ptr cs:[c45m]	; B'  b'
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[esi]		; C   B'  b'
+	fmul	qword ptr cs:[c67]	; C.  B'  b'
+	fld	qword ptr[esi+8]	; c   C.  B'  b'
+	fmul	qword ptr cs:[s67]	; c.  C.  B'  b'
+	fsubp	st(1),	st		; C'  B'  b'
+	fst	st(3)			; C'  B'  b'  C'
+	fld	qword ptr[esi]		; C   C'  B'  b'  C'
+	fmul	qword ptr cs:[s67]	; C_  C'  B'  b'  C'
+	fld	qword ptr[esi+8]	; c   C_  C'  B'  b'  C'
+	fmul	qword ptr cs:[c67]	; c_  C_  C'  B'  b'  C'
+	faddp	st(1),	st		; c'  C'  B'  b'  C'
+	fst	st(5)			; c'  C'  B'  b'  C'  c'
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[esi+ebx]	; D   c'  C'  B'  b'  C'  c'
+	fmul	qword ptr cs:[c22m]	; D.  c'  C'  B'  b'  C'  c'
+	fld	qword ptr[esi+ebx+8]	; d   D.  c'  C'  B'  b'  C'  c'
+	fmul	qword ptr cs:[s22m]	; d.  D.  c'  C'  B'  b'  C'  c'
+	fsubp	st(1),	st		; D'  c'  C'  B'  b'  C'  c'
+	fadd	st(5),	st		; D'  c'  C'  B'  b'  F   c'
+	fsubp	st(2),	st		; c'  G   B'  b'  F   c'
+	fld	qword ptr[esi+ebx]	; D   c'  G   B'  b'  F   c'
+	fmul	qword ptr cs:[s22m]	; D_  c'  G   B'  b'  F   c'
+	fld	qword ptr[esi+ebx+8]	; d   D_  c'  G   B'  b'  F   c'
+	fmul	qword ptr cs:[c22m]	; d_  D_  c'  G   B'  b'  F   c'
+	faddp	st(1),	st		; d'  c'  G   B'  b'  F   c'
+	fadd	st(6),	st		; d'  c'  G   B'  b'  F   f
+	fsubp	st(1),	st		; g   G   B'  b'  F   f
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[edi]		; A   g   G   B'  b'  F   f
+	fsub	st,	st(3)		; K   g   G   B'  b'  F   f
+	fst	st(7)			; K   g   G   B'  b'  F   f   K
+	fsub	st,	st(1)		; B"  g   G   B'  b'  F   f   K
+	fstp	qword ptr[edi+ebx]	; g   G   B'  b'  F   f   K
+	faddp	st(6),	st		; G   B'  b'  F   f   D"
+	fld	qword ptr[edi+8]	; a   G   B'  b'  F   f   D"
+	fsub	st,	st(3)		; k   G   B'  b'  F   f   D"
+	fst	st(7)			; k   G   B'  b'  F   f   D"  k
+	fadd	st,	st(1)		; b"  G   B'  b'  F   f   D"  k
+	fstp	qword ptr[edi+ebx+8]	; G   B'  b'  F   f   D"  k
+	fsubp	st(6),	st		; B'  b'  F   f   D"  d"
+	fadd	qword ptr[edi]		; H   b'  F   f   D"  d"
+	fld	st			; H   H   b'  F   f   D"  d"
+	fadd	st,	st(3)		; A"  H   b'  F   f   D"  d"
+	fstp	qword ptr[edi]		; H   b'  F   f   D"  d"
+	fsubrp	st(2),	st		; b'  C"  f   D"  d"
+	fadd	qword ptr[edi+8]	; h'  C"  f   D"  d"
+	fst	st(5)			; h'  C"  f   D"  d"  h'
+	fadd	st,	st(2)		; a"  C"  f   D"  d"  h'
+	fstp	qword ptr[edi+8]	; C"  f   D"  d"  h'
+	fstp	qword ptr[esi]		; f   D"  d"  h'
+	fsubp	st(3),	st		; D"  d"  c"
+	lea	edi,	[edi+4*ebx]	;
+	cmp	edi,	[fftend]	;
+	fstp	qword ptr[esi+ebx]	; d"  c"
+	fstp	qword ptr[esi+ebx+8]	; c"
+	fstp	qword ptr[esi+8]	;
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	jl		a		;
+endm
+;----------------------------------------------------------------------------
+FFTPASS_A_2A	macro	adr		;
+local a
+	mov	edi,	adr		;
+;	alignx	16			; PETER CHANGED THIS
+a:					; st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[edi+ebx]	; B
+	fmul	[cos2]			; Bc
+	fld	qword ptr[edi+ebx+8]	; b   Bc
+	fmul	[sin2]			; bs  Bc
+	fsubp	st(1),	st		; B'
+	fld	qword ptr[edi+ebx]	; B   B'
+	fmul	[sin2]			; Bs  B'
+	fld	qword ptr[edi+ebx+8]	; b   Bs  B'
+	fmul	[cos2]			; bc  Bs  B'
+	faddp	st(1),	st		; b'  B'
+	lea	esi,	[edi+2*ebx]	;
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[esi]		; C   b'  B'
+	fmul	[cos]			; Cc  b'  B'
+	fld	qword ptr[esi+8]	; c   Cc  b'  B'
+	fmul	[sin]			; cs  Cc  b'  B'
+	fsubp	st(1),	st		; C'  b'  B'
+	fst	st(3)			; C'  b'  B'  C'
+	fld	qword ptr[esi]		; C   C'  b'  B'  C'
+	fmul	[sin]			; Cs  C'  b'  B'  C'
+	fld	qword ptr[esi+8]	; c   Cs  C'  b'  B'  C'
+	fmul	[cos]			; cc  Cs  C'  b'  B'  C'
+	faddp	st(1),	st		; c'  C'  b'  B'  C'
+	fst	st(5)			; c'  C'  b'  B'  C'  c'
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[esi+ebx]	; D   c'  C'  b'  B'  C'  c'
+	fmul	[cos3]			; Dc  c'  C'  b'  B'  C'  c'
+	fld	qword ptr[esi+ebx+8]	; d   Dc  c'  C'  b'  B'  C'  c'
+	fmul	[sin3]			; ds  Dc  c'  C'  b'  B'  C'  c'
+	fsubp	st(1),	st		; D'  c'  C'  b'  B'  C'  c'
+	fadd	st(5),	st		; D'  c'  C'  b'  B'  F   c'
+	fsubp	st(2),	st		; c'  G   b'  B'  F   c'
+	fld	qword ptr[esi+ebx]	; D   c'  G   b'  B'  F   c'
+	fmul	[sin3]			; Ds  c'  G   b'  B'  F   c'
+	fld	qword ptr[esi+ebx+8]	; d   Ds  c'  G   b'  B'  F   c'
+	fmul	[cos3]			; dc  Ds  c'  G   b'  B'  F   c'
+	faddp	st(1),	st		; d'  c'  G   b'  B'  F   c'
+	fadd	st(6),	st		; d'  c'  G   b'  B'  F   f
+	fsubp	st(1),	st		; g   G   b'  B'  F   f
+;---------------------------------------- st0 st1 st2 st3 st4 st5 st6 st7
+	fld	qword ptr[edi]		; A   g   G   b'  B'  F   f
+	fsub	st,	st(4)		; K   g   G   b'  B'  F   f
+	fst	st(7)			; K   g   G   b'  B'  F   f   K
+	fsub	st,	st(1)		; B"  g   G   b'  B'  F   f   K
+	fstp	qword ptr[edi+ebx]	; g   G   b'  B'  F   f   K
+	faddp	st(6),	st		; G   b'  B'  F   f   D"
+	fld	qword ptr[edi+8]	; a   G   b'  B'  F   f   D"
+	fsub	st,	st(2)		; k   G   b'  B'  F   f   D"
+	fld	st			; k   k   G   b'  B'  F   f   D"
+	fadd	st,	st(2)		; b"  k   G   b'  B'  F   f   D"
+	fstp	qword ptr[edi+ebx+8]	; k   G   b'  B'  F   f   D"
+	fsubrp	st(1),	st		; d"  b'  B'  F   f   D"
+	fstp	qword ptr[esi+ebx+8]	; b'  B'  F   f   D"
+	fadd	qword ptr[edi+8]	; h   B'  F   f   D"
+	fst	st(5)			; h   B'  F   f   D"  h
+	fadd	st,	st(3)		; a"  B'  F   f   D"  h
+	fstp	qword ptr[edi+8]	; B'  F   f   D"  h
+	fadd	qword ptr[edi]		; H   F   f   D"  h
+	fst	st(5)			; H   F   f   D"  h   H
+	fadd	st,	st(1)		; A"  F   f   D"  h   H
+	fstp	qword ptr[edi]		; F   f   D"  h   H
+	fsubp	st(4),	st		; f   D"  h   C"
+	lea	edi,	[edi+4*ebx]	;
+	fsubp	st(2),	st		; D"  c"  C"
+	cmp	edi,	[fftend]	;
+	fstp	qword ptr[esi+ebx]	; c"  C"
+	fstp	qword ptr[esi+8]	; C"
+	fstp	qword ptr[esi]		;
+;					  st0 st1 st2 st3 st4 st5 st6 st7
+	jl		a		;
+endm
+;----------------------------------------------------------------------------
+;----------------------------------------------------------------------------
+;----------------------------------------------------------------------------
+FFT_LOOP macro  adr			;
+local a
+	lea	esi,	[adr+ebx]	;
+;	alignx	16			; PETER CHANGED THIS
+a:					; st0  st1  st2  st3  st4  st5  st6
+	fld	qword ptr[esi]		; B
+	fmul	[cos]			; Bc
+	mov	edi,	esi		;
+	sub	edi,	ebx		;
+	fsubr	qword ptr[edi]		; A-Bc
+	fld	qword ptr[esi+8]	; b    A-Bc
+	fmul	[sin]			; bs   A-Bc
+	faddp	st(1),	st		; B"
+	add	word ptr[edi+6], 0010h	; A *= 2.
+	fld	qword ptr[esi]		; B    B"
+	fmul	[sin]			; Bs   B"
+	fsubr	qword ptr[edi+8]	; a-Bs B"
+	fld	qword ptr[esi+8]	; b    a-Bs B"
+	fmul	[cos]			; bc   a-Bs B"
+	fsubp	st(1),	st		; b"   B"
+	add	word ptr[edi+14], 0010h	; a *= 2.
+	fst	qword ptr[esi+8]	; b"   B"
+	fsubr	qword ptr[edi+8]	; a"   B"
+	fstp	qword ptr[edi+8]	; B"
+	fst	qword ptr[esi]		; B"
+	fsubr	qword ptr[edi]		; A"
+	lea	esi,	[esi+ebx*2]	;
+	cmp	esi,	[fftend]	;
+	fstp	qword ptr[edi]		;
+	jl	short	a		;
+endm
+;----------------------------------------------------------------------------
+;----------------------------------------------------------------------------
+SCALE	macro	stpx			;
+local	a				;
+	mov	esi,	[fftstart]	;
+	mov	ecx,	[dim]		;
+	fld1				;
+	fidiv	[dim]			;
+a:					;
+	fst	st(1)			;
+	fmul	qword ptr[esi]		;
+	fstp	qword ptr[esi]		;
+	fst	st(1)			;
+	fmul	qword ptr[esi+8]	;
+	fstp	qword ptr[esi+8]	;
+	add	esi,	stpx		;
+	dec	ecx			;
+	jnz	short	a		;
+	fstp	st			;
+endm					;
+;----------------------------------------------------------------------------
+;----------------------------------------------------------------------------
+;====================================================================
+IFFTD1R	PROC public uses esi edi ebp ebx, ;
+	data	: dword,		;
+	ofs	: dword,		;
+	dim	: dword,		;
+	stp	: dword			;
+local	dummy	: dword,		;
+	wcos:qword, wsin:qword,		;
+	cos :qword, sin :qword,		;
+	cos2:qword, sin2:qword,		;
+	cos3:qword, sin3:qword,		;
+	fftstart:dword,			;
+	fftend  :dword,			;
+	fftsiz  :dword			;
+	FFT_ENTRY	 realft		;
+	REORD				;
+	mov	edi,	[fftstart]
+	mov	esi,	[fftend]
+	mov	ecx,	[dim]
+	sar	ecx,	1		;
+	dec	ecx			; cnt = dim/2 - 1
+	fldpi				;
+	fidiv	[dim]			; PI/2n
+	fchs				; -
+	fsincos				; wc   ws
+
+	fld	qword ptr[edi]		; R0
+	fld	st			; R0    R0
+	fld	qword ptr[edi+8]	; I0    R0    R0
+	fadd	st(2),	st		; I0    R0    R0+I0
+	fsubp	st(1),	st		; R0-I0 R0+I0
+	fmul	qword ptr cs:[flt05]	;
+	fstp	qword ptr[edi+8]	;
+	fmul	qword ptr cs:[flt05]	;
+	fstp	qword ptr[edi]		;
+	fldz				; sin
+	fld	qword ptr cs:[flt05]	; cos   sin
+@@200:					;
+;---------------------------------------; st0   st1   st2   st3   st4   st5   st6
+	fld	st(1)			; sin   cos   sin   wc    ws
+	fmul	st,	st(4)		; ws*s  cos   sin   wc    ws
+	fld	st(3)			; wc    ws*s  cos   sin   wc    ws
+	fmul	st(3),	st		; wc    ws*s  cos   wc*s  wc    ws
+	fmul	st,	st(2)		; wc*c  ws*s  cos   wc*s  wc    ws
+	fxch	st(2)			; cos   ws*s  wc*c  wc*s  wc    ws
+	fmul	st,	st(5)		; ws*c  ws*s  wc*c  wc*s  wc    ws
+	faddp	st(3),	st		; ws*s  wc*c  sin"  wc    ws
+	fsubp	st(1),	st		; cos"  sin"  wc    ws
+;---------------------------------------- st0   st1   st2   st3   st4   st5   st6   st7
+	add	edi,	ebx		; j++
+	sub	esi,	ebx		; k--
+	fld	st			; cos   cos   sin   wc    ws
+	fld	qword ptr[ edi]		; Rk    cos   cos   sin   wc    ws
+	fsub	qword ptr[ esi]		; I2    cos   cos   sin   wc    ws
+	fmul	st(1),	st		; I2    I2*c  cos   sin   wc    ws
+	fmul	st,	st(3)		; I2*s  I2*c  cos   sin   wc    ws
+	fld	st(2)			; cos   I2*s  I2*c  cos   sin   wc    ws
+	fld	qword ptr[edi+8]	; Ij    cos   I2*s  I2*c  cos   sin   wc    ws
+	fadd	qword ptr[esi+8]	; R2    cos   I2*s  I2*c  cos   sin   wc    ws
+	fchs
+	fmul	st(1),	st		; R2    R2*c  I2*s  I2*c  cos   sin   wc    ws
+	fmul	st,	st(5)		; R2*s  R2*c  I2*s  I2*c  cos   sin   wc    ws
+	faddp	st(3),	st		; R2*c  I2*s  TI    cos   sin   wc    ws
+	fsubrp	st(1),	st		; TR    TI    cos   sin   wc    ws
+;........................................ st0   st1   st2   st3   st4   st5   st6   st7
+	fld	qword ptr[edi]		; Rj    TR    TI    cos   sin   wc    ws
+	fadd	qword ptr[esi]		;
+	fmul	qword ptr cs:[flt05]	; R1    TR    TI    cos   sin   wc    ws
+	fld	st			; R1    R1    TR    TI    cos   sin   wc    ws
+	fadd	st,	st(2)		; R"j   R1    TR    TI    cos   sin   wc    ws
+	fstp	qword ptr[edi]		; R1    TR    TI    cos   sin   wc    ws
+	fsubrp	st(1),	st		; R"k   TI    cos   sin   wc    ws
+	fstp	qword ptr[esi]		; TI    cos   sin   wc    ws
+	fld	qword ptr[edi+8]	; Ij    TI    cos   sin   wc    ws
+	fsub	qword ptr[esi+8]	;
+	fmul	qword ptr cs:[flt05]	; I1    TI    cos   sin   wc    ws
+	fld	st			; I1    I1    TI    cos   sin   wc    ws
+	fadd	st,	st(2)		; I"j   I1    TI    cos   sin   wc    ws
+	fstp	qword ptr[edi+8]	; I1    TI    cos   sin   wc    ws
+	fsubp	st(1),	st		; I"k   cos   sin   wc    ws
+	fstp	qword ptr[esi+8]	; cos   sin   wc    ws
+	dec	ecx			;
+	jnz	short	@@200		;
+	fstp	st			;
+	fstp	st			;
+	fstp	st			;
+	fstp	st			;
+;----------------------------------------------------------------------------
+	REVERS				;
+	INIT_WSINCOS			;
+	mov	eax,	ebx		;
+@@20:
+	mov	ecx,	[fftstart]	;
+	lea	edx,	[ecx+ebx]	;
+	INIT_SINCOS			;
+@@24:					;
+	FFT_LOOP	ecx		;
+	SINCOS				;
+	add	ecx,	eax		;
+	cmp	ecx,	edx		;
+	jl		@@24		;
+	sal	ebx,	1		;
+	HSINCOS	rev			;
+	cmp	ebx,	[fftsiz]	;
+	jl	@@20			;
+	SCALE	eax			;
+	FFT_EXIT			;
+	ret				;
+IFFTD1R endp				;
+;====================================================================
+;====================================================================
+IFFTD1 PROC public uses esi edi ebp ebx, ;
+	data	: dword,		;
+	ofs	: dword,		;
+	dim	: dword,		;
+	stp	: dword			;
+local	dummy	: dword,		;
+	wcos:qword, wsin:qword,		;
+	cos :qword, sin :qword,		;
+	cos2:qword, sin2:qword,		;
+	cos3:qword, sin3:qword,		;
+	fftstart:dword,			;
+	fftend  :dword,			;
+	fftsiz  :dword			;
+	FFT_ENTRY			;
+	REORD				;
+	REVERS				;
+	INIT_WSINCOS			;
+	mov	eax,	ebx		;
+@@20:
+	mov	ecx,	[fftstart]	;
+	lea	edx,	[ecx+ebx]	;
+	INIT_SINCOS			;
+@@24:					;
+	FFT_LOOP	ecx		;
+	SINCOS				;
+	add	ecx,	eax		;
+	cmp	ecx,	edx		;
+	jl		@@24		;
+	sal	ebx,	1		;
+	HSINCOS	rev			;
+	cmp	ebx,	[fftsiz]	;
+	jl	@@20			;
+	SCALE	eax			;
+	FFT_EXIT			;
+	ret				;
+IFFTD1 endp				;
+;====================================================================
+;====================================================================
+FFTD1 PROC public uses esi edi ebp ebx,	;
+	data	: dword,		;
+	ofs	: dword,		;
+	dim	: dword,		;
+	stp	: dword			;
+local	dummy	: dword,		;
+	wcos:qword, wsin:qword,		;
+	cos :qword, sin :qword,		;
+	cos2:qword, sin2:qword,		;
+	cos3:qword, sin3:qword,		;
+	fftstart:dword,			;
+	fftend  :dword,			;
+	fftsiz  :dword			;
+	FFT_ENTRY			;
+	REVERS				;
+;---------------------------------------------------------------------
+	INIT_WSINCOS			;
+	mov	eax,	ebx		;
+	mov	ecx,	[fftstart]	;
+	FFTPASS_0_0	ecx		;
+	sal	ebx,	2		;
+	HSINCOS				;
+	HSINCOS				;
+;---------------------------------------------------------------------
+	FFTPASS_0_0	ecx		;
+	add	ecx,	eax		;
+	FFTPASS_22_45	ecx		;
+	add	ecx,	eax		;
+	FFTPASS_45_90	ecx		;
+	add	ecx,	eax		;
+	FFTPASS_67_135	ecx		;
+	sal	ebx,	2		;
+	HSINCOS				;
+	HSINCOS				;
+;---------------------------------------------------------------------
+	bsf	ecx,	[dim]		;
+	shr	cx,	1		;
+	jnc	@@29			;
+	mov	ecx,	[fftstart]	;
+	lea	edx,	[ecx+ebx]	;
+	INIT_SINCOS			;
+@@20:					;
+	FFT_LOOP	ecx		;
+	SINCOS				;
+	add	ecx,	eax		;
+	cmp	ecx,	edx		;
+	jl		@@20		;
+	sal	ebx,	1		;
+	HSINCOS				;
+@@29:
+;---------------------------------------------------------------------
+	jmp	@@48			;
+@@40:					;
+	HSINCOS				;
+	INIT_SINCOS3			;
+	mov	ecx,	[fftstart]	;
+	lea	edx,	[ecx+ebx]	;
+@@45:					;
+	FFTPASS_A_2A	ecx		;
+	SINCOS3				;
+	add	ecx,	eax		;
+	cmp	ecx,	edx		;
+	jl	@@45			;
+	HSINCOS				;
+	sal	ebx,	2		;
+@@48:	cmp	ebx,	[fftsiz]	;
+	jl	@@40			;
+;---------------------------------------------------------------------
+	mov	ebx,	eax		;
+	REORD				;
+	FFT_EXIT			;
+	ret				;
+FFTD1 endp				;
+;====================================================================
+;====================================================================
+FFTD1R PROC public uses esi edi ebp ebx, ;
+	data	: dword,		;
+	ofs	: dword,		;
+	dim	: dword,		;
+	stp	: dword			;
+local	dummy	: dword,		;
+	wcos:qword, wsin:qword,		;
+	cos :qword, sin :qword,		;
+	cos2:qword, sin2:qword,		;
+	cos3:qword, sin3:qword,		;
+	fftstart:dword,			;
+	fftend  :dword,			;
+	fftsiz  :dword			;
+	FFT_ENTRY realft		;
+	REVERS				;
+;---------------------------------------------------------------------
+	INIT_WSINCOS			;
+	mov	eax,	ebx		;
+	mov	ecx,	[fftstart]	;
+	FFTPASS_0_0	ecx		;
+	sal	ebx,	2		;
+	HSINCOS				;
+	HSINCOS				;
+;---------------------------------------------------------------------
+	FFTPASS_0_0	ecx		;
+	add	ecx,	eax		;
+	FFTPASS_22_45	ecx		;
+	add	ecx,	eax		;
+	FFTPASS_45_90	ecx		;
+	add	ecx,	eax		;
+	FFTPASS_67_135	ecx		;
+	sal	ebx,	2		;
+	HSINCOS				;
+	HSINCOS				;
+;---------------------------------------------------------------------
+	bsf	ecx,	[dim]		;
+	shr	cx,	1		;
+	jnc	@@29			;
+	mov	ecx,	[fftstart]	;
+	lea	edx,	[ecx+ebx]	;
+	INIT_SINCOS			;
+@@20:					;
+	FFT_LOOP	ecx		;
+	SINCOS				;
+	add	ecx,	eax		;
+	cmp	ecx,	edx		;
+	jl		@@20		;
+	sal	ebx,	1		;
+	HSINCOS				;
+@@29:
+;---------------------------------------------------------------------
+	jmp	@@48			;
+@@40:					;
+	HSINCOS				;
+	INIT_SINCOS3			;
+	mov	ecx,	[fftstart]	;
+	lea	edx,	[ecx+ebx]	;
+@@45:					;
+	FFTPASS_A_2A	ecx		;
+	SINCOS3				;
+	add	ecx,	eax		;
+	cmp	ecx,	edx		;
+	jl	@@45			;
+	HSINCOS				;
+	sal	ebx,	2		;
+@@48:	cmp	ebx,	[fftsiz]	;
+	jl	@@40			;
+;---------------------------------------------------------------------
+	mov	ebx,	eax		;
+	mov	ecx,	[dim]		;
+	sar	ecx,	1		;
+	dec	ecx			; cnt = dim/2 - 1
+	mov	edi,	[fftstart]	;
+	mov	esi,	[fftend]	;
+;........................................
+	fld	qword ptr[edi]		; R0
+	fld	st			; R0    R0
+	fld	qword ptr[edi+8]	; I0    R0    R0
+	fadd	st(2),	st		; I0    R0    R"0
+	fsubp	st(1),	st		; I"0   R"0
+	fstp	qword ptr[edi+8]	; R"0
+	fstp	qword ptr[edi]		;
+;........................................
+	fld	[wsin]
+	fld	[wcos]
+	fldz				; sin
+	fstp	[sin]
+	fld	qword ptr cs:[flt05]	; cos
+	fstp	[cos]
+@@200:					;
+;---------------------------------------; st0   st1   st2   st3   st4   st5   st6
+	SINCOS
+	fld	[sin]
+	fld	[cos]
+
+;---------------------------------------- st0   st1   st2   st3   st4   st5   st6   st7
+	add	edi,	ebx		; j++
+	sub	esi,	ebx		; k--
+	fld	st			; cos   cos   sin   wc    ws
+	fld	qword ptr[esi]		; Rk    cos   cos   sin   wc    ws
+	fsub	qword ptr[edi]		; I2    cos   cos   sin   wc    ws
+	fmul	st(1),	st		; I2    I2*c  cos   sin   wc    ws
+	fmul	st,	st(3)		; I2*s  I2*c  cos   sin   wc    ws
+	fld	st(2)			; cos   I2*s  I2*c  cos   sin   wc    ws
+	fld	qword ptr[edi+8]	; Ij    cos   I2*s  I2*c  cos   sin   wc    ws
+	fadd	qword ptr[esi+8]	; R2    cos   I2*s  I2*c  cos   sin   wc    ws
+	fmul	st(1),	st		; R2    R2*c  I2*s  I2*c  cos   sin   wc    ws
+	fmul	st,	st(5)		; R2*s  R2*c  I2*s  I2*c  cos   sin   wc    ws
+	faddp	st(3),	st		; R2*c  I2*s  TI    cos   sin   wc    ws
+	fsubrp	st(1),	st		; TR    TI    cos   sin   wc    ws
+;........................................ st0   st1   st2   st3   st4   st5   st6   st7
+	fld	qword ptr[edi]		; Rj    TR    TI    cos   sin   wc    ws
+	fadd	qword ptr[esi]		;
+	fmul	qword ptr cs:[flt05]	; R1    TR    TI    cos   sin   wc    ws
+	fld	st			; R1    R1    TR    TI    cos   sin   wc    ws
+	fadd	st,	st(2)		; R"j   R1    TR    TI    cos   sin   wc    ws
+	fstp	qword ptr[edi]		; R1    TR    TI    cos   sin   wc    ws
+	fsubrp	st(1),	st		; R"k   TI    cos   sin   wc    ws
+	fstp	qword ptr[esi]		; TI    cos   sin   wc    ws
+	fld	qword ptr[edi+8]	; Ij    TI    cos   sin   wc    ws
+	fsub	qword ptr[esi+8]	;
+	fmul	qword ptr cs:[flt05]	; I1    TI    cos   sin   wc    ws
+	fld	st			; I1    I1    TI    cos   sin   wc    ws
+	fadd	st,	st(2)		; I"j   I1    TI    cos   sin   wc    ws
+	fstp	qword ptr[edi+8]	; I1    TI    cos   sin   wc    ws
+	fsubp	st(1),	st		; I"k   cos   sin   wc    ws
+	fstp	qword ptr[esi+8]	; cos   sin   wc    ws
+	fstp	st			;
+	fstp	st			;
+
+	dec	ecx			;
+	jnz		@@200		;
+;----------------------------------------------------------------------------
+	REORD
+
+	FFT_EXIT
+	ret				;
+FFTD1R endp				;
+
+end
+

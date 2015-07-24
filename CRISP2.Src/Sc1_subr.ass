@@ -1,0 +1,254 @@
+include	DEFINE32.MAC
+	.data
+;========================================
+ENDBUF		dd	0		;
+Ystep		label	dword		;
+Xstep		dd	0       	;
+BEGIN		dd	0		;
+;========================================
+	.code
+;========================================
+;========================================
+;========================================
+sc1_exp_init	PROC USES esi,		; ( v )
+	val : dword			;
+	mov	eax,	[val]		;
+	xchg	eax,	[BEGIN]		;
+	ret				;
+sc1_exp_init	endp			;
+;========================================
+;========================================
+;========================================
+sc1_exp_str_X	PROC USES esi edi ebx ebp, ; ( *bi, *bo, xi, xo )
+	bi:dword, bo:dword, xi:dword, xo:dword
+	cld				;
+	mov	edi,	[bo]		;
+	push	edi			;
+	mov	esi,	[bi]		;
+	mov	edx,	[xi]		;
+	mov	ebx,	[xo]		;
+	mov	eax,	ebx		;
+	cmp	edx,	ebx		;
+	jz	short @@200		;
+	jns	short @@300		;
+;----------------------------------------
+@@100:					;
+	add	eax,	edi		;
+	mov	[ENDBUF], eax		;
+	mov	[Xstep], edx		; xi
+	mov	ebp,	ebx		;
+	call    near ptr EXPX1		;
+	jmps	@@999			;
+;----------------------------------------
+@@200:					;
+	mov	ecx,	eax		;
+	shr	ecx,	1		;
+	rep	movs word ptr [edi], [esi]
+	adc	ecx,	ecx		;
+	rep	movs byte ptr [edi], [esi]
+	jmps	@@999			;
+;----------------------------------------
+@@300:					;
+	add	eax,	edi		;
+	mov	[ENDBUF], eax		;
+	mov	ebp, 	ebx		;
+	call	near ptr STRX1          ;
+;----------------------------------------
+@@999:					;
+	pop	eax			;
+	ret				;
+sc1_exp_str_X	endp			;
+;========================================
+;========================================
+;========================================
+EXPX1	PROC	 			;
+	mov	ecx, 	ebp		;
+	movzx	eax,	byte ptr [esi]	;
+	mov	ebx,	eax		;
+	inc	esi			;
+	jmp	@@3			;
+@@10:                                   ;
+	mov	eax, 	esi	        ;
+	imul	ecx			;
+	idiv	ebp			;
+	add	eax, 	ebx		;
+	add	ecx, 	[Xstep]		;
+	cmp	ecx, 	ebp		;
+	jl	short @@2               ;
+	pop	esi			;
+	movzx   ebx, 	byte ptr [esi]	;
+	inc	esi			;
+@@3:					;
+	push	esi			;
+	movzx	esi,	byte ptr [esi]	;
+	sub	esi,	ebx		;
+	sub	ecx, 	ebp		;
+@@2:                                    ;
+	stosb                           ;
+	cmp	edi, 	[ENDBUF]	;
+	jb	short @@10              ;
+	pop	esi			;
+	retn                            ;
+EXPX1	endp				;
+;========================================
+;========================================
+;========================================
+STRX1	proc	near			;
+	xor	ebx, 	ebx		; x = 0
+@@10:                                   ;
+	xor	eax, 	eax		;
+	mov	ecx, 	eax		;
+@@1:                                    ;
+	add	al, 	[esi]		;
+	adc	ah, 	ch              ;
+	inc	esi 	                ;
+	add	ebx, 	ebp		;
+	inc	cl                      ;
+	cmp	ebx, 	edx		;
+	jbe	short @@1               ;
+	sub	ebx, 	edx             ;
+	div	cl                      ;
+	stosb                           ;
+	cmp	edi, 	[ENDBUF]        ;
+	jb	short @@10              ;
+	retn                            ;
+STRX1	endp				;
+;========================================
+;========================================
+;========================================
+sc1_str_ADD	PROC USES esi edi ebx,	; ( *bufi, *bufo, len, flag )
+	bufi:dword, bufo:dword, len:dword, flag:dword
+	cld				;
+	mov	esi, 	[bufi]		;
+	mov	edi, 	[bufo]		;
+	mov	ecx, 	[len]		;
+	xor	eax, 	eax   		;
+	cmp	[flag], eax		;
+	jnz	short @@2               ;
+@@1:					;
+	lodsb                           ;
+	stosw				;
+	loop	@@1			;
+	jmp	@@10			;
+@@2:                                    ;
+	lodsb				;
+	add	[edi], ax 		;
+	add	edi,	2               ;
+	loop	@@2			;
+@@10:                                   ;
+	ret                             ;
+sc1_str_ADD	endp			;
+;========================================
+;========================================
+;========================================
+sc1_str_DIV	PROC	USES esi edi ebx, ; ( *bufi, len, div )
+	bufi:dword, len:dword, ddd:dword ;
+	cld				;
+	mov	esi, 	[bufi]		;
+	mov	edi, 	[bufi]		;
+	mov	ecx, 	[len]		;
+	mov	edx, 	[ddd]		;
+	cmp	dl,	1		;
+	ja	short @@2               ;
+@@1:    				;
+	lodsw				; div 1
+	stosb   			;
+	loop	@@1                     ;
+	jmp	@@10			;
+@@2:					;
+	cmp	dl,	2		;
+	ja	short @@4		;
+@@3:					;
+	lodsw				; div 2
+	shr	ax,	1		;
+	stosb				;
+	loop	@@3			;
+	jmp	@@10			;
+@@4:					;
+	lodsw                           ; div > 2
+	div	dl                      ;
+	stosb                           ;
+	loop	@@4			;
+@@10:                                   ;
+	ret				;
+sc1_str_DIV	endp			;
+;========================================
+;========================================
+;========================================
+sc1_str_CNT	PROC USES ebx,		; ( yi, yo )
+	yi:dword, yo:dword		;
+	xor	eax, 	eax		;
+	mov	ecx, 	[BEGIN]         ;
+	mov	edx, 	[yi]            ;
+	mov	ebx, 	[yo]            ;
+@@1:                                    ;
+	add	ecx, 	ebx		;
+	inc	eax			;
+	cmp	ecx, 	edx		;
+	jbe	short @@1               ;
+	sub	ecx, 	edx		;
+	mov	[BEGIN], ecx		;
+	ret                             ;
+sc1_str_CNT	endp			;
+;========================================
+;========================================
+;========================================
+EXPY1	proc	near                    ;
+@@1:                                    ;
+	movzx	eax,	byte ptr [esi]	;
+	neg	eax                      ;
+	add	al, 	[ebx]		;
+	adc	ah, 	0               ;
+	imul 	cx	                ;
+	idiv	bp	                ;
+	add	al, 	[esi]       	;
+	stosb                           ;
+	inc	esi			;
+	inc	ebx			;
+	cmp	edi, 	[ENDBUF]        ;
+	jb	short @@1               ;
+	retn                            ;
+EXPY1	endp				;
+;========================================
+;========================================
+;========================================
+sc1_exp_Y	PROC USES esi edi ebx ebp, ; ( *buf_1, *buf_2, *buf_o, xo, yi, yo )
+	buf_1:dword, buf_2:dword, buf_o:dword, xo:dword,
+	yi:dword, yo:dword		;
+	cld				;
+	mov	eax,	[yi]		;
+	mov	[Ystep], eax		;
+	mov	edx,	[yo]		;
+	mov	eax,	[xo]		;
+	mov	edi, 	[buf_o]		; *buf_o
+	mov	esi, 	[buf_1]		; *buf_str1
+	mov	ebx, 	[buf_2]		; *buf_str2
+	mov	ecx, 	[BEGIN]		;
+	mov	ebp,	edx		;
+;----------------------------------------
+	jecxz	@@2			;
+	add	eax, 	edi		;
+	mov	[ENDBUF], eax		; end *buf_0
+	call	near ptr EXPY1		;
+	jmp	@@999			;
+@@2:    				;
+	xchg	ecx, 	eax		;
+	shr	ecx,	1		;
+	rep	movs word ptr [edi], [esi]
+	adc	ecx,	ecx		;
+	rep	movs byte ptr [edi], [esi]
+	xchg	ecx,	eax		;
+;----------------------------------------
+@@999:					;
+	mov	eax, 	0FFFFFFFFh	;
+	add	ecx, 	[Ystep]         ;
+	cmp	ecx, 	ebp		;
+	jl	short @@3               ;
+	xor	eax, 	eax          	;
+	sub	ecx, 	ebp          	;
+@@3:                                    ;
+	mov	[BEGIN], ecx   		;
+	ret                             ;
+sc1_exp_Y	endp			;
+;========================================
+end
