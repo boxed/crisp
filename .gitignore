@@ -12,3 +12,5 @@ thumbs.db
 Visual Studio 2008
 Debug
 Release
+*.suo
+*.def

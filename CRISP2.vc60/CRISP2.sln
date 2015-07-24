@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CRISP2", "CRISP2.vcproj", "{2255C175-2BFF-45DC-9BCD-BF3A3C3B7881}"
@@ -17,7 +16,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpinStar", "..\SpinStar.vc6
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UserDB", "UserDB\UserDB.vcproj", "{463AEF38-BDF6-4B40-AA1E-617607A6F4C1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PeakFit", "..\..\PeakFit_\PeakFit.Src\PeakFit.vcproj", "{F2C79913-893C-4FFE-94C3-B3CADA28AAE0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PeakFit", "..\PeakFit.Src\PeakFit.vcproj", "{F2C79913-893C-4FFE-94C3-B3CADA28AAE0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cbnstat", "xCBN\cbnstat.vcproj", "{0A7CE432-E4CB-418C-81EA-B7B17DCF69D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +46,10 @@ Global
 		{F2C79913-893C-4FFE-94C3-B3CADA28AAE0}.Debug|Win32.Build.0 = Debug|Win32
 		{F2C79913-893C-4FFE-94C3-B3CADA28AAE0}.Release|Win32.ActiveCfg = Release|Win32
 		{F2C79913-893C-4FFE-94C3-B3CADA28AAE0}.Release|Win32.Build.0 = Release|Win32
+		{0A7CE432-E4CB-418C-81EA-B7B17DCF69D4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0A7CE432-E4CB-418C-81EA-B7B17DCF69D4}.Debug|Win32.Build.0 = Debug|Win32
+		{0A7CE432-E4CB-418C-81EA-B7B17DCF69D4}.Release|Win32.ActiveCfg = Release|Win32
+		{0A7CE432-E4CB-418C-81EA-B7B17DCF69D4}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

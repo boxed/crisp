@@ -1,0 +1,129 @@
+
+               This is a sample session of the WINDOWS NT fight.
+               -------------------------------------------------
+
+The windows NT CSERVE support had a hard time answering my questions. All together 25
+quections posted, many of them with a multiple bounce type of communcation like .. did you do this, or do you have that etc..
+
+The progress we made was a collaboration of several departments. Of course it was slower then ideal. To give you a taste of how real the questions were, please read the following sample of correspondence.
+
+REQUEST TO CSERVE:
+
+Problems on compiling a device driver.
+
+I have the following config:
+----------------------------
+i486 50Mhz, IDE 420 MB * 2, 16 Mbyte RAM
+NT 3.5, DDK MSDN october 1994, VC 2.0 for NT
+
+When I compile (BUILD) a sample device driver, all seems to be O.K.
+By just renaming the files I get into trouble.
+
+The following error pops up:
+
+                           BUILD.EXE
+                Access violation at 0x01004768
+                Cannot access memory at memory at 0x00000000
+
+Which looks like a NULL pointer access. I cannot continue with my work.
+I have tried he folloing combinations:
+
+GENPORT (for simplicity) NT 3.1, VC1.10, VC 2.00, DDK jun, DDK oct
+GENPORT (for simplicity) NT 3.5, VC 2.00, DDK oct
+with the same result.
+
+I cannot continue with my work. I need to produce an a2d device driver, hooked on the parallel port. I am late, and out of company schedule.
+
+Please help.
+
+Peter Glen Atlanta.
+
+ANSWER FROM CSERVE:
+
+Hi Peter,
+
+you even have problems to build GENPORT using NT 3.1 + VC/NT 1.10 + NT 3.1-DDK (from June-MSDN) ?
+
+This is a configuration we're using to build NT-Device-Drivers for months without problems. We know problems if you're using:
+ - NT 3.1 + VC/NT 1.10 + NT 3.5-DDK (from Oct-MSDN)
+ - NT 3.5 + VC/NT 1.10
+.. and we didn't use the Retail-Version of MSVC 2.0 til now (still using a BETA), due to a lack of time<g>.
+
+But, you're saying the problems occured after RENAMING files even in the
+configuration that's working well at our site.
+BTW, our hardware-base is similar to yours. Can you tell we
+(based on the GENPORT-sample) what exactly led you into problems
+
+
+(renaming which files to which names)?
+
+I hope I can help you ..
+Joerg Allmendinger
+
+If you are in pinch for time you might want to look at our toolkit,WinRT. No-one gets through the NT DDK without putting in some very significant time.
+
+WinRT allows a Win32 program to perform Port I/O, Memory I/O and Interrupt handling withou the DDK. The toolkit takes very little time to come up to speed on.
+If you would like further info e-mail a ground address or Fax number.
+
+Paul Lever
+BlueWater Systems
+(206)771-3610
+(206)771-2742Fax
+
+REQUEST TO CSERVE:
+
+Problems on compiling a device driver.
+
+I have the following config:
+----------------------------
+i486 50Mhz, IDE 420 MB * 2, 16 Mbyte RAM
+NT 3.5, DDK MSDN october 1994, VC 2.0 for NT
+
+When I compile (BUILD) a sample device driver, all seems to be O.K.
+By just renaming the files I get into trouble.
+
+The following error pops up:
+
+                           BUILD.EXE
+                Access violation at 0x01004768
+                Cannot access memory at memory at 0x00000000
+
+Which looks like a NULL pointer access. I cannot continue with my work.
+I have tried he folloing combinations:
+
+GENPORT (for simplicity) NT 3.1, VC1.10, VC 2.00, DDK jun, DDK oct
+GENPORT (for simplicity) NT 3.5, VC 2.00, DDK oct
+with the same result.
+
+I cannot continue with my work. I need to produce an a2d device
+
+ANSWER FROM CSERVE:
+
+I tried to duplicate your problem, but could not.  When I want to build a
+quick sample, I usually copy one of the DDK samples, rename the files, modify
+the code as needed, and build the driver.  I've never seen the problem you
+are experiencing.
+
+Did you also edit the files to change the "#include ..." files?  You might
+try renaming the files to a different name (possible name conflict?).
+
+You might also might want to insure that you are using the correct version
+of nmake, build, etc.  Type "where nmake.exe" and see where the path is for
+this program.  The preferred order is as follows:
+
+\msvc20\bin
+\ddk\bin
+\mstools\bin
+
+When you try the build, use the "build -cef" command to force the build
+program to rebuild all the objects.
+
+ Steve Dziok
+ Microsoft Developer Support
+
+
+
+Despilte the difficulties, I wish to thank the people  involved.
+
+                                        Peter Glen developer.
+
