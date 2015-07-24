@@ -1,0 +1,9 @@
+; PeakFit.def : Declares the module parameters for the DLL.
+
+LIBRARY      "PeakFit"
+DESCRIPTION  'PeakFit Windows Dynamic Link Library'
+
+EXPORTS
+    ; Explicit exports can go here
+	Run_PeakFit @12
+	Free_PeakFit @4
