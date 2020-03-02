@@ -507,6 +507,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description=""
+				CommandLine=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -5614,19 +5617,19 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="Icbs\bitmap1.bmp"
-				>
-			</File>
-			<File
 				RelativePath="..\CRISP2.Src\ICBS\bitmap1.bmp"
 				>
 			</File>
 			<File
-				RelativePath="Icbs\bkg.bmp"
+				RelativePath="Icbs\bitmap1.bmp"
 				>
 			</File>
 			<File
 				RelativePath="..\CRISP2.Src\ICBS\bkg.bmp"
+				>
+			</File>
+			<File
+				RelativePath="Icbs\bkg.bmp"
 				>
 			</File>
 			<File
@@ -5638,11 +5641,11 @@
 				>
 			</File>
 			<File
-				RelativePath="Icbs\Bmccirc.bmp"
+				RelativePath="..\CRISP2.Src\ICBS\BMCCIRC.BMP"
 				>
 			</File>
 			<File
-				RelativePath="..\CRISP2.Src\ICBS\BMCCIRC.BMP"
+				RelativePath="Icbs\Bmccirc.bmp"
 				>
 			</File>
 			<File
@@ -5650,11 +5653,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\CRISP2.Src\ICBS\Chkboxs.bmp"
+				RelativePath="Icbs\Chkboxs.bmp"
 				>
 			</File>
 			<File
-				RelativePath="Icbs\Chkboxs.bmp"
+				RelativePath="..\CRISP2.Src\ICBS\Chkboxs.bmp"
 				>
 			</File>
 			<File
@@ -5724,19 +5727,19 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\CRISP2.Src\ICBS\Cur00001.cur"
-				>
-			</File>
-			<File
 				RelativePath="Icbs\Cur00001.cur"
 				>
 			</File>
 			<File
-				RelativePath="..\CRISP2.Src\ICBS\FCIRC.BMP"
+				RelativePath="..\CRISP2.Src\ICBS\Cur00001.cur"
 				>
 			</File>
 			<File
 				RelativePath="Icbs\Fcirc.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\CRISP2.Src\ICBS\FCIRC.BMP"
 				>
 			</File>
 			<File
@@ -5752,11 +5755,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\CRISP2.Src\ICBS\icon1.ico"
+				RelativePath="Icbs\icon1.ico"
 				>
 			</File>
 			<File
-				RelativePath="Icbs\icon1.ico"
+				RelativePath="..\CRISP2.Src\ICBS\icon1.ico"
 				>
 			</File>
 			<File
@@ -5768,15 +5771,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\CRISP2.Src\ICBS\Ledon.bmp"
-				>
-			</File>
-			<File
 				RelativePath="Icbs\Ledon.bmp"
 				>
 			</File>
 			<File
-				RelativePath="Icbs\Mycross.cur"
+				RelativePath="..\CRISP2.Src\ICBS\Ledon.bmp"
 				>
 			</File>
 			<File
@@ -5784,11 +5783,15 @@
 				>
 			</File>
 			<File
-				RelativePath="Icbs\Myheight.cur"
+				RelativePath="Icbs\Mycross.cur"
 				>
 			</File>
 			<File
 				RelativePath="..\CRISP2.Src\ICBS\Myheight.cur"
+				>
+			</File>
+			<File
+				RelativePath="Icbs\Myheight.cur"
 				>
 			</File>
 			<File
@@ -5800,19 +5803,19 @@
 				>
 			</File>
 			<File
-				RelativePath="ICBS\red_cir.ico"
-				>
-			</File>
-			<File
 				RelativePath="..\CRISP2.Src\ICBS\red_cir.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\CRISP2.Src\ICBS\smallico.bmp"
+				RelativePath="ICBS\red_cir.ico"
 				>
 			</File>
 			<File
 				RelativePath="Icbs\smallico.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\CRISP2.Src\ICBS\smallico.bmp"
 				>
 			</File>
 			<File
@@ -5824,19 +5827,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\CRISP2.Src\ICBS\toolbar1.bmp"
-				>
-			</File>
-			<File
 				RelativePath="Icbs\toolbar1.bmp"
 				>
 			</File>
 			<File
-				RelativePath="..\CRISP2.Src\ICBS\toolbar2.bmp"
+				RelativePath="..\CRISP2.Src\ICBS\toolbar1.bmp"
 				>
 			</File>
 			<File
 				RelativePath="Icbs\toolbar2.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\CRISP2.Src\ICBS\toolbar2.bmp"
 				>
 			</File>
 			<File
@@ -5848,19 +5851,19 @@
 				>
 			</File>
 			<File
-				RelativePath="ICBS\viol_cir.ico"
-				>
-			</File>
-			<File
 				RelativePath="..\CRISP2.Src\ICBS\viol_cir.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\CRISP2.Src\ICBS\yell_cir.ico"
+				RelativePath="ICBS\viol_cir.ico"
 				>
 			</File>
 			<File
 				RelativePath="ICBS\yell_cir.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\CRISP2.Src\ICBS\yell_cir.ico"
 				>
 			</File>
 		</Filter>
