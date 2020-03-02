@@ -3737,8 +3737,7 @@ BOOL CALLBACK AboutDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 			SendDlgItemMessage( hDlg, IDC_ABOUT_TEXT, WM_SETFONT, (WPARAM)hfcourier, 0);
 			sprintf(TMP, "Version %d.%d%c", iVersion, iRelease, cSubRel);
 			SetDlgItemText( hDlg, IDC_ABOUT_VERSION, TMP);
-			{ int i; for(i=0;i<sizeof(Copyright);i++) TMP[i]=Copyright[i] ^(5+(i%7)+(i%23));}
-			SetDlgItemText( hDlg, IDC_ABOUT_COPYRIGHT, TMP);
+			SetDlgItemText( hDlg, IDC_ABOUT_COPYRIGHT, "Copyright 2020 Calidris, Stockholm Sweden\n\ninfo@calidris-em.se");
 			ReleaseDC( hDlg, hdc );
 			LoadAboutBmp( &O, "bkg" );
 			pntBitmapToScreen( hDlg, O.dp, O.x, O.y, 0, 0, O.scu, O.scd, &O, 0x8000);
