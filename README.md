@@ -29,12 +29,14 @@ Full three dimensional information can be retrieved by CRISP by processing the m
 Further, advanced processing techniques in the Fourier transform allow correction for the effects of the contrast transfer function, defocus levels and astigmatism. image processed by CRISP
 
 ![screenshot](knb1.gif)
+
 On the left is shown an original micrograph of K<sub>7</sub>Nb<sub>15</sub>W<sub>13</sub>O<sub>80</sub>. The smaller panel in the centre shows the same micrograph after reconstruction. Now the atom positions (black spots) are clearly visible. On the right is the calculated Fourier transform, showing the level of focus and astigmatism in the image.
 
 
 # Analysis of dislocations
 
 ![screenshot](dislocat.gif)
+
 On the left: the original image, on the right the filtered image after processing by CRISP. A dislocation is clearly seen at 9 o'clock.
 
 Key features
