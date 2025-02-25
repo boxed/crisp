@@ -1,4 +1,4 @@
-![memb1](https://github.com/user-attachments/assets/562f607d-1fe8-4848-b5a2-5a62af513cc3)# CRISP + ELD
+# CRISP + ELD
 
 This is the source code for the CRISP/ELD software, developed by Calidris.
 
