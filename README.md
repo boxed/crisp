@@ -47,3 +47,43 @@ Key features
 #. rapid forward and inverse FFT calculation
 #. combine ED amplitudes from ELD for accurate structure determination
 #. fully automatic or user steered processing
+
+
+# ELD
+
+## Quantitative information from electron diffraction patterns
+
+ELD extracts full quantitative information from electron diffraction patterns, including single crystal patterns, powder patterns and patterns from more or less oriented fibres.
+
+![screenshot](ELD.jpg)
+
+## Easy to use, Productive, Fast
+
+ELD runs under Windows and makes full use of its intuitive and easy to use user interface. ELD is designed to be easy to learn and easy to use, and gives productive results within hours of its installation. Using advanced curve fitting techniques electron diffraction intensities can be estimated to high precision.
+
+## Key Features
+
+- full quantification of diffraction patterns from single crystals, from powders and from fibres
+- measurement of d-values of reflections
+- quantitative determination of electron diffraction intensities and amplitudes
+- combination of ED data with TEM imaging data from CRISP
+- automatic and manual lattice refinement
+- many options for examining ED spots
+- fully automatic or user steered processing
+
+
+The analysis of patterns from single crystals includes everything from d-spacings and crystal symmetry to full analysis of amplitudes/ intensities and shapes of electron diffraction spots. Electron diffraction data often extends to higher resolutions than TEM images, for inorganic specimens well beyond 1 �. ELD will give full structural information from over 1000 diffraction spots in only a few minutes. ED data from several projections can be combined into a complete 3-dimensional data set, of quality comparable to X-ray diffraction data.
+
+
+
+![screenshot](eldspot.gif)
+![screenshot](eldring1.gif)
+![screenshot](eldring2.gif)
+
+
+	
+Diffraction patterns from powder rings can be used to calibrate the measurement of d-spacings from other patterns, or can themselves be analysed in terms of the d-spacings of the rings, the radial distribution function, and the width and intensity of the rings.
+
+![screenshot](eldarc2m.gif)
+
+Diffraction arcs from fibres are treated as a special case of rings, where the ring does not occupy 360 degrees. Again, d-spacings, widths and intensities are evaluated, both for the arc as a complete unit and at a number of angular positions across the arc.
