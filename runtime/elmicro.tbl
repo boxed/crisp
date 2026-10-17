@@ -1,0 +1,40 @@
+; HRTEMs parameters from ASU Winter School, 1993. Michael A.O'Keefe
+; Format:
+; Name                     Par= | Vacc | Cs | Cc | Resolution (Å)      |
+;                               | (keV)|(mm)|(mm)| Scherz.| Inf. Limit |
+;-------------------------------------------------------------------
+Hitachi H8100              Par=   200   0.70 1.10  2.07     1.54
+Cambridge HREM             Par=   600   2.5  2.7   1.70     1.22
+Hitachi H8100              Par=   200   0.7  1.1   2.07     1.54
+Hitachi HF2000             Par=   200   1.2  1.5   2.37     1.26
+Hitachi HF2000-UHR         Par=   200   0.7  1.0   2.07     1.03
+Hitachi H9000-UHR          Par=   300   0.9  1.5   1.84     1.36
+Hitachi H9000-NAR          Par=   300   0.68 1.4   1.71     1.32
+Hitachi 300keV FEG         Par=   300   0.9  1.5   1.84     1.07
+Hitachi HU1250             Par=  1250   2.5  3.5   1.13     0.98
+Hitachi H-1500             Par=  1300   1.85 3.4   1.03     0.95
+Now Topcon ISI 002A        Par=   120   0.3  0.6   2.08     1.65
+Now Topcon ISI 002B        Par=   200   0.4  0.8   1.80     1.31
+JEOL 200CX                 Par=   200   1.2  1.5   2.37     1.26
+JEOL 2000EX                Par=   200   0.9  1.2   2.21     1.61
+JEOL 2010HT                Par=   200   1.0  1.4   2.26     1.74
+JEOL 2010UHR               Par=   200   0.5  1.0   1.90     1.47
+JEOL 2010F                 Par=   200   0.5  1.0   1.90     1.03
+JEOL 3010HT                Par=   300   1.4  2.2   2.05     1.65
+JEOL 3010UHR               Par=   300   0.6  1.4   1.66     1.32
+JEOL 4000EX                Par=   400   0.9  1.65  1.61     1.20
+JEOL HAREM                 Par=   500   1.0  1.4   1.48     0.97
+JEOL ARM-1000              Par=  1000   2.3  3.4   1.26     1.07
+JEOL Kyoto-1000            Par=  1000   1.7  3.6   1.17     1.10
+JEOL ARM-1250              Par=  1250   1.6  4.0   1.02     1.05
+Philps CM20/ST             Par=   200   1.2  1.2   2.37     1.61
+Philps CM200FEG/ST         Par=   200   1.2  1.2   2.37     1.13
+Philps CM20/UT             Par=   200   0.5  1.0   1.90     1.47
+Philps CM200FEG/UT         Par=   200   0.5  1.0   1.90     1.03
+Philps CM30/T              Par=   300   2.0  2.0   2.25     1.58
+Philps CM300FEG/T          Par=   300   2.0  2.0   2.25     1.23
+Philps CM30/ST             Par=   300   1.2  1.5   1.98     1.36
+Philps CM300FEG/ST         Par=   300   1.2  1.5   1.98     1.07
+Philps CM300FEG/UT         Par=   300   0.7  1.5   1.73     1.07
+Philps CM300FEG/UT         Par=   300   0.7  1.5   1.73     1.07
+Philps CM300FEG/UT         Par=   300   0.7  1.5   1.73     1.07
