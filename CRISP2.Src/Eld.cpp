@@ -34,14 +34,12 @@
 #endif
 
 #include "eld.h"
-#include "xCBN\shcb.h"
 
 #include "ELD_HOLZ.h"
 
 using namespace std;
 
-extern CRISP scbCrisp;
-static DWORD s_dwELD_with_SpinnigStar = IDC_ELD_DEFINE_HOLZ;
+static DWORD s_dwELD_with_SpinnigStar = IDC_ELD_LAUE_ZONES;
 
 static	LPCSTR s_szFlags[3] = {" ","Not estimated", "Misplaced"};
 
@@ -5177,16 +5175,7 @@ BOOL InitELDDialog( HWND hDlg, OBJ* O, LPELD pEld )
 */
 
 //----------------------------------------------------------------------
-	// Added by Peter on [3/8/2005]
-	// check if we have permission for the Spinning Star in the LIC file
-	if( 0 != (scbCrisp.flags & CRISP_ELD_SPINSTAR) )
-	{
-		s_dwELD_with_SpinnigStar = IDC_ELD_LAUE_ZONES;
-	}
-	else
-	{
-		s_dwELD_with_SpinnigStar = IDC_ELD_DEFINE_HOLZ;
-	}
+	s_dwELD_with_SpinnigStar = IDC_ELD_LAUE_ZONES;
 	// add maximum number of LAUE ZONES
 	HWND hCombo = GetDlgItem(hDlg, IDC_ELD_LAUE_ZONE_NR);
 	for(i = 0; i < ELD_MAX_LAUE_CIRCLES; i++)

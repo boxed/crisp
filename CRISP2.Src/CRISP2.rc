@@ -1866,7 +1866,6 @@ STRINGTABLE
 BEGIN
     IDS_ERRELMICRONOTFOUND  "File 'ELMICRO.TBL' not found"
     IDS_ERRINVALIDTIF       "Can't recognize as valid TIF file"
-    IDS_ERRDEMO             "Impossible for Demo version"
     IDS_ERRINVALIDJPG       "Can't recognize as valid JPEG file"
     IDS_ERRINVALIDMRC       "Can't recognize as valid CCP4 map file"
     IDS_ERRINVALIDBMP       "Can't recognize as a valid BMP file"

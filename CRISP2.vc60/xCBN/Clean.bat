@@ -1,1 +1,0 @@
-@echo Please use clean.bat from project root.

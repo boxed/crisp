@@ -17,10 +17,6 @@ extern char		szProg[];		// Program name
 extern int		iVersion;
 extern int		iRelease;
 extern char		cSubRel;
-extern char	 	szUserName[128];
-extern char		szValidUntil[128];
-extern char		szSerNo[128];
-extern BOOL		bDemo;
 
 
 extern HWND		MDIhWnd;		// Handle to MDI frame

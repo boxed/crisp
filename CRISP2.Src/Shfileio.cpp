@@ -394,7 +394,6 @@ static	BOOL	bFirst;		// On first callback we have nothing to save
 static	DWORD	dwCnt;		// Counter of saved bytes
 static	HFILE	hFile;		// File handle
 
-static	BOOL	bDemoPCX;
 /****************************************************************************/
 BOOL fioFixImageMemory( LPSAVEIMAGE I )
 {
@@ -3095,14 +3094,10 @@ static BOOL	fioCheckPCX( LPSAVEIMAGE I )
 		}
 	} else 	for (i=0; i<256; i++) x_lookup[i] = (BYTE) i;
 
-	if ((pcx_header.extra[0] == 'P') && (pcx_header.extra[1] == 'I'))
-		bDemoPCX = TRUE;	// Acceptable for demo version, it means old style Project Info
-
 	_llseek( hFile, -769-(LONG)sizeof(NEWINFO), FILE_END);
 	_lread( hFile, &NI, sizeof(NEWINFO) );
 	if ((NI.logo[0]=='N') && (NI.logo[1]=='I')) {
 		memcpy(I->lpAdd, &NI, I->iAddSize);		// If logo is OK then copy NEWINFO
-		bDemoPCX = TRUE;	// Acceptable for demo version
 	}
 	_llseek(hFile, 128, FILE_BEGIN);
 	filebuffptr = BUFFSIZE+1;
@@ -3804,15 +3799,6 @@ BOOL WINAPI fioOpenImageFile( LPSTR fname, OBJ* pObj, LPSAVEIMAGE pI,
 		return FALSE;
 	}
 
-	if ( bDemo || strlen(szSerNo) == 0 )
-	{
-		if (stricmp( ext, ".XIF" ) == 0 && fioCheckTIFF( pI ))
-			iRMode = _TIF_CRY_;
-		else
-			iError = IDS_ERRUNKNOWNFORMAT;
-		goto xxx;
-	}
-	// Not in demo mode
 	if (stricmp( ext, ".PCX" ) == 0)
 	{
 		if (fioCheckPCX( pI )) iRMode = _PCX_;
@@ -3908,7 +3894,6 @@ BOOL WINAPI fioOpenImageFile( LPSTR fname, OBJ* pObj, LPSAVEIMAGE pI,
 		hFile = 0;
 		return myError(IDS_ERRUNKNOWNFORMAT);
 	}
-xxx:
 	if (iError)
 	{
 		_lclose( hFile );
@@ -4157,7 +4142,6 @@ static	BOOL	fioSaveSER( LPSTR fname, LPSAVEIMAGE I)
 BOOL WINAPI fioSaveImageFile( LPSTR fname, LPSAVEIMAGE I, WORD wJPGq )
 {
 	char	ext[_MAX_EXT];
-	int		i;
 
 	_splitpath( fname, &TMP[0], &TMP[100], &TMP[200], ext );
 	strupr( ext );
@@ -4169,9 +4153,7 @@ BOOL WINAPI fioSaveImageFile( LPSTR fname, LPSAVEIMAGE I, WORD wJPGq )
 	}
 	// End of addition by Peter on 12 April 2007
 
-	if( 0==stricmp( ext, ".XIF" ) && 0!=strlen(szSerNo) && 1==sscanf(szSerNo,"%d",&i) && i < 5 )
-		return fioSaveTIF( fname, I, TRUE  );	// Crypted
-	else if( 0 == stricmp( ext, ".TIF" ) ) return fioSaveTIF( fname, I, FALSE );
+	if( 0 == stricmp( ext, ".TIF" ) ) return fioSaveTIF( fname, I, FALSE );
 	else if( 0 == stricmp( ext, ".JPG" ) ) return fioSaveJPG( fname, I, wJPGq );
 	else if( 0 == stricmp( ext, ".BMP" ) ) return fioSaveBMP( fname, I );
 #ifdef __FEI__

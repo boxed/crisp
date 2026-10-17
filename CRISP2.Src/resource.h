@@ -35,7 +35,6 @@
 #define IDS_ERRUNKNOWNFORMAT            0X001F
 #define IDS_ERRELMICRONOTFOUND          0X0020
 #define IDS_ERRINVALIDTIF               0X0021
-#define IDS_ERRDEMO                     0X0022
 #define IDS_ERRINVALIDJPG               0X0023
 #define IDS_ERRINVALIDMRC               0X0024
 #define IDS_ERRINVALIDBMP               37

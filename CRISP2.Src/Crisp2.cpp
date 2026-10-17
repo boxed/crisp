@@ -37,7 +37,6 @@
 #include "..\shark49x\shark4.h"
 
 #include "eld.h"
-#include "xCBN\shcb.h"
 
 // Added by Peter on 22 Aug 2002
 // SoftHard Technology MV4.0 support
@@ -115,9 +114,6 @@ char		szProg[]="CRISP 2.2";		// title
 int			iVersion= 2;
 int			iRelease= 2;
 char		cSubRel = ' ';
-char	 	szUserName[128];
-char		szValidUntil[128];
-char		szSerNo[128];
 
 HWND		splashWnd = NULL;	// Logo window
 
@@ -125,13 +121,6 @@ extern HANDLE	hLiveThreadShark4;
 GRABBER	nUseGrabber = GB_USE_NONE;
 
 static char gszCmdLine[_MAX_PATH] = {0};
-/*
-extern BYTE szDemoUser[19];
-extern BYTE szUntil[23];
-extern BYTE szUnlimited[9];
-extern BYTE szExpired[7];
-extern BYTE szCrippled[8];
-*/
 #pragma comment( exestr, "Build on " __TIMESTAMP__ )
 
 #define TIMESTAMP		"Build on " ##__TIMESTAMP__
@@ -164,8 +153,6 @@ WORD		wShowCommands[3] = {SW_SHOWMINIMIZED, SW_SHOWNORMAL, SW_SHOWMAXIMIZED};
 
 HFONT		hfInfo = NULL;
 int			wFntW, wFntH;
-
-#include	"copyrt.c"
 
 char		TMP[TMPSIZE];
 
@@ -251,8 +238,6 @@ BOOL	bInformChilds = FALSE;
 
 int		iImageSerial = 1;	// Grabbed image serial number
 
-BOOL	bDemo = TRUE;
-
 //---------------------- Default Project Info ------------------------------
 // the function calls to read default microscope settings into NIDefault variable
 // defined in Prjinfo.cpp
@@ -290,8 +275,6 @@ char	g_szClipboard_32f[] = "CRISP FLOAT image";
 
 UINT	g_Clipboard_64f;		// Clipboard format for DOUBLE image
 char	g_szClipboard_64f[] = "CRISP DOUBLE image";
-
-CRISP	scbCrisp;
 
 /****************************************************************************/
 static	BOOL	InitFonts( HINSTANCE hInst )
@@ -344,72 +327,6 @@ static void	FreeAllResources( void )
 	DeletePen(hPlotPen);
 	DeleteFont(hfInfo);
 	FontManager::Uninitialize();
-}
-/****************************************************************************/
-void xxEncode( LPWORD data, int size )
-{
-	for(int i=0; i<size/2; i++) data[i] ^= MAGIC_NUMBER;
-}
-/****************************************************************************/
-static void InitSecurity()
-{
-	USER	usr;
-	CRISP	l;
-	DWORD	t0;
-	int		i;
-	struct tm *ltm = NULL;
-	static LPSTR mnth[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-
-	GetModuleFileName( hInst, TMP, sizeof(TMP) );
-	*(strrchr( TMP, '\\')+1) =0;
-	strcat( TMP, "crisp2.lic");
-
-	if (GetPrivateProfileStruct( "CRISP2", "Lic_c",  &usr.c,         sizeof(usr.c),        TMP ) &&
-		GetPrivateProfileStruct( "CRISP2", "SerNum", &usr.wSRN,      sizeof(usr.wSRN),     TMP ) &&
-		GetPrivateProfileStruct( "CRISP2", "User",   &usr.UserName,  sizeof(usr.UserName), TMP ) )
-	{
-		xxEncode( (LPWORD)&usr.wSRN,     sizeof(usr.wSRN) );
-		xxEncode( (LPWORD)&usr.c,        sizeof(usr.c) );
-		xxEncode( (LPWORD)&usr.UserName, sizeof(usr.UserName) );
-
-		l = usr.c;
-
-		sprintf(szSerNo, "%05d", usr.wSRN); sscanf("0","%d",&bDemo);
-
-		t0 = (DWORD)time(NULL);
-
-		if (t0>l.dwExp)
-		{
-			for(i = 0; i < sizeof(szExpired); i++)
-				szValidUntil[i] = szExpired[i]   ^ (5+(i%7)+(i%23));
-		}
-		else if(l.dwExp==-1)
-		{
-			for(i = 0; i < sizeof(szUnlimited); i++)
-				szValidUntil[i] = szUnlimited[i] ^ (5+(i%7)+(i%23));
-		}
-		else
-		{
-	    	ltm = localtime( (time_t*)&l.dwExp );
-			for(i=0;i<sizeof(szUntil); i++) TMP[i] = szUntil[i] ^ (5+(i%7)+(i%23));
-			sprintf(szValidUntil, TMP, ltm->tm_mday, mnth[ltm->tm_mon], 1900+ltm->tm_year );
-		}
-		scbCrisp = l;
-
-		strcpy( szUserName, usr.UserName );
-	}
-	else
-	{
-		for(i=0;i<sizeof(szDemoUser); i++) szUserName[i]   = szDemoUser[i] ^ (5+(i%7)+(i%23));
-		for(i=0;i<sizeof(szCrippled); i++) szValidUntil[i] = szCrippled[i] ^ (5+(i%7)+(i%23));
-		bDemo = TRUE;
-	}
-
-	if(szValidUntil[0]=='E' && szValidUntil[1] == 'x' && szValidUntil[2] == 'p')
-	{
-		szSerNo[0]=0;
-		bDemo = TRUE;
-	}
 }
 
 // Added by Peter on 28 June 2004
@@ -566,8 +483,6 @@ BOOL InitApplication(HINSTANCE hInst, HANDLE hPrev, int *pCmdShow, LPTSTR lpCmdL
 		wc.lpszClassName = "CrispDlgClass";
 		if (!RegisterClass(&wc)) return FALSE;
 	}
-
-	InitSecurity();
 
 	if (! pntInit() )
 	{
@@ -929,28 +844,10 @@ void InitializeMenu( HWND hWnd )
 cont:
 
 // Change by Peter on 22 Aug 2002
-	int nGrabByShark4 = bShark4 && (scbCrisp.flags & CRISP_ACQUISITION);
+	int nGrabByShark4 = bShark4;
 	int nGrabByMV40   = bMV40;
 	xEnable( IDM_F_GRAB, (nGrabByShark4 != 0) || (nGrabByMV40 != 0) );
 	xCheck ( IDM_F_GRAB, bGrabberActive );
-
-	if (!bDemo)
-	{
-		if ( (scbCrisp.flags & CRISP_CRISP) == 0 )
-			dd &= ~(b(OT_FFT) | b(OT_LREF) | b(OT_OREF) | b(OT_DMAP) | b(OT_AMTR) | b(OT_UBEND) | b(OT_FILT) | b(OT_IFFT) | b(OT_AXTL));
-
-		if ( (scbCrisp.flags & CRISP_ELD) == 0)
-			dd &= ~(b(OT_ELD));
-
-		if ( (scbCrisp.flags & CRISP_CALIBRATION) == 0)
-			dd &= ~(b(OT_CAL));
-
-		if ( (scbCrisp.flags & CRISP_PHIDO) == 0)
-			dd &= ~(b(OT_PHIDO));
-
-		if ( (scbCrisp.flags & CRISP_EDRD) == 0 )
-			dd &= ~(b(OT_EDRD));
-	}
 
 	xEnable( IDM_A_AR128,  dd&b(OT_AREA));
 	xEnable( IDM_A_AR256,  dd&b(OT_AREA));
@@ -1013,25 +910,16 @@ cont:
 	CheckMenuItem( hm, IDM_L_EDITTOP, MF_BYCOMMAND | (hEditTop    ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem( hm, IDM_V_INFO,    MF_BYCOMMAND | (hInfo       ? MF_CHECKED : MF_UNCHECKED));
 
-	// Added by Peter on 12 April 2007
-	if( !bDemo )
-	{
-		BOOL bEnable =
-			IsClipboardFormatAvailable(CF_DIB) ||
-			IsClipboardFormatAvailable(g_Clipboard_8s) ||
-			IsClipboardFormatAvailable(g_Clipboard_16u) ||
-			IsClipboardFormatAvailable(g_Clipboard_16s) ||
-			IsClipboardFormatAvailable(g_Clipboard_32u) ||
-			IsClipboardFormatAvailable(g_Clipboard_32s) ||
-			IsClipboardFormatAvailable(g_Clipboard_32f) ||
-			IsClipboardFormatAvailable(g_Clipboard_64f) ;
-		xEnable( IDM_E_PASTE, bEnable );
-	}
-	else
-	{
-		xEnable( IDM_E_PASTE, FALSE );
-	}
-	// End of addition by Peter on 12 April 2007
+	BOOL bEnable =
+		IsClipboardFormatAvailable(CF_DIB) ||
+		IsClipboardFormatAvailable(g_Clipboard_8s) ||
+		IsClipboardFormatAvailable(g_Clipboard_16u) ||
+		IsClipboardFormatAvailable(g_Clipboard_16s) ||
+		IsClipboardFormatAvailable(g_Clipboard_32u) ||
+		IsClipboardFormatAvailable(g_Clipboard_32s) ||
+		IsClipboardFormatAvailable(g_Clipboard_32f) ||
+		IsClipboardFormatAvailable(g_Clipboard_64f) ;
+	xEnable( IDM_E_PASTE, bEnable );
 	xEnable( IDM_E_COPY,  bSave );
 	xEnable( IDM_E_XCOPY, hActive != NULL );
 	tobUpdateToolBarWnd();
@@ -2382,7 +2270,7 @@ static BOOL CRISP_OpenFile(OBJ* pObj, int nOpenType = OFN_IMAGER)
 {
 	// NOTE: don't use this function directly, instead use _OpenShellFile
 	if( !fioGetFileNameDialog(MainhWnd, "Open Image File",
-		&ofNames[nOpenType], "", FALSE, bDemo?2:1) )
+		&ofNames[nOpenType], "", FALSE, 1) )
 	{
 		return FALSE;
 	}
@@ -2523,13 +2411,6 @@ HWND objCreateObject( UINT uType, OBJ* OE, pfnCREATEOBJ_CALLBACK pfnPreCreate/* 
 	// list of loaded images, if any
 	vObjectsVec vObjects;
 
-	// Added by Peter on 12 April 2007
-	if( bDemo && (IDM_E_PASTE == uType) )
-	{
-		return NULL;
-	}
-	// End of addition by Peter on 12 April 2007
-
 	if (uType==IDM_F_SAVE)
 	{
 		objSaveObject();
@@ -2653,14 +2534,10 @@ HWND objCreateObject( UINT uType, OBJ* OE, pfnCREATEOBJ_CALLBACK pfnPreCreate/* 
 		break;
 
 	case IDM_E_PASTE:
-		// DEMO mode check added by Peter on 10 Nov 2005
-		if ( !bDemo && (0 != strlen(szSerNo)) )
+		if( !objPasteFromCB( O ) )
 		{
-			if( !objPasteFromCB( O ) )
-			{
-				free( O );
-				return FALSE;
-			}
+			free( O );
+			return FALSE;
 		}
 		break;
 
@@ -3697,21 +3574,6 @@ BOOL LoadAboutBmp( OBJ* O, LPSTR lpString )
 	return TRUE;
 }
 /****************************************************************************/
-static void SetAboutUserText( HWND hDlg )
-{
-	int serno;
-
-	if( sscanf(szSerNo,"%d",&serno)==1 && serno!=0 )
-	{
-		sprintf(TMP,"%s\n%s\nS/N: %s", szUserName, szValidUntil, szSerNo);
-	}
-	else
-	{
-		sprintf(TMP,"\n%s\n%s", szUserName, szValidUntil);
-	}
-	SetDlgItemText( hDlg, IDC_ABOUT_TEXT, TMP);
-}
-/****************************************************************************/
 BOOL CALLBACK AboutDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static	HFONT	hftimes, hfcourier;
@@ -3741,7 +3603,7 @@ BOOL CALLBACK AboutDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 			ReleaseDC( hDlg, hdc );
 			LoadAboutBmp( &O, "bkg" );
 			pntBitmapToScreen( hDlg, O.dp, O.x, O.y, 0, 0, O.scu, O.scd, &O, 0x8000);
-			SetAboutUserText( hDlg );
+			SetDlgItemText( hDlg, IDC_ABOUT_TEXT, "Free and open source software");
 			if (lParam) {	// As logo window
 			RECT	rc;
 				splashWnd = hDlg;
