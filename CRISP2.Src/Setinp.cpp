@@ -8,8 +8,8 @@
 #include "common.h"
 #include "rgconfig.h"
 
-#include "..\shark49x\pcidev.h"
-#include "..\shark49x\shark4.h"
+#include "../shark49x/pcidev.h"
+#include "../shark49x/shark4.h"
 
 typedef struct {
 	BOOL	exist;			// Input exist

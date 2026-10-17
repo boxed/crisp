@@ -34,8 +34,8 @@ extern FILE *s_pLog;
 // added by Peter on 22 Aug 2002
 #include "MV40Live.h"
 
-#include "..\shark49x\pcidev.h"
-#include "..\shark49x\shark4.h"
+#include "../shark49x/pcidev.h"
+#include "../shark49x/shark4.h"
 
 HANDLE	hLiveThreadShark4 = NULL;
 

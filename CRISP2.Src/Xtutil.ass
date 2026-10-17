@@ -236,7 +236,7 @@ X256_Copy PROC C PUBLIC uses esi edi ebx, ;
 	y_b	: dword,		;
 	s_a0	: dword,		;
 	s_b0	: dword,		;
-	xneg	: dword,		;
+	xneg	: dword 		;
 ;........................................
 local	xcnt	: dword,		;
 	ycnt	: dword,		;

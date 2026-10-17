@@ -712,7 +712,7 @@ xr_y:	//========================================================================
 		fadd	st,		st(4)			;	Ci		ci		dj*zi	di*zj	ti
 		fxch	st(1)					;	ci		Ci		dj*zi	di*zj	ti
 		fsubrp	st(4),	st				;	Ci		dj*zi	di*zj	Di
-		fstp	[esi+8]					;	dj*zi	di*zj	Di
+		fstp	dword ptr[esi+8]		;	dj*zi	di*zj	Di
 		faddp	st(1),	st				;	tj		Di
 		fld		dword ptr[esi+12]		;	cj		tj		Di
 		fld		st						;	cj		cj		tj		Di

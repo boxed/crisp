@@ -90,7 +90,7 @@ namespace stdext
 #endif
 {
     template<>
-	size_t hash_compare<StringBase, std::less<StringBase> >::operator ()
+	inline size_t hash_compare<StringBase, std::less<StringBase> >::operator ()
 		( const StringBase& str ) const
     {
 		// This is the PRO-STL way, but it seems to cause problems with VC7.1

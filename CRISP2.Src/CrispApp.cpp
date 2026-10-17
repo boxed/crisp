@@ -12,8 +12,8 @@
 #include "MainFrm.h"
 
 #include "setinp.h"
-#include "..\shark49x\pcidev.h"
-#include "..\shark49x\shark4.h"
+#include "../shark49x/pcidev.h"
+#include "../shark49x/shark4.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

@@ -5,7 +5,7 @@
 #pragma once
 
 #include "MathKrnl.h"
-#include "..\Profile.h"
+#include "../Profile.h"
 
 typedef struct PEAKSEARCHtag
 {

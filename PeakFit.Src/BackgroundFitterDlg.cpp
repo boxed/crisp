@@ -8,7 +8,7 @@
 #include "resource.h"
 #include "BackgroundFitterDlg.h"
 
-#include "Math\PeakSearch.h"
+#include "Math/PeakSearch.h"
 
 #include <process.h>
 
@@ -149,14 +149,14 @@ BEGIN_MESSAGE_MAP(CBackgroundFitterDlg, CDialog)
 	ON_WM_RBUTTONUP()
 	ON_WM_LBUTTONDBLCLK()
 	ON_WM_DESTROY()
-	ON_BN_CLICKED(IDC_TP_BKG_FIT_POINTS, CBackgroundFitterDlg::OnFitBkgPoints)
-	ON_BN_CLICKED(IDC_FIND_PEAKS, CBackgroundFitterDlg::OnFindPeaks)
-	ON_BN_CLICKED(IDC_AUTO_FIT_POINTS, CBackgroundFitterDlg::OnAutoFitPoints)
-	ON_BN_CLICKED(IDC_RESET_PARAMS, CBackgroundFitterDlg::OnResetParams)
-	ON_BN_CLICKED(IDC_ABORT_FITTING, CBackgroundFitterDlg::OnAbortFitting)
-	ON_CBN_SELCHANGE(IDC_FIT_BKG_POLY_N, CBackgroundFitterDlg::OnSelchangeFitBkgPolyN)
-	ON_MESSAGE(UM_UPDATE_FITTING, OnUpdateFitting)
-	ON_MESSAGE(UM_FINNISHED_FITTING, OnTerminated)
+	ON_BN_CLICKED(IDC_TP_BKG_FIT_POINTS, &CBackgroundFitterDlg::OnFitBkgPoints)
+	ON_BN_CLICKED(IDC_FIND_PEAKS, &CBackgroundFitterDlg::OnFindPeaks)
+	ON_BN_CLICKED(IDC_AUTO_FIT_POINTS, &CBackgroundFitterDlg::OnAutoFitPoints)
+	ON_BN_CLICKED(IDC_RESET_PARAMS, &CBackgroundFitterDlg::OnResetParams)
+	ON_BN_CLICKED(IDC_ABORT_FITTING, &CBackgroundFitterDlg::OnAbortFitting)
+	ON_CBN_SELCHANGE(IDC_FIT_BKG_POLY_N, &CBackgroundFitterDlg::OnSelchangeFitBkgPolyN)
+	ON_MESSAGE(UM_UPDATE_FITTING, &CBackgroundFitterDlg::OnUpdateFitting)
+	ON_MESSAGE(UM_FINNISHED_FITTING, &CBackgroundFitterDlg::OnTerminated)
 // 	ON_THREAD_MESSAGE(UM_UPDATE_FITTING, OnUpdateFitting)
 // 	ON_THREAD_MESSAGE(UM_FINNISHED_FITTING, OnTerminated)
 	//}}AFX_MSG_MAP

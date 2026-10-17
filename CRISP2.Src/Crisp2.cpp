@@ -33,15 +33,15 @@
 // Added by Peter on 24 February 2006
 #include "Crash.h"
 
-#include "..\shark49x\pcidev.h"
-#include "..\shark49x\shark4.h"
+#include "../shark49x/pcidev.h"
+#include "../shark49x/shark4.h"
 
 #include "eld.h"
 
 // Added by Peter on 22 Aug 2002
 // SoftHard Technology MV4.0 support
-#include "..\MV40\mv40api.h"
-#include "..\MV40\PixFilt.h"
+#include "../MV40/mv40api.h"
+#include "../MV40/PixFilt.h"
 #include "MV40Live.h"
 // end of addition
 
@@ -123,7 +123,7 @@ GRABBER	nUseGrabber = GB_USE_NONE;
 static char gszCmdLine[_MAX_PATH] = {0};
 #pragma comment( exestr, "Build on " __TIMESTAMP__ )
 
-#define TIMESTAMP		"Build on " ##__TIMESTAMP__
+#define TIMESTAMP		"Build on " __TIMESTAMP__
 
 static LPCTSTR s_pszTimeStamp = TIMESTAMP;
 

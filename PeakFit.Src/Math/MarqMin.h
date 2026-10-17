@@ -2,7 +2,7 @@
 #define __MARQUARDT_H__
 
 #include "MathKrnl.h"
-#include "..\GRuntimeClass.h"
+#include "../GRuntimeClass.h"
 
 typedef bool (*NLFITCALLBACK)(double *pdParams, int nParams, double dChiSq, int nIter, LPVOID pUserData);
 

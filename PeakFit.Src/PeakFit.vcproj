@@ -50,6 +50,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\external_libs"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -149,6 +150,7 @@
 				AdditionalOptions="/D _SECURE_SCL=0 /D _HAS_ITERATOR_DEBUGGING=0"
 				Optimization="0"
 				InlineFunctionExpansion="0"
+				AdditionalIncludeDirectories="..\external_libs"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL"
 				StringPooling="true"
 				RuntimeLibrary="0"

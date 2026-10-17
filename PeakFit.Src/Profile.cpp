@@ -6,7 +6,7 @@
 
 //#include "Math\MathDef.h"
 //#include "Math\MathKrnl.h"
-#include "Math\Smooth.h"
+#include "Math/Smooth.h"
 //#include "Math\Vector.h"
 
 #include "Profile.h"

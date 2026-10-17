@@ -10,7 +10,7 @@ BOOL regCheckKeyAccess();
 
 BOOL regSetData( LPSTR szSubKey, LPSTR szValue, LPVOID lpData, DWORD size );
 BOOL regGetData( LPSTR szSubKey, LPSTR szValue, LPVOID lpData, DWORD size );
-BOOL regGetDataDef( LPCSTR szSubKey, LPCSTR szValue, LPVOID lpDef, LPVOID lpData, DWORD size );
+BOOL regGetDataDef( LPCSTR szSubKey, LPCSTR szValue, LPCVOID lpDef, LPVOID lpData, DWORD size );
 BOOL regSetInt( LPCSTR szSubKey, LPCSTR szValue, int val);
 int  regGetInt( LPCSTR szSubKey, LPCSTR szValue, int defval );
 

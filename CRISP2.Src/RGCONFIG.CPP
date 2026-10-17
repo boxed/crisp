@@ -144,14 +144,14 @@ DWORD	size = sizeof(str);
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
-BOOL regGetDataDef( LPCSTR szSubKey, LPCSTR szValue, LPVOID lpDef, LPVOID lpData, DWORD size )
+BOOL regGetDataDef( LPCSTR szSubKey, LPCSTR szValue, LPCVOID lpDef, LPVOID lpData, DWORD size )
 {
 static char	fkey[_MAX_PATH];
 HKEY	hKey;
 DWORD	type;
 LONG	rcr;
 
-	strcpy((LPSTR)lpData, (LPSTR)lpDef);
+	strcpy((LPSTR)lpData, (LPCSTR)lpDef);
 	sprintf(fkey,"Software\\SoftHard\\%s\\%d.%d\\%s", szProg, iVersion, iRelease, szSubKey );
 	rcr = RegOpenKeyEx( s_hKeyToUse, fkey, 0, KEY_READ, &hKey );
 	if (rcr != ERROR_SUCCESS) return FALSE;

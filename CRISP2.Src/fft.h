@@ -1,7 +1,7 @@
 #pragma once
 
-#include "complex\complex_tmpl.h"
-#include "complex\ft2real.h"
+#include "complex/complex_tmpl.h"
+#include "complex/ft2real.h"
 
 #define	FF_LOG	0x001			// Logarithm control
 #define	FF_RES	0x002			// Status line in 1/Angstrom

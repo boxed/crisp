@@ -310,7 +310,7 @@ public:
 	BOOL ELD_CalculateUserLattice();
 	void ELDSaveHKA( LPCSTR fname );
 
-	void GetIndex3D(CVector3d &za, double h, double k, int nLZ, CVector3l &vOut);
+	void GetIndex3D(const CVector3d &za, double h, double k, int nLZ, CVector3l &vOut);
 
 	void UpdateFirstRefls(LPARAM lParam, int h, int k, WPARAM wParam);
 

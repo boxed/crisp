@@ -414,7 +414,7 @@ ELD::~ELD()
 {
 }
 
-void ELD::GetIndex3D(CVector3d &za, double h, double k, int nLZ, CVector3l &vOut)
+void ELD::GetIndex3D(const CVector3d &za, double h, double k, int nLZ, CVector3l &vOut)
 {
 	CVector3d v1(m_uh, m_uk, m_ul), v2(m_vh, m_vk, m_vl), v3, res;
 	double denom = FastAbs(za.x) + FastAbs(za.y) + FastAbs(za.z);

@@ -399,7 +399,7 @@ public:
 #endif
 	}
 
-	float operator ! () { return (float) sqrt(x*x + y*y + z*z); }
+	float operator ! () const { return (float) sqrt(x*x + y*y + z*z); }
 	float& operator [] (int n) { return * (&x + n); }
 	float& operator () (int n) { return * (&x + n); }
 	int operator < (float v) { return x < v && y < v && z < v; }
@@ -762,7 +762,7 @@ public:
 
 public:
 	CRay () {}
-	CRay (CVector3<_Tx> &o, CVector3<_Tx> &d) { m_vOrg = o; m_vDir = d; }
+	CRay (const CVector3<_Tx> &o, const CVector3<_Tx> &d) { m_vOrg = o; m_vDir = d; }
 
 public:
 
@@ -783,7 +783,7 @@ public:
 
 public:
 	CRay2 () {}
-	CRay2 (CVector2<_Tx> &o, CVector2<_Tx> &d) { m_vOrg = o; m_vDir = d; }
+	CRay2 (const CVector2<_Tx> &o, const CVector2<_Tx> &d) { m_vOrg = o; m_vDir = d; }
 
 public:
 	CVector2<_Tx> Point(double t) { return m_vOrg + m_vDir*(float)t; }
@@ -1068,10 +1068,10 @@ CMatrix4x4 MirrorY  ();
 CMatrix4x4 MirrorZ  ();
 
 
-__forceinline CVector3d Normalize(CVector3d & v) { return v / (!v);}
-__forceinline CVector3f Normalize(CVector3f & v) { return v / (!v);}
-__forceinline CVector2d Normalize(CVector2d & v) { return v / (!v);}
-__forceinline CVector2f Normalize(CVector2f & v) { return v / (!v);}
+__forceinline CVector3d Normalize(const CVector3d & v) { return v / (!v);}
+__forceinline CVector3f Normalize(const CVector3f & v) { return v / (!v);}
+__forceinline CVector2d Normalize(const CVector2d & v) { return v / (!v);}
+__forceinline CVector2f Normalize(const CVector2f & v) { return v / (!v);}
 //
 // CViewVolume
 //

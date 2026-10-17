@@ -14,3 +14,7 @@ Debug
 Release
 *.suo
 *.def
+mac/vs2008/
+mac/build/
+mac/tools/
+!external_libs/**

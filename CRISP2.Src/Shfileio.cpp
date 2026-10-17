@@ -11,7 +11,7 @@
 #include "FEI.h"
 #include "RawDlg.h"
 
-#include "..\shjpeg32\shjpeg32.h"
+#include "../shjpeg32/shjpeg32.h"
 
 #include "objects.h"
 #include "common.h"
@@ -20,7 +20,7 @@
 #include "const.h"
 #include "commondef.h"
 #include "resource.h"
-#include "blowfish\blowfish.h"
+#include "blowfish/blowfish.h"
 #include "rgconfig.h"
 
 #define		_NDR_24BIT_
@@ -1159,39 +1159,21 @@ static	BYTE	GetFileByte( void )
 //#pragma optimize ("",off)
 static	WORD GetNextCode( void )
 {
-WORD cc;
+WORD cc = 0;
+BYTE b, bits, left = CodeLen;
 
 	if (c_bit==0) {	c_byte=GetFileByte(); c_bit = 8; }
-_asm {
-	mov		bl,	c_byte
-	mov		cl,	CodeLen
-	mov		ch,	c_bit
-	xor		ax,	ax
-xx:
-	shl		bl,	1
-	rcl		ax,	1
-	dec		cl
-	jz		ex
-	dec		ch
-	jnz		xx
-	push	eax
-	push	ecx
-	push	ebx
-}
-	c_byte = GetFileByte();
-_asm{
-	pop		ebx
-	pop		ecx
-	pop		eax
-	mov		ch,	8
-	mov		bl,	c_byte
-	jmp		xx
-ex:
-	dec		ch
-	mov		cc, ax
-	mov		c_bit,	ch
-	mov		c_byte, bl
-}
+	// Read CodeLen bits, most significant first, refilling c_byte when it runs out
+	b = c_byte;
+	bits = c_bit;
+	for (;;) {
+		cc = (WORD)((cc << 1) | (b >> 7));
+		b <<= 1;
+		if (--left == 0) break;
+		if (--bits == 0) { b = c_byte = GetFileByte(); bits = 8; }
+	}
+	c_bit = (BYTE)(bits - 1);
+	c_byte = b;
 	return	cc;
 }
 //---------------------------------------------------------------------------

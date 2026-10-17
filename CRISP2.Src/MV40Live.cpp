@@ -19,13 +19,13 @@
 #include <mmsystem.h>
 #include <process.h>
 
-#include "..\MV40\mv40api.h"
-#include "..\MV40\PixFilt.h"
+#include "../MV40/mv40api.h"
+#include "../MV40/PixFilt.h"
 
 #include "MV40Live.h"
 
-#pragma comment(lib, "..\\MV40\\mv40api.lib")
-#pragma comment(lib, "..\\MV40\\PixFilt.lib")
+#pragma comment(lib, "../MV40/mv40api.lib")
+#pragma comment(lib, "../MV40/PixFilt.lib")
 
 HANDLE	hLiveThreadMV40 = NULL;
 
@@ -68,11 +68,11 @@ BOOL CALLBACK MV40ControlDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
-static void m12_16(LPWORD ip, LPWORD op, int n)
+static void m12_16(LPWORD src, LPWORD op, int n)
 {
 LPWORD	ep = op+n;
 	_asm{
-		mov		esi,	[ip]
+		mov		esi,	[src]
 		mov		edi,	[op]
 t10:
 

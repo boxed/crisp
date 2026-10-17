@@ -5677,7 +5677,7 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						AdditionalIncludeDirectories="\Calidris\Calidris\CRISP2.Src"
+						AdditionalIncludeDirectories="..\CRISP2.Src"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -5686,7 +5686,7 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						AdditionalIncludeDirectories="\Calidris\Calidris\CRISP2.Src"
+						AdditionalIncludeDirectories="..\CRISP2.Src"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -5695,7 +5695,7 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						AdditionalIncludeDirectories="\Calidris\Calidris\CRISP2.Src"
+						AdditionalIncludeDirectories="..\CRISP2.Src"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -5704,7 +5704,7 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						AdditionalIncludeDirectories="\Calidris\Calidris\CRISP2.Src"
+						AdditionalIncludeDirectories="..\CRISP2.Src"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -5713,7 +5713,7 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						AdditionalIncludeDirectories="\Calidris\Calidris\CRISP2.Src"
+						AdditionalIncludeDirectories="..\CRISP2.Src"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -5722,7 +5722,7 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						AdditionalIncludeDirectories="\Calidris\Calidris\CRISP2.Src"
+						AdditionalIncludeDirectories="..\CRISP2.Src"
 					/>
 				</FileConfiguration>
 			</File>

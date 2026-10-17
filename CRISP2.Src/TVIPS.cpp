@@ -20,7 +20,7 @@
 //
 // #ifdef _USE_COM
 
-#import "EMMENU4.tlb" no_namespace named_guids raw_interfaces_only
+#include "EMMENU4.tlh"
 
 BOOL AcquireImage(LPVOID pData, IEMMenuApplication *ptrEMMENU);
 BOOL GetImage(LPVOID pData, IEMMenuApplication *ptrEMMENU);

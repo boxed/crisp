@@ -112,8 +112,8 @@ private:
 public:
 	static SG_TABLES tables_def[3];
 
-	static size_t GetSgMapSize()		{ return theInitSgInfo.SgMap.size(); }
-	static size_t GetSgMapPlaneSize()	{ return theInitSgInfo.SgMapPlane.size(); }
+	static size_t GetSgMapSize();
+	static size_t GetSgMapPlaneSize();
 
 private:
 	void MakeSgName(LPCTSTR pszName, LPTSTR pszOut)
@@ -317,6 +317,9 @@ public:
 	}
 
 } theInitSgInfo;
+
+size_t InitSgInfo::GetSgMapSize()		{ return theInitSgInfo.SgMap.size(); }
+size_t InitSgInfo::GetSgMapPlaneSize()	{ return theInitSgInfo.SgMapPlane.size(); }
 
 //InitSgInfo::Map InitSgInfo::SgMap;
 //InitSgInfo::Map InitSgInfo::SgMapPlane;

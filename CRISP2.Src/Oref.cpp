@@ -55,7 +55,7 @@ static	void	FillORefList( HWND hDlg, OBJ* O, LPLATTICE L )
 	int 		i;
 	LPSGINFO	SI;
 	wchar_t		ra[32], rs[32], rr[32];
-	wchar_t		not[] = L"  - ";
+	wchar_t		szNot[] = L"  - ";
 	wchar_t		sname[32];
 //	char		ra[20], rs[20], rr[20];
 //	char		not[] = " -  ";
@@ -67,9 +67,9 @@ static	void	FillORefList( HWND hDlg, OBJ* O, LPLATTICE L )
 	{
 //		if (SI->flg & OR_DONE)
 //		{
-//			if (SI->NFa) sprintf(ra, "%4.1f", SI->RFa); else strcpy(ra, not);
-//			if (SI->NFp) sprintf(rs, "%4.1f", SI->RFp); else strcpy(rs, not);
-//			if (SI->Nr ) sprintf(rr, "%4.1f", SI->Rr ); else strcpy(rr, not);
+//			if (SI->NFa) sprintf(ra, "%4.1f", SI->RFa); else strcpy(ra, szNot);
+//			if (SI->NFp) sprintf(rs, "%4.1f", SI->RFp); else strcpy(rs, szNot);
+//			if (SI->Nr ) sprintf(rr, "%4.1f", SI->Rr ); else strcpy(rr, szNot);
 //			sprintf(TMP, "%s %s %s %s", rflSymmName(i, SN), ra, rs, rr );
 //		}
 //		else sprintf(TMP, "%s", rflSymmName(i, SN));
@@ -92,9 +92,9 @@ static	void	FillORefList( HWND hDlg, OBJ* O, LPLATTICE L )
 //		mbstowcs(sname, pszSymm, strlen(pszSymm));
 		if (SI->flg & OR_DONE)
 		{
-			if (SI->NFa) swprintf(ra, L"%4.1f", SI->RFa); else wcscpy(ra, not);
-			if (SI->NFp) swprintf(rs, L"%4.1f", SI->RFp); else wcscpy(rs, not);
-			if (SI->Nr ) swprintf(rr, L"%4.1f", SI->Rr ); else wcscpy(rr, not);
+			if (SI->NFa) swprintf(ra, L"%4.1f", SI->RFa); else wcscpy(ra, szNot);
+			if (SI->NFp) swprintf(rs, L"%4.1f", SI->RFp); else wcscpy(rs, szNot);
+			if (SI->Nr ) swprintf(rr, L"%4.1f", SI->Rr ); else wcscpy(rr, szNot);
 			swprintf((wchar_t*)TMP, L"%s   %s   %s   %s", sname/*rflSymmName(i, SN)*/, ra, rs, rr );
 		}
 		else swprintf((wchar_t*)TMP, L"%s", sname/*rflSymmName(i, SN)*/);
