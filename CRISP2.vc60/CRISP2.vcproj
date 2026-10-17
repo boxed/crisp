@@ -170,7 +170,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ctl3d32s.lib comctl32.lib winmm.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="comctl32.lib winmm.lib odbc32.lib odbccp32.lib"
 				OutputFile="../../Bin/vc60/Debug/CRISP2.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

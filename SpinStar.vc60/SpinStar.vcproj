@@ -126,7 +126,7 @@
 			IntermediateDirectory=".\Debug"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
-			UseOfMFC="2"
+			UseOfMFC="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
 			>
@@ -157,7 +157,7 @@
 				AdditionalIncludeDirectories="..\Crisp2.Src\,..\Math.Src,..\SpinStar.Src,..\external_libs"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stdafx.h"
 				PrecompiledHeaderFile=".\Debug/SpinStar.pch"
